@@ -1,0 +1,40 @@
+<!-- Copyright (c) Microsoft Corporation and Contributors. -->
+<!-- Licensed under the MIT License. -->
+
+<Page
+    x:Class="AirX.Pages.NewTextPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="using:AirX.Pages"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    DataContext="ViewModel">
+
+    <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Vertical">
+            <TextBlock 
+                x:Name="TextTextBlock"
+                FontSize="18" 
+                FontWeight="Normal"
+                Text="{x:Bind ViewModel.Title}"
+                MaxHeight="300"
+                />
+            <TextBlock
+                x:Name="FromTextBlock"
+                FontSize="12"
+                FontWeight="Normal"
+                Text="{x:Bind ViewModel.From}"
+                />
+        </StackPanel>
+
+        <SplitView DisplayMode="CompactOverlay" Margin="0,75,0,30" CompactPaneLength= "150"  OpenPaneLength= "300" PaneBackground="LightSteelBlue" Background="LightSteelBlue">
+            <SplitView.Pane>
+                <Button Content="COPY" FontSize="15" Foreground="DarkGreen" FontWeight="Bold"/>
+            </SplitView.Pane>
+            <RepeatButton Content="BLOCK" HorizontalAlignment="Right" Foreground="DarkGreen" FontWeight="Bold" FontSize="15"/>
+        </SplitView>
+
+    </StackPanel>
+</Page>

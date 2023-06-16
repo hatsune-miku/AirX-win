@@ -1,0 +1,85 @@
+<!-- Copyright (c) Microsoft Corporation and Contributors. -->
+<!-- Licensed under the MIT License. -->
+
+<Page
+    x:Class="AirX.Pages.LoginPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AirX"
+    xmlns:localView="using:AirX.View"
+    xmlns:converters="using:AirX.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+>
+
+    <Page.Resources>
+        <converters:BooleanInvertionConverter x:Key="BooleanInvertionConverter" />
+    </Page.Resources>
+
+    <Grid>
+        <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+            <StackPanel
+                DataContext="{x:Bind ViewModel}"
+                Orientation="Vertical"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+            >
+                <TextBlock FontSize="32" FontWeight="Bold">
+                    Sign In
+                </TextBlock>
+                <TextBox
+                    x:Name="textBoxUid" 
+                    PreviewKeyDown="onTextBoxesKeyDown"
+                    PlaceholderText="UID/Email"               
+                    Margin="0,30,0,12"
+                    Text="{x:Bind ViewModel.Uid, Mode=TwoWay}"
+                    IsEnabled="{x:Bind ViewModel.IsLoggingIn, Mode=OneWay, Converter={StaticResource BooleanInvertionConverter}}"
+                />
+
+                <TextBox
+                    x:Name="textBoxPassword" 
+                    PreviewKeyDown="onTextBoxesKeyDown"
+                    PlaceholderText="Password"
+                    Margin="0,0,0,20"
+                    Text="{x:Bind ViewModel.Password, Mode=TwoWay}"
+                    IsEnabled="{x:Bind ViewModel.IsLoggingIn, Mode=OneWay, Converter={StaticResource BooleanInvertionConverter}}"
+                />
+
+                <Grid
+                    HorizontalAlignment="Stretch"
+                    ColumnSpacing="20"
+                >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Button 
+                        Grid.Row="0" Grid.Column="0"
+                        x:Name="loginButton"
+                        Click="onLoginButtonClicked"
+                        Content="{x:Bind ViewModel.ButtonTitle, Mode=TwoWay}"
+                        HorizontalAlignment="Stretch"
+                        IsEnabled="{x:Bind ViewModel.IsLoggingIn, Mode=OneWay, Converter={StaticResource BooleanInvertionConverter}}"
+                    />
+
+                    <CheckBox
+                        Grid.Row="0" Grid.Column="1"
+                        x:Name="checkBoxRememberMe"
+                        Content="Remember Me"
+                        IsChecked="{x:Bind ViewModel.ShouldRememberPassword, Mode=TwoWay}"
+                        IsEnabled="{x:Bind ViewModel.IsLoggingIn, Mode=OneWay, Converter={StaticResource BooleanInvertionConverter}}"
+                    />
+                </Grid>
+
+                <TextBlock
+                    TextWrapping="WrapWholeWords"
+                    Margin="0,24,0,0"
+                >
+                    <Span xml:space="preserve"><Run>No AirX account yet? </Run><Hyperlink NavigateUri="https://airx.eggtartc.com/signup">Create One!</Hyperlink>
+                    </Span>
+                </TextBlock>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>

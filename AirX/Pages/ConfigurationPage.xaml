@@ -1,0 +1,30 @@
+<!-- Copyright (c) Microsoft Corporation and Contributors. -->
+<!-- Licensed under the MIT License. -->
+
+<Page
+    x:Class="AirX.Pages.ConfigurationPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AirX.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+>
+
+    <StackPanel>
+        <StackPanel Padding="40, 20, 10, 0">
+            <TextBlock Text="Preferences" FontSize="24" FontWeight="Bold"/>
+        </StackPanel>
+        
+        <StackPanel>
+            <TextBlock x:Name="textBlock1" Margin="12,60,0,30" Text="Lan Discovery Port" FontWeight="Bold"/>
+            <TextBox AutomationProperties.Name="simple TextBox"/>
+            <TextBlock x:Name="textBlock2" Margin="12,30,0,30" Text="Lan Clipboard Server Port" FontWeight="Bold"/>
+            <TextBox AutomationProperties.Name="simple TextBox"/>
+            <Button Content="Copy Text to the Clipboard" Margin="5,30,0,30" Click="CopyText_Click" FontWeight="Bold"/>
+            <Button Content="Paste Text from the Clipboard" Margin="5,30,0,30" Click="PasteText_Click" FontWeight="Bold"/>
+            <Button x:Name="OpenFolderButton" Click="OpenFolderButton_Click" Content="OpenFolder" Background="MediumSeaGreen" Margin="8,0,0,0" Padding="10" CornerRadius="25"/>
+            <TextBlock x:Name="textBlock" Margin="12,30,0,30" Text="Lan Clipboard Server Port" FontWeight="Bold"/>
+        </StackPanel>
+    </StackPanel>
+</Page>
