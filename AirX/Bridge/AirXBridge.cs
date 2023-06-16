@@ -29,12 +29,16 @@ public class AirXBridge
         var DataPackageView = Clipboard.GetContent();
         if (DataPackageView.Contains(StandardDataFormats.Text))
         {
-            var text = await DataPackageView.GetTextAsync();
-            if (text != lastClipboardText)
+            try
             {
-                lastClipboardText = text;
-                OnClipboardChanged(text);
+                var text = await DataPackageView.GetTextAsync();
+                if (text != lastClipboardText)
+                {
+                    lastClipboardText = text;
+                    OnClipboardChanged(text);
+                }
             }
+            catch(Exception) { }
         }
     }
 
