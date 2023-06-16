@@ -8,13 +8,20 @@ namespace SRCounter;
 
 public class NotificationUtil
 {
+    private static bool _didManagerInitialized = false;
+
     public static void ShowNotification(string content)
     {
-        AppNotificationManager.Default.NotificationInvoked += (AppNotificationManager sender, AppNotificationActivatedEventArgs args) =>
-        {
-        };
         var manager = AppNotificationManager.Default;
-        manager.Register();
+
+        if (!_didManagerInitialized)
+        {
+            AppNotificationManager.Default.NotificationInvoked += (AppNotificationManager sender, AppNotificationActivatedEventArgs args) =>
+            {
+            };
+            manager.Register();
+            _didManagerInitialized = true;
+        }
 
         Debug.WriteLine($"Notification: {content}");
 

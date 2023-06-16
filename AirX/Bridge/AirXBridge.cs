@@ -83,6 +83,8 @@ public class AirXBridge
             return false;
         }
 
+        ShouldInterruptSignal = false;
+
         string listenAddress = "0.0.0.0";
         IntPtr listenAddressBuffer = CreateUtf8String(listenAddress, out uint listenAddressSize);
 
