@@ -20,6 +20,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Principal;
+using System.Threading;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using WinRT.Interop;
@@ -35,10 +36,13 @@ namespace AirX.View
     public sealed partial class TrayIconHolderWindow : Window
     {
         private static AirXBridge.OnTextReceivedHandler Handler = OnTextReceived;
+        private static SynchronizationContext context;
 
         public TrayIconHolderWindow()
         {
             this.InitializeComponent();
+
+            context = SynchronizationContext.Current;
 
             TrySignIn();
             AirXBridge.TryStartAirXService();
@@ -57,9 +61,18 @@ namespace AirX.View
                 "Welcome back, " + GlobalViewModel.Instance.LoggingGreetingsName + "!");
         }
 
-        private static void OnTextReceived(string text, string from)
+        private static void OnTextReceived(string text, string source)
         {
-            NotificationUtil.ShowNotification(text);
+            if (AccountUtil.IsInBlockList(source))
+            {
+                return;
+            }
+
+            context.Post(_ =>
+            {
+                var window = NewTextWindow.InstanceOf(text, source);
+                window.Activate();
+            }, null);
         }
 
         private void Window_Activated(object sender, WindowActivatedEventArgs args)

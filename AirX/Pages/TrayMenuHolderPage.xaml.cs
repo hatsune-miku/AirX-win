@@ -40,7 +40,7 @@ namespace AirX.Pages
         [RelayCommand]
         public void ExitApplication()
         {
-            Application.Current.Exit();
+            Environment.Exit(0);
         }
 
         [RelayCommand]

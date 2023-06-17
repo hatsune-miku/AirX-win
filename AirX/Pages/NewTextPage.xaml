@@ -8,33 +8,77 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="using:AirX.Pages"
+    xmlns:converters="using:AirX.Converters"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-    DataContext="ViewModel">
-
-    <StackPanel Orientation="Vertical">
-        <StackPanel Orientation="Vertical">
-            <TextBlock 
-                x:Name="TextTextBlock"
-                FontSize="18" 
-                FontWeight="Normal"
-                Text="{x:Bind ViewModel.Title}"
-                MaxHeight="300"
+    DataContext="ViewModel"
+>
+    <Page.Resources>
+        <converters:IpAdrressToTextSourceConverter
+            x:Name="ipAdrressToTextSourceConverter"
+        />
+        <converters:StringToFixedLengthStringConverter
+            x:Name="stringToFixedLengthStringConverter"
+        />
+    </Page.Resources>
+    <Border
+        Background="{x:Bind ViewModel.BackgroundColor, Mode=OneWay}"
+        Width="317" Height="168"
+        CornerRadius="12"
+    >
+        <Grid RowDefinitions="Auto, *, Auto">
+            <StackPanel Grid.Row="0" Padding="20, 30, 30, 0">
+                <TextBlock
+                    FontFamily="Inter" FontSize="20" Foreground="Black"
+                    Text="{x:Bind ViewModel.Title, Mode=OneWay, Converter={StaticResource stringToFixedLengthStringConverter}}"
                 />
-            <TextBlock
-                x:Name="FromTextBlock"
-                FontSize="12"
-                FontWeight="Normal"
-                Text="{x:Bind ViewModel.From}"
+
+                <TextBlock
+                    FontFamily="Inter" FontSize="13" Margin="0,40,0,5" Foreground="DimGray"
+                    Text="{x:Bind ViewModel.From, Mode=OneWay, Converter={StaticResource ipAdrressToTextSourceConverter}}"
                 />
-        </StackPanel>
 
-        <SplitView DisplayMode="CompactOverlay" Margin="0,75,0,30" CompactPaneLength= "150"  OpenPaneLength= "300" PaneBackground="LightSteelBlue" Background="LightSteelBlue">
-            <SplitView.Pane>
-                <Button Content="COPY" FontSize="15" Foreground="DarkGreen" FontWeight="Bold"/>
-            </SplitView.Pane>
-            <RepeatButton Content="BLOCK" HorizontalAlignment="Right" Foreground="DarkGreen" FontWeight="Bold" FontSize="15"/>
-        </SplitView>
+            </StackPanel>
 
-    </StackPanel>
+            <StackPanel Grid.Row="1">
+
+            </StackPanel>
+
+            <Grid
+                Grid.Row="2"
+                Background="{x:Bind ViewModel.AccentColor}" Padding="5"
+                ColumnDefinitions="Auto, *, Auto"
+            >
+                <HyperlinkButton
+                    Grid.Column="0"
+                    FontFamily="Inter"
+                    FontSize="15"
+                    Foreground="{x:Bind ViewModel.DimmedAccentColor, Mode=OneWay}"
+                    FontWeight="Bold"
+                >
+                    <TextBlock>COPIED.</TextBlock>
+                </HyperlinkButton>
+
+                <TextBlock
+                    Grid.Column="1"
+                    FontFamily="Inter"
+                    Foreground="LightGray"
+                    FontWeight="Bold"
+                    FontSize="10"
+                    VerticalAlignment="Center"
+                />
+
+                <HyperlinkButton
+                    Grid.Column="2"
+                    FontFamily="Inter"
+                    FontSize="15"
+                    Foreground="{x:Bind ViewModel.DimmedAccentColor, Mode=OneWay}"
+                    FontWeight="Bold"
+                    Click="OnBlockClicked"
+                >
+                    <TextBlock>BLOCK</TextBlock>
+                </HyperlinkButton>
+            </Grid>
+        </Grid>
+    </Border>
 </Page>

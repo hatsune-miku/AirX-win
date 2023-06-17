@@ -1,6 +1,9 @@
 // Copyright (c) Microsoft Corporation and Contributors.
 // Licensed under the MIT License.
 
+using AirX.Util;
+using AirX.View;
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
@@ -30,89 +33,52 @@ namespace AirX.Pages
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class NewTextPage : Page
+    public partial class NewTextPage : Page
     {
-        private NewTextViewModel ViewModel = new NewTextViewModel();
+        private NewTextViewModel ViewModel = new();
+        private NewTextWindow _instance;
 
-        public NewTextPage(string title, string from)
+        public NewTextPage()
         {
-            ViewModel.Title = title;
-            ViewModel.From = "Text from " + from;
-
             this.InitializeComponent();
         }
-        public static void Popup(string title, string from)
+
+        public void SetWindowInstance(NewTextWindow instance)
         {
-            NewTextPage page = new NewTextPage(title, from);
-            Window window = new Window();
-
-            Frame root = new Frame();
-            root.Content = page;
-            window.Content = root;
-
-            window.Activate();
-            page.AdjustWindow(window);
+            this._instance = instance;
         }
 
-        private void HandleMessageReceived(string message)
+        public void UpdateInformation(string title, string source)
         {
+            ViewModel.Title = title;
+            ViewModel.From = source;
         }
 
-        private void AdjustWindow(Window window)
+        [RelayCommand]
+        private void Block()
         {
-            IntPtr hwnd = WindowNative.GetWindowHandle(window);
-            WindowId windowId = Win32Interop.GetWindowIdFromWindow(hwnd);
-            AppWindow appWindow = AppWindow.GetFromWindowId(windowId);
-
-            int width = 640;
-            int height = 480;
-
-            appWindow.Resize(new Windows.Graphics.SizeInt32(width, height));
-            appWindow.Move(
-                new Windows.Graphics.PointInt32(
-                    (int)(GetActualScreenWidth() - width),
-                    (int)(GetActualScreenHeight() - height - 48)
-                    )
-                );
+            AccountUtil.AddToBlockList(ViewModel.From);
+            _instance.Close();
         }
 
-        [DllImport("user32.dll")]
-        private static extern int GetSystemMetrics(int nIndex);
-
-        [DllImport("user32.dll")]
-        private static extern IntPtr GetDC(IntPtr hwnd);
-
-        [DllImport("user32.dll")]
-        private static extern bool ReleaseDC(IntPtr hwnd, IntPtr hdc);
-
-        [DllImport("gdi32.dll")]
-        private static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
-
-        private int GetActualScreenWidth()
+        [RelayCommand]
+        private void Cancel()
         {
-            return (int)(GetSystemMetrics(0));
-        }
-        private int GetActualScreenHeight()
-        {
-            return (int)(GetSystemMetrics(1));
+
         }
 
-        private double GetDpiX()
+        private void OnBlockClicked(object sender, RoutedEventArgs e)
         {
-            IntPtr hdc = GetDC(IntPtr.Zero);
-            int ret = GetDeviceCaps(hdc, 88);
-            ReleaseDC(IntPtr.Zero, hdc);
-            return ret / 100.0;
+            _ = new ContentDialog()
+            {
+                Title = "Blocking " + ViewModel.From,
+                Content = "Are you sure to block " + ViewModel.From + "?",
+                PrimaryButtonText = "Block",
+                SecondaryButtonText = "Cancel",
+                PrimaryButtonCommand = BlockCommand,
+                SecondaryButtonCommand = CancelCommand,
+                XamlRoot = Content.XamlRoot,
+            }.ShowAsync();
         }
-
-        private double GetDpiY()
-        {
-            IntPtr hdc = GetDC(IntPtr.Zero);
-            int ret = GetDeviceCaps(hdc, 90);
-            ReleaseDC(IntPtr.Zero, hdc);
-            return ret / 100.0;
-        }
-
-
     }
 }

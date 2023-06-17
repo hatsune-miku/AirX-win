@@ -34,10 +34,13 @@ namespace AirX.View
     {
         protected LoginWindowViewModel ViewModel;
 
+        public static ControlPanelWindow Instance { get; private set; }
+
         public ControlPanelWindow()
         {
             this.InitializeComponent();
             this.ViewModel = new LoginWindowViewModel();
+            Instance = this;
 
             PrepareWindow(
                 new PrepareWindowParameters

@@ -15,6 +15,7 @@ using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -83,14 +84,17 @@ namespace AirX.Pages
             // Success
             SettingsUtil.Write(DefaultKeys.SavedUid, ViewModel.Uid);
             SettingsUtil.Write(DefaultKeys.LoggedInUid, ViewModel.Uid);
+            SettingsUtil.Write(DefaultKeys.SavedCredential, response.token);
+            SettingsUtil.Write(DefaultKeys.SavedCredentialType, CredentialType.AirXToken);
             GlobalViewModel.Instance.LoggingInUid = ViewModel.Uid;
             GlobalViewModel.Instance.IsSignedIn = true;
 
-            if (ViewModel.ShouldRememberPassword)
-            {
-                SettingsUtil.Write(DefaultKeys.SavedCredentialType, Util.CredentialType.AirXToken);
-                SettingsUtil.Write(DefaultKeys.SavedCredential, response.token);
-            }
+            SettingsUtil.Write(
+                DefaultKeys.ShouldAutoSignIn,
+                ViewModel.ShouldRememberPassword
+            );
+
+            await AccountUtil.TryGreetings();
 
             LoginWindow.Instance?.Close();
         }

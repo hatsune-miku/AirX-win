@@ -203,7 +203,6 @@ namespace AirX.Pages
                     }
                     else
                     {
-                        
                         Debug.WriteLine($"File sharing failed. Error: {response.StatusCode}");
                     }
                 }

@@ -21,6 +21,9 @@ namespace AirX.Util
         SavedUid,
         SavedCredentialType,
         SavedCredential,
+        ShouldAutoSignIn,
+
+        BlockList,
     }
 
     public enum CredentialType
@@ -37,6 +40,9 @@ namespace AirX.Util
 
         public static void TryInitializeConfigurationsForFirstRun()
         {
+            // TODO: remove
+            Write(DefaultKeys.BlockList, "");
+
             if (Bool(DefaultKeys.IsNotFirstRun, false))
             {
                 return;
@@ -47,6 +53,7 @@ namespace AirX.Util
             Write(DefaultKeys.DiscoveryServiceServerPort, 9818);
             Write(DefaultKeys.TextServiceListenPort, 9819);
             Write(DefaultKeys.GroupIdentity, 0);
+            Write(DefaultKeys.ShouldAutoSignIn, false);
             Write(DefaultKeys.IsNotFirstRun, true);
         }
 
@@ -101,9 +108,29 @@ namespace AirX.Util
                 : CredentialType.Password;
         }
 
+        public static HashSet<string> ReadBlockList()
+        {
+            string rawValue = String(DefaultKeys.BlockList, "");
+            return rawValue.Split(
+                ",",
+                StringSplitOptions.TrimEntries 
+                    & StringSplitOptions.RemoveEmptyEntries
+            ).ToHashSet();
+        }
+
+        public static void WriteBlockList(HashSet<string> blockList)
+        {
+            Write(DefaultKeys.BlockList, string.Join(',', blockList));
+        }
+
         public static void Write(DefaultKeys key, object value)
         {
             localSettings.Values[key.ToString()] = value;
+        }
+
+        public static void Write(DefaultKeys key, bool value)
+        {
+            Write(key, value.ToString());
         }
 
         public static void Write(DefaultKeys key, CredentialType value)

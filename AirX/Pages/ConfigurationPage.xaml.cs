@@ -19,6 +19,8 @@ using Windows.Foundation.Collections;
 using Windows.Storage.Pickers;
 using Windows.Storage;
 using WinRT.Interop;
+using AirX.Util;
+using AirX.View;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -57,9 +59,13 @@ namespace AirX.Pages
 
         private async void OpenFolderButton_Click(object sender, RoutedEventArgs e)
         {
-            var folderPicker = new Windows.Storage.Pickers.FolderPicker();
-            folderPicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.Desktop;
+            var folderPicker = new FolderPicker();
+            folderPicker.SuggestedStartLocation = PickerLocationId.Desktop;
             folderPicker.FileTypeFilter.Add("*");
+
+            var window = ControlPanelWindow.Instance;
+            var hwnd = WindowNative.GetWindowHandle(window);
+            InitializeWithWindow.Initialize(folderPicker, hwnd);
 
             StorageFolder folder = await folderPicker.PickSingleFolderAsync();
             if (folder != null)

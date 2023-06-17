@@ -11,19 +11,58 @@ namespace AirX.Util
 {
     public class AccountUtil
     {
+        private static HashSet<string> _blockList = SettingsUtil.ReadBlockList();
+
         public static void ClearSavedUserInfoAndSignOut()
         {
             SettingsUtil.Delete(DefaultKeys.SavedCredential);
             SettingsUtil.Delete(DefaultKeys.LoggedInUid);
-            SettingsUtil.Delete(DefaultKeys.SavedCredentialType);
+            GlobalViewModel.Instance.IsSignedIn = false;
+            GlobalViewModel.Instance.LoggingInUid = "";
+            GlobalViewModel.Instance.LoggingGreetingsName = "AirX User";
         }
 
+        public static bool IsInBlockList(string ipAddress)
+        {
+            string realIpAddress = ipAddress.Split(":")[0];
+            return _blockList.Contains(realIpAddress);
+        }
+
+        public static void AddToBlockList(string ipAddress)
+        {
+            string realIpAddress = ipAddress.Split(":")[0];
+            _blockList.Add(realIpAddress);
+            SettingsUtil.WriteBlockList(_blockList);
+        }
+
+        public static async Task<bool> TryGreetings()
+        {
+
+            AirXCloud.GreetingsResponse greetingsResponse;
+            try
+            {
+                var uid = SettingsUtil.String(DefaultKeys.SavedUid, "");
+                greetingsResponse = await AirXCloud.GreetingsAsync(uid);
+                if (greetingsResponse.success)
+                {
+                    GlobalViewModel.Instance.LoggingGreetingsName = greetingsResponse.name;
+                    return true;
+                }
+            }
+            catch { }
+            return false;
+        }
 
         /**
          * Return: true if successfully logged in, otherwise, false.
          */
         public static async Task<bool> TryAutomaticLogin()
         {
+            if (!SettingsUtil.Bool(DefaultKeys.ShouldAutoSignIn, false))
+            {
+                return false;
+            }
+
             GlobalViewModel.Instance.IsSignedIn = false;
             Debug.WriteLine("Trying automatic login...");
 
@@ -63,16 +102,7 @@ namespace AirX.Util
                 return false;
             }
 
-            AirXCloud.GreetingsResponse greetingsResponse;
-            try
-            {
-                greetingsResponse = await AirXCloud.GreetingsAsync(uid);
-                if (greetingsResponse.success)
-                {
-                    GlobalViewModel.Instance.LoggingGreetingsName = greetingsResponse.name;
-                }
-            }
-            catch { }
+            await TryGreetings();
 
             // Almost there!
             Debug.WriteLine("Success.");
