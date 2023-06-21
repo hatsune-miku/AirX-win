@@ -1,6 +1,3 @@
-<!-- Copyright (c) Microsoft Corporation and Contributors. -->
-<!-- Licensed under the MIT License. -->
-
 <localView:BaseWindow
     x:Class="AirX.View.NewTextWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
