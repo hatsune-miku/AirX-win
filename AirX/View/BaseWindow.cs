@@ -13,6 +13,7 @@ using Windows.Graphics;
 using WinRT;
 using Microsoft.UI.Composition.SystemBackdrops;
 using Microsoft.UI.Composition;
+using System.Drawing;
 
 namespace AirX.View
 {
@@ -41,7 +42,11 @@ namespace AirX.View
 
         protected void PrepareWindow(PrepareWindowParameters parameters)
         {
-            AppWindow.Resize(new SizeInt32(parameters.Width, parameters.Height));
+            var screenSize = UIUtil.GetPrimaryScreenSize();
+            var graphics = Graphics.FromHwnd(IntPtr.Zero);
+            var realWidth = (int)(parameters.WidthPortion / (graphics.DpiX / 100.0) * screenSize.Width);
+            var realHeight = (int)(parameters.HeightPortion / (graphics.DpiY / 100.0) * screenSize.Height);
+            AppWindow.Resize(new SizeInt32(realWidth, realHeight));
             if (parameters.CenterScreen)
             {
                 UIUtil.MoveWindowToCenterScreen(AppWindow);
@@ -134,8 +139,8 @@ namespace AirX.View
     public partial class PrepareWindowParameters
     {
         public string Title { get; set; }
-        public int Width { get; set; }
-        public int Height { get; set; }
+        public double WidthPortion { get; set; }
+        public double HeightPortion { get; set; }
         public bool CenterScreen { get; set; } = true;
         public bool Resizable { get; set; } = true;
         public bool HaveMaximumButton { get; set; } = false;

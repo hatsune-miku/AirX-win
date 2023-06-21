@@ -22,5 +22,7 @@
         <StackPanel Grid.Row="1" Orientation="Vertical">
             <pages:SplitViewPage></pages:SplitViewPage>
         </StackPanel>
+        
+        
     </Grid>
 </localView:BaseWindow>

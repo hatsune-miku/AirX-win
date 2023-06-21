@@ -34,7 +34,7 @@ namespace AirX
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
-    public partial class App : Application
+    public partial class App : Microsoft.UI.Xaml.Application
     {
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -52,12 +52,13 @@ namespace AirX
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
             SettingsUtil.TryInitializeConfigurationsForFirstRun();
+            AirXBridge.airx_init();
 
             var window = new View.TrayIconHolderWindow();
             window.Activate();
         }
 
-        public static Window loginWindow;
+        public static Microsoft.UI.Xaml.Window loginWindow;
 
     }
 }

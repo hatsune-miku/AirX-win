@@ -133,4 +133,5 @@ namespace AirX.Pages
         public string Label { get; set; }
         public Symbol Symbol { get; set; }
     }
+
 }

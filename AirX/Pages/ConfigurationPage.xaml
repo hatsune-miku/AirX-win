@@ -12,19 +12,33 @@
 >
 
     <StackPanel>
-        <StackPanel Padding="40, 20, 10, 0">
+        <StackPanel Margin="20, 40, 10, 0">
             <TextBlock Text="Preferences" FontSize="24" FontWeight="Bold"/>
         </StackPanel>
-        
-        <StackPanel>
-            <TextBlock x:Name="textBlock1" Margin="12,60,0,30" Text="Lan Discovery Port" FontWeight="Bold"/>
-            <TextBox AutomationProperties.Name="simple TextBox"/>
-            <TextBlock x:Name="textBlock2" Margin="12,30,0,30" Text="Lan Clipboard Server Port" FontWeight="Bold"/>
-            <TextBox AutomationProperties.Name="simple TextBox"/>
-            <Button Content="Copy Text to the Clipboard" Margin="5,30,0,30" Click="CopyText_Click" FontWeight="Bold"/>
-            <Button Content="Paste Text from the Clipboard" Margin="5,30,0,30" Click="PasteText_Click" FontWeight="Bold"/>
-            <Button x:Name="OpenFolderButton" Click="OpenFolderButton_Click" Content="OpenFolder" Background="MediumSeaGreen" Margin="8,0,0,0" Padding="10" CornerRadius="25"/>
-            <TextBlock x:Name="textBlock" Margin="12,30,0,30" Text="Lan Clipboard Server Port" FontWeight="Bold"/>
-        </StackPanel>
+
+        <Pivot Margin="20, 20, 20, 0">
+            <PivotItem Header="AirX Core">
+                <StackPanel>
+                    <TextBlock x:Name="textBlock1" Margin="12,60,0,30" Text="Lan Discovery Port" FontWeight="Bold"/>
+                    <TextBox AutomationProperties.Name="simple TextBox"/>
+                    <TextBlock x:Name="textBlock2" Margin="12,30,0,30" Text="Lan Clipboard Server Port" FontWeight="Bold"/>
+                    <TextBox AutomationProperties.Name="simple TextBox"/>
+                </StackPanel>
+            </PivotItem>
+
+            <PivotItem Header="Account">
+                <StackPanel>
+                    <Button Content="Copy Text to the Clipboard" Margin="5,30,0,30" Click="CopyText_Click" FontWeight="Bold"/>
+                    <Button Content="Paste Text from the Clipboard" Margin="5,30,0,30" Click="PasteText_Click" FontWeight="Bold"/>
+                </StackPanel>
+            </PivotItem>
+
+            <PivotItem Header="Customization">
+                <StackPanel>
+                    <Button x:Name="OpenFolderButton" Click="OpenFolderButton_Click" Content="OpenFolder" Background="MediumSeaGreen" Margin="8,0,0,0" Padding="10" CornerRadius="25"/>
+                    <TextBlock x:Name="textBlock" Margin="12,30,0,30" Text="Lan Clipboard Server Port" FontWeight="Bold"/>
+                </StackPanel>
+            </PivotItem>
+        </Pivot>
     </StackPanel>
 </Page>

@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation and Contributors.
 // Licensed under the MIT License.
 
+using AirX.Helper;
 using AirX.Services;
 using AirX.Util;
 using AirX.View;
@@ -33,6 +34,7 @@ namespace AirX.Pages
     public sealed partial class LoginPage : Page
     {
         public LoginWindowViewModel ViewModel { get; set; }
+        private GoogleSignInHelper googleSignInHelper = new();
 
         public LoginPage()
         {
@@ -107,5 +109,11 @@ namespace AirX.Pages
             }
             onLoginButtonClicked(sender, null);
         }
+
+        private void GoogleLoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            var _ = googleSignInHelper.TrySignInAsync();
+        }
+
     }
 }

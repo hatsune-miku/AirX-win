@@ -22,7 +22,7 @@
     </Page.Resources>
 
     <StackPanel>
-        <StackPanel Padding="40, 20, 10, 0">
+        <StackPanel Margin="20, 40, 10, 0">
             <TextBlock Text="Dashboard" FontSize="24" FontWeight="Bold"/>
         </StackPanel>
 
@@ -103,6 +103,7 @@
                 Content="Refresh"
             />
             </Grid>
+            
 
         </Button>
     </StackPanel>

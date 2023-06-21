@@ -12,91 +12,80 @@
     mc:Ignorable="d"
     DataContext="ViewModel"
 >
-    <Grid>
-        <Grid RowSpacing="20" Margin="0, 20, 0, 0">
-            <Grid.RowDefinitions>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-            </Grid.RowDefinitions>
+    <StackPanel Spacing="24" Margin="0, 24, 0, 0">
+        <Border
+            HorizontalAlignment="Center"
+            Background="{x:Bind ViewModel.BackgroundColor, Mode=OneWay}"
+            Width="317" Height="168"
+            CornerRadius="12"
+        >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>
-            </Grid.ColumnDefinitions>
+                <StackPanel Grid.Row="0" Padding="20, 30, 30, 0">
+                    <TextBlock FontFamily="Inter" FontSize="20" FontWeight="Black" Foreground="Black">report.pdf</TextBlock>
+                    <TextBlock FontFamily="Inter" FontSize="16" Margin="0,0,0,5" Foreground="Black">12.2 MB</TextBlock>
+                    <TextBlock FontFamily="Inter" FontSize="13" Margin="0,20,0,5" Foreground="DimGray">File From 10.0.0.9</TextBlock>
+                </StackPanel>
 
-            <Border
-                Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center"
-                Background="{x:Bind ViewModel.BackgroundColor, Mode=OneWay}"
-                Width="317" Height="168"
-                CornerRadius="12"
-            >
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
+                <StackPanel Grid.Row="1">
 
-                    <StackPanel Grid.Row="0" Padding="20, 30, 30, 0">
-                        <TextBlock FontFamily="Inter" FontSize="20" FontWeight="Black" Foreground="Black">report.pdf</TextBlock>
-                        <TextBlock FontFamily="Inter" FontSize="16" Margin="0,0,0,5" Foreground="Black">12.2 MB</TextBlock>
-                        <TextBlock FontFamily="Inter" FontSize="13" Margin="0,20,0,5" Foreground="DimGray">File From 10.0.0.9</TextBlock>
-                    </StackPanel>
+                </StackPanel>
 
-                    <StackPanel Grid.Row="1">
-
-                    </StackPanel>
-
-                    <Grid Grid.Row="2" Background="{x:Bind ViewModel.AccentColor}" Padding="5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="90"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <muxc:ProgressBar Grid.Column="0" IsIndeterminate="True" Width="80" />
-                        <TextBlock Grid.Column="1" FontFamily="Inter" Text="65%" Foreground="LightGray" FontWeight="Bold" FontSize="10" VerticalAlignment="Center" />
-                        <TextBlock Grid.Column="2"></TextBlock>
-                        <HyperlinkButton Grid.Column="3" FontFamily="Inter" Content="STOP" FontSize="15" Foreground="{x:Bind ViewModel.DimmedAccentColor, Mode=OneWay}" FontWeight="Bold"/>
-                        <HyperlinkButton Grid.Column="4" FontFamily="Inter" Content="BLOCK" FontSize="15" Foreground="{x:Bind ViewModel.DimmedAccentColor, Mode=OneWay}" FontWeight="Bold"/>
-                    </Grid>
+                <Grid Grid.Row="2" Background="{x:Bind ViewModel.AccentColor}" Padding="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <muxc:ProgressBar Grid.Column="0" IsIndeterminate="True" Width="80" />
+                    <TextBlock Grid.Column="1" FontFamily="Inter" Text="65%" Foreground="LightGray" FontWeight="Bold" FontSize="10" VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="2"></TextBlock>
+                    <HyperlinkButton Grid.Column="3" FontFamily="Inter" Content="STOP" FontSize="15" Foreground="{x:Bind ViewModel.DimmedAccentColor, Mode=OneWay}" FontWeight="Bold"/>
+                    <HyperlinkButton Grid.Column="4" FontFamily="Inter" Content="BLOCK" FontSize="15" Foreground="{x:Bind ViewModel.DimmedAccentColor, Mode=OneWay}" FontWeight="Bold"/>
                 </Grid>
-            </Border>
+            </Grid>
+        </Border>
 
-            <Border
-                Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center"
-                Background="{x:Bind ViewModel.BackgroundColor, Mode=OneWay}"
-                Width="317" Height="168"
-                CornerRadius="12"
-            >
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
+        <Border
+            HorizontalAlignment="Center"
+            Background="{x:Bind ViewModel.BackgroundColor, Mode=OneWay}"
+            Width="317" Height="168"
+            CornerRadius="12"
+        >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-                    <StackPanel Grid.Row="0" Padding="20, 30, 30, 0">
-                        <TextBlock FontFamily="Inter" FontSize="20" Foreground="Black">Hello :)</TextBlock>
-                        <TextBlock FontFamily="Inter" FontSize="13" Margin="0,40,0,5" Foreground="DimGray">Text From LAN/chance</TextBlock>
-                    </StackPanel>
+                <StackPanel Grid.Row="0" Padding="20, 30, 30, 0">
+                    <TextBlock FontFamily="Inter" FontSize="20" Foreground="Black">Hello :)</TextBlock>
+                    <TextBlock FontFamily="Inter" FontSize="13" Margin="0,40,0,5" Foreground="DimGray">Text From LAN/chance</TextBlock>
+                </StackPanel>
 
-                    <StackPanel Grid.Row="1">
+                <StackPanel Grid.Row="1">
 
-                    </StackPanel>
+                </StackPanel>
 
-                    <Grid Grid.Row="2" Background="{x:Bind ViewModel.AccentColor}" Padding="5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <HyperlinkButton Grid.Column="0" FontFamily="Inter" Content="COPIED." FontSize="15" Foreground="{x:Bind ViewModel.DimmedAccentColor, Mode=OneWay}" FontWeight="Bold"/>
-                        <TextBlock Grid.Column="1" FontFamily="Inter" Foreground="LightGray" FontWeight="Bold" FontSize="10" VerticalAlignment="Center"></TextBlock>
-                        <HyperlinkButton Grid.Column="2" FontFamily="Inter" Content="BLOCK" FontSize="15" Foreground="{x:Bind ViewModel.DimmedAccentColor, Mode=OneWay}" FontWeight="Bold"/>
-                    </Grid>
+                <Grid Grid.Row="2" Background="{x:Bind ViewModel.AccentColor}" Padding="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <HyperlinkButton Grid.Column="0" FontFamily="Inter" Content="COPIED." FontSize="15" Foreground="{x:Bind ViewModel.DimmedAccentColor, Mode=OneWay}" FontWeight="Bold"/>
+                    <TextBlock Grid.Column="1" FontFamily="Inter" Foreground="LightGray" FontWeight="Bold" FontSize="10" VerticalAlignment="Center"></TextBlock>
+                    <HyperlinkButton Grid.Column="2" FontFamily="Inter" Content="BLOCK" FontSize="15" Foreground="{x:Bind ViewModel.DimmedAccentColor, Mode=OneWay}" FontWeight="Bold"/>
                 </Grid>
-            </Border>
-        </Grid>
-    </Grid>
+            </Grid>
+        </Border>
+    </StackPanel>
 </Page>

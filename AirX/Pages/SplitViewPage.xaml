@@ -28,7 +28,7 @@
                 IsPaneOpen="True"
                 DisplayMode="CompactInline"
                 IsTabStop="False"
-                OpenPaneLength="240"
+                OpenPaneLength="320"
                 PaneBackground="Transparent"
             >
                 <SplitView.Pane>
@@ -61,6 +61,7 @@
                                     Text="{x:Bind SharedViewModel.LoggingInUid, Mode=OneWay, Converter={StaticResource loggingInUidStringToDescriptionConverter}}"
                                 />
                             </Grid>
+
                             <DropDownButton
                                 Grid.Row="0" Grid.Column="1"
                                 VerticalAlignment="Center"
@@ -72,12 +73,13 @@
                                     <MenuFlyout Placement="Bottom">
                                         <MenuFlyoutItem Text="Toggle Day/Night" Click="ToggleDayNightClicked">
                                             <MenuFlyoutItem.Icon>
-                                                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE77B;"/>
+                                                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE708;"/>
                                             </MenuFlyoutItem.Icon>
                                         </MenuFlyoutItem>
                                     </MenuFlyout>
                                 </DropDownButton.Flyout>
                             </DropDownButton>
+                         
                         </Grid>
                         <ListView
                             x:Name="NavLinksList"
@@ -88,6 +90,18 @@
                             ItemsSource="{x:Bind NavLinks}"
                             ItemTemplate="{StaticResource NavLinkItemTemplate}"
                             SelectionMode="Single"
+                        />
+                        <CalendarView
+                            SelectionMode="Single"
+                            IsGroupLabelVisible="True"
+                            IsOutOfScopeEnabled="True"
+                            Language="en"
+                            CalendarIdentifier="GregorianCalendar" 
+                        />
+                        <RatingControl AutomationProperties.Name="Simple RatingControl" 
+                                           IsClearEnabled="True"
+                                           IsReadOnly="False" 
+                                           Caption="Your rating"
                         />
                     </StackPanel>
                 </SplitView.Pane>

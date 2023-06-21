@@ -58,8 +58,8 @@ namespace AirX.View
                 new PrepareWindowParameters
                 {
                     Title = "New Text Window",
-                    Width = WINDOW_WIDTH,
-                    Height = WINDOW_HEIGHT,
+                    WidthPortion = WINDOW_WIDTH / 3840.0 * 1.75,
+                    HeightPortion = WINDOW_HEIGHT / 2160.0 * 1.75,
                     CenterScreen = false,
                     TopMost = true,
                     Resizable = false,

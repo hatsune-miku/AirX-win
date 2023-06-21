@@ -70,6 +70,11 @@ public class AirXBridge
         handler?.Invoke(incomingText, sourceIpAddressSring);
     }
 
+    private static void OnFileComing(uint fileSize, IntPtr fileName, uint fileNamelen, IntPtr sourceIpAddress, uint sourceIpAddressLen)
+    {
+        // TODO
+    }
+
     private static bool ShouldInterrupt()
     {
         return ShouldInterruptSignal;
@@ -95,7 +100,7 @@ public class AirXBridge
         try
         {
             Console.WriteLine("AirX version: " + airx_version());
-            Console.WriteLine("Is first run: " + airx_is_first_run());
+            Console.WriteLine("AirX compabilitily version: " + airx_compatibility_number());
 
             AirXInstance = airx_create(
                 (ushort)SettingsUtil.Int(DefaultKeys.DiscoveryServiceServerPort, 9818),
@@ -132,7 +137,7 @@ public class AirXBridge
         AirXTextServiceThread = new Thread(() =>
         {
             Debug.WriteLine("Text start");
-            airx_text_service(AirXInstance, OnTextReceived, ShouldInterrupt);
+            airx_text_service(AirXInstance, OnTextReceived, OnFileComing, ShouldInterrupt);
             Debug.WriteLine("Text end");
 
             synchronizationContext.Post((_) =>
@@ -178,8 +183,10 @@ public class AirXBridge
     public static extern int airx_version();
 
     [DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl)]
-    [return: MarshalAs(UnmanagedType.I1)]
-    public static extern bool airx_is_first_run();
+    public static extern int airx_compatibility_number();
+
+    [DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void airx_init();
 
     [DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr airx_create(UInt16 discovery_service_server_port,
@@ -189,8 +196,6 @@ public class AirXBridge
                                             UInt16 text_service_listen_port,
                                             byte group_identity);
 
-    [DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr airx_restore();
 
     // Define delegate for the interrupt function
     public delegate bool InterruptFunc();
@@ -198,17 +203,21 @@ public class AirXBridge
     [DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl)]
     public static extern void airx_lan_discovery_service(IntPtr airx_ptr, InterruptFunc should_interrupt);
 
-    [DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void airx_lan_discovery_service_async(IntPtr airx_ptr, InterruptFunc should_interrupt);
 
     // Define delegate for the callback function
-    public delegate void CallbackFunc(IntPtr text, uint textLen, IntPtr sourceIpAddress, uint sourceIpAddressLen);
+    public delegate void TextCallbackFunction(
+        IntPtr text, uint textLen, IntPtr sourceIpAddress, uint sourceIpAddressLen);
+    public delegate void FileComingCallbackFunction(
+        uint fileSize, IntPtr fileName, uint fileNamelen, IntPtr sourceIpAddress, uint sourceIpAddressLen);
 
     [DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void airx_text_service(IntPtr airx_ptr, CallbackFunc callback, InterruptFunc should_interrupt);
+    public static extern void airx_text_service(
+        IntPtr airx_ptr, 
+        TextCallbackFunction textCallback,
+        FileComingCallbackFunction fileComingCallback,
+        InterruptFunc should_interrupt
+    );
 
-    [DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void airx_text_service_async(IntPtr airx_ptr, CallbackFunc callback, InterruptFunc should_interrupt);
 
     [DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.I1)]

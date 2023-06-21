@@ -44,8 +44,8 @@ namespace AirX.View
                 new PrepareWindowParameters
                 {
                     Title = "About AirX",
-                    Width = 890,
-                    Height = 525,
+                    WidthPortion = 890 / 3840.0 * 1.75,
+                    HeightPortion = 525 / 2160.0 * 1.75,
                     CenterScreen = true,
                     TopMost = true,
                     Resizable = false,

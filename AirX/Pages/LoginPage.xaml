@@ -37,12 +37,12 @@
                     IsEnabled="{x:Bind ViewModel.IsLoggingIn, Mode=OneWay, Converter={StaticResource BooleanInvertionConverter}}"
                 />
 
-                <TextBox
+                <PasswordBox
                     x:Name="textBoxPassword" 
                     PreviewKeyDown="onTextBoxesKeyDown"
                     PlaceholderText="Password"
                     Margin="0,0,0,20"
-                    Text="{x:Bind ViewModel.Password, Mode=TwoWay}"
+                    Password="{x:Bind ViewModel.Password, Mode=TwoWay}"
                     IsEnabled="{x:Bind ViewModel.IsLoggingIn, Mode=OneWay, Converter={StaticResource BooleanInvertionConverter}}"
                 />
 
@@ -72,6 +72,7 @@
                     />
                 </Grid>
 
+                
                 <TextBlock
                     TextWrapping="WrapWholeWords"
                     Margin="0,24,0,0"
@@ -79,6 +80,14 @@
                     <Span xml:space="preserve"><Run>No AirX account yet? </Run><Hyperlink NavigateUri="https://airx.eggtartc.com/signup">Create One!</Hyperlink>
                     </Span>
                 </TextBlock>
+                
+                <Button Click="GoogleLoginButton_Click">
+                    <Button.Background>
+                        <SolidColorBrush Opacity="0"/>
+                    </Button.Background>
+                    <Image Source="C:\Chance\AirX0616\AirX\Assets\btn_google_signin_dark_focus_web@2x.png" Width="191" Height="46" />
+                </Button>
+
             </StackPanel>
         </Grid>
     </Grid>

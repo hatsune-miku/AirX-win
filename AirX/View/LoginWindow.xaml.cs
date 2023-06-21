@@ -9,6 +9,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Newtonsoft.Json.Serialization;
 using System;
+using System.Drawing;
 /**
 * MVVM: Model View ViewModel 
 */
@@ -36,10 +37,10 @@ namespace AirX.View
                 new PrepareWindowParameters
                 {
                     Title = "AirX Login",
-                    Width = 827,
-                    Height = 758,
+                    WidthPortion = 827 / 3840.0 * 1.75,
+                    HeightPortion = 758 / 2160.0 * 1.75,
                     CenterScreen = true,
-                    TopMost = true,
+                    TopMost = false,
                     Resizable = false,
                     HaveMaximumButton = false,
                     HaveMinimumButton = true,
