@@ -14,7 +14,8 @@ namespace AirX.Util
 
         DiscoveryServiceClientPort,
         DiscoveryServiceServerPort,
-        TextServiceListenPort,
+        DataServiceListenPort,
+        DataServiceAddressIpV4,
         GroupIdentity,
 
         LoggedInUid,
@@ -51,7 +52,7 @@ namespace AirX.Util
             // 像啊，很像啊
             Write(DefaultKeys.DiscoveryServiceClientPort, 0);
             Write(DefaultKeys.DiscoveryServiceServerPort, 9818);
-            Write(DefaultKeys.TextServiceListenPort, 9819);
+            Write(DefaultKeys.DataServiceListenPort, 9819);
             Write(DefaultKeys.GroupIdentity, 0);
             Write(DefaultKeys.ShouldAutoSignIn, false);
             Write(DefaultKeys.IsNotFirstRun, true);

@@ -18,11 +18,15 @@ using Windows.Storage;
 using WinRT.Interop;
 using AirX.Util;
 using AirX.View;
+using AirX.ViewModel;
+using System.Windows.Xps.Serialization;
 
 namespace AirX.Pages
 {
     public sealed partial class ConfigurationPage : Page
     {
+        ConfigurationViewModel ViewModel = new();
+
         public ConfigurationPage()
         {
             this.InitializeComponent();
@@ -69,6 +73,74 @@ namespace AirX.Pages
             {
                 this.textBlock.Text = "Operation cancelled.";
             }
+        }
+
+        private bool IsPortValid(int port)
+        {
+            return port == 0 || (1024 < port && port < 65535);
+        }
+
+        private bool IsIpV4AddressValid(string address)
+        {
+            var parts = address.Split(':');
+            return (parts.Length == 4 
+                && parts.All(p => int.TryParse(p, out int res) && res >= 0 && res <= 255));
+        }
+
+        private bool IsGroupIdentityValid(int groupIdentity)
+        {
+            return 0 <= groupIdentity && groupIdentity <= 255;
+        }
+
+        // TODO: !
+        private void OnLanDiscoveryServerPortSaved(object sender, RoutedEventArgs e)
+        {
+            if (!int.TryParse(ViewModel.LanDiscoveryServerPort, out int port) || !IsPortValid(port))
+            {
+                UIUtil.ShowContentDialog("Error", "Invalid port value.", Content.XamlRoot);
+                return;
+            }
+            SettingsUtil.Write(DefaultKeys.DiscoveryServiceServerPort, port);
+        }
+
+        private void OnLanDiscoveryClientPortSaved(object sender, RoutedEventArgs e)
+        {
+            if (!int.TryParse(ViewModel.LanDiscoveryClientPort, out int port) || !IsPortValid(port))
+            {
+                UIUtil.ShowContentDialog("Error", "Invalid port value.", Content.XamlRoot);
+                return;
+            }
+            SettingsUtil.Write(DefaultKeys.DiscoveryServiceClientPort, port);
+        }
+
+        private void OnDataServiceListenAddressSaved(object sender, RoutedEventArgs e)
+        {
+            if (!IsIpV4AddressValid(ViewModel.DataServiceAddressIpV4))
+            {
+                UIUtil.ShowContentDialog("Error", "Invalid IpV4 address.", Content.XamlRoot);
+                return;
+            }
+            SettingsUtil.Write(DefaultKeys.DataServiceAddressIpV4, ViewModel.DataServiceAddressIpV4);
+        }
+
+        private void OnDataServiceListenPortSaved(object sender, RoutedEventArgs e)
+        {
+            if (!int.TryParse(ViewModel.DataServiceAddressIpV4, out int port) || !IsPortValid(port))
+            {
+                UIUtil.ShowContentDialog("Error", "Invalid port value.", Content.XamlRoot);
+                return;
+            }
+            SettingsUtil.Write(DefaultKeys.DiscoveryServiceClientPort, port);
+        }
+
+        private void OnGroupIdentitySaved(object sender, RoutedEventArgs e)
+        {
+            if (!int.TryParse(ViewModel.GroupIdentity, out int gi) || !IsGroupIdentityValid(gi))
+            {
+                UIUtil.ShowContentDialog("Error", "Invalid group identity.", Content.XamlRoot);
+                return;
+            }
+            SettingsUtil.Write(DefaultKeys.GroupIdentity, gi);
         }
     }
 }

@@ -107,7 +107,7 @@ public class AirXBridge
                 (ushort)SettingsUtil.Int(DefaultKeys.DiscoveryServiceClientPort, 0),
                 listenAddressBuffer,
                 listenAddressSize,
-                (ushort)SettingsUtil.Int(DefaultKeys.TextServiceListenPort, 9819),
+                (ushort)SettingsUtil.Int(DefaultKeys.DataServiceListenPort, 9819),
                 ((byte)SettingsUtil.Int(DefaultKeys.GroupIdentity, 0))
             );
         }

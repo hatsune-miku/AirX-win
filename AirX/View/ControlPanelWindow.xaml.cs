@@ -40,7 +40,7 @@ namespace AirX.View
                 new PrepareWindowParameters
                 {
                     Title = "Control Panel",
-                    WidthPortion = 1420 / 3840.0 * 1.75,
+                    WidthPortion = 1510 / 3840.0 * 1.75,
                     HeightPortion = 930 / 2160.0 * 1.75,
                     CenterScreen = true,
                     TopMost = false,
