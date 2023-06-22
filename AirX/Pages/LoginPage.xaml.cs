@@ -63,15 +63,15 @@ namespace AirX.Pages
             }
 
             // Success
-            SettingsUtil.Write(DefaultKeys.SavedUid, ViewModel.Uid);
-            SettingsUtil.Write(DefaultKeys.LoggedInUid, ViewModel.Uid);
-            SettingsUtil.Write(DefaultKeys.SavedCredential, response.token);
-            SettingsUtil.Write(DefaultKeys.SavedCredentialType, CredentialType.AirXToken);
+            SettingsUtil.Write(Keys.SavedUid, ViewModel.Uid);
+            SettingsUtil.Write(Keys.LoggedInUid, ViewModel.Uid);
+            SettingsUtil.Write(Keys.SavedCredential, response.token);
+            SettingsUtil.Write(Keys.SavedCredentialType, CredentialType.AirXToken);
             GlobalViewModel.Instance.LoggingInUid = ViewModel.Uid;
             GlobalViewModel.Instance.IsSignedIn = true;
 
             SettingsUtil.Write(
-                DefaultKeys.ShouldAutoSignIn,
+                Keys.ShouldAutoSignIn,
                 ViewModel.ShouldRememberPassword
             );
 

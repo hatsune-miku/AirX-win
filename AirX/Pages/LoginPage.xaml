@@ -15,7 +15,7 @@
     </Page.Resources>
 
     <Grid>
-        <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid>
             <StackPanel
                 DataContext="{x:Bind ViewModel}"
                 Orientation="Vertical"
@@ -77,13 +77,26 @@
                     <Span xml:space="preserve"><Run>No AirX account yet? </Run><Hyperlink NavigateUri="https://airx.eggtartc.com/signup">Create One!</Hyperlink>
                     </Span>
                 </TextBlock>
-                
-                <Button Click="GoogleLoginButton_Click">
-                    <Button.Background>
-                        <SolidColorBrush Opacity="0"/>
-                    </Button.Background>
-                    <Image Source="C:\Chance\AirX0616\AirX\Assets\btn_google_signin_dark_focus_web@2x.png" Width="191" Height="46" />
-                </Button>
+
+
+                <MenuFlyoutSeparator />
+
+                <HyperlinkButton
+                    Margin="0, 12, 0, 0"
+                    Click="GoogleLoginButton_Click" Width="191" Height="46" Padding="0"
+                >
+                    <HyperlinkButton.ContentTemplate>
+                        <DataTemplate>
+                            <Image 
+                                Margin="0"
+                                Stretch="Fill"
+                                Width="191"
+                                Height="46"
+                                Source="ms-appx:///Assets/btn_google_signin_dark_focus_web@2x.png"
+                            />
+                        </DataTemplate>
+                    </HyperlinkButton.ContentTemplate>
+                </HyperlinkButton>
 
             </StackPanel>
         </Grid>

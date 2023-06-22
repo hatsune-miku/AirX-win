@@ -9,5 +9,13 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-    <pages:LoginPage />
+    <Grid RowDefinitions="32, *">
+        <Grid
+            Grid.Row="0"
+            x:Name="titleBar"
+            Background="Transparent"
+            Opacity="0"
+        />
+        <pages:LoginPage Grid.Row="1" />
+    </Grid>
 </localView:BaseWindow>

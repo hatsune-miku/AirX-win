@@ -37,11 +37,11 @@ namespace AirX.View
             Instance = this;
 
             PrepareWindow(
-                new PrepareWindowParameters
+                new WindowParameters
                 {
                     Title = "Control Panel",
-                    WidthPortion = 1510 / 3840.0 * 1.75,
-                    HeightPortion = 930 / 2160.0 * 1.75,
+                    WidthPortion = 1810 / 3840.0 * 1.75,
+                    HeightPortion = 1230 / 2160.0 * 1.75,
                     CenterScreen = true,
                     TopMost = false,
                     Resizable = true,

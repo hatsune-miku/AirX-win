@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="assets\sign-in.html" />
     <None Remove="Pages\LoginPage.xaml" />
     <None Remove="Pages\TrayMenuHolderPage.xaml" />
     <None Remove="View\AboutWindow.xaml" />

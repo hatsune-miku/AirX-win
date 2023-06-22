@@ -34,7 +34,7 @@ namespace AirX.View
 
             Instance = this;
             PrepareWindow(
-                new PrepareWindowParameters
+                new WindowParameters
                 {
                     Title = "AirX Login",
                     WidthPortion = 827 / 3840.0 * 1.75,
@@ -44,8 +44,10 @@ namespace AirX.View
                     Resizable = false,
                     HaveMaximumButton = false,
                     HaveMinimumButton = true,
+                    EnableMicaEffect = true,
                 }
             );
+            SetTitleBar(titleBar);
         }
     }
 }

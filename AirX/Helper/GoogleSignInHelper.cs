@@ -80,8 +80,13 @@ namespace AirX.Helper
 
             // Sends an HTTP response to the browser.
             var response = context.Response;
-            string responseString = string.Format("<html><head><meta http-equiv='refresh' content='10;url=https://google.com'></head><body>Please return to the app.</body></html>");
+
+            // Read ms-appx:///Assets/sign-in.html
+            var signInHtmlFile = await Windows.Storage.StorageFile.GetFileFromApplicationUriAsync
+                (new Uri("ms-appx:///Assets/sign-in.html"));
+            string responseString = await Windows.Storage.FileIO.ReadTextAsync(signInHtmlFile);
             var buffer = Encoding.UTF8.GetBytes(responseString);
+
             response.ContentLength64 = buffer.Length;
             var responseOutput = response.OutputStream;
             Task responseTask = responseOutput.WriteAsync(buffer, 0, buffer.Length)

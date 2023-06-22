@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation and Contributors.
 // Licensed under the MIT License.
 
+using AirX.Extension;
 using AirX.Util;
 using AirX.View;
 using AirX.ViewModel;
@@ -16,11 +17,13 @@ using Microsoft.UI.Xaml.Navigation;
 using SRCounter;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Principal;
 using System.Threading;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using WinRT.Interop;
@@ -44,12 +47,12 @@ namespace AirX.View
 
             context = SynchronizationContext.Current;
 
-            TrySignIn();
+            TrySignInAsync().LogOnError();
             AirXBridge.TryStartAirXService();
             AirXBridge.SetOnTextReceivedHandler(Handler);
         }
 
-        private async void TrySignIn()
+        private async Task TrySignInAsync()
         {
             if (!await AccountUtil.TryAutomaticLogin())
             {

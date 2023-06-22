@@ -35,7 +35,7 @@ namespace AirX.View
             };
 
             PrepareWindow(
-                new PrepareWindowParameters
+                new WindowParameters
                 {
                     Title = "About AirX",
                     WidthPortion = 890 / 3840.0 * 1.75,
@@ -48,7 +48,6 @@ namespace AirX.View
                     EnableMicaEffect = true,
                 }
             );
-
             SetTitleBar(titleBar);
         }
     }

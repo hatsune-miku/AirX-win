@@ -55,11 +55,11 @@ namespace AirX.View
             this.InitializeComponent();
 
             PrepareWindow(
-                new PrepareWindowParameters
+                new WindowParameters
                 {
                     Title = "New Text Window",
                     WidthPortion = WINDOW_WIDTH / 3840.0 * 1.75,
-                    HeightPortion = WINDOW_HEIGHT / 2160.0 * 1.75,
+                    HeightPortion = WINDOW_HEIGHT / 3840.0 * 1.75,
                     CenterScreen = false,
                     TopMost = true,
                     Resizable = false,
@@ -69,9 +69,11 @@ namespace AirX.View
                 }
             );
 
+            SetTitleBar(titleBar);
+
             var screenSize = UIUtil.GetPrimaryScreenSize();
             ExtendsContentIntoTitleBar = true;
-            AppWindow.Move(
+            CurrentAppWindow.Move(
                 new PointInt32(
                     (int)(screenSize.Width - WINDOW_WIDTH - 16), 
                     (int)(screenSize.Height - WINDOW_HEIGHT - 16)

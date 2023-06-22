@@ -1,6 +1,8 @@
-﻿using AirX.Util;
+﻿using AirX.Extension;
+using AirX.Util;
 using AirX.ViewModel;
 using Microsoft.UI.Xaml;
+using PInvoke;
 using System;
 using System.Diagnostics;
 using System.Net.Http.Headers;
@@ -8,7 +10,9 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
+using static System.Net.Mime.MediaTypeNames;
 
 public class AirXBridge
 {
@@ -24,22 +28,25 @@ public class AirXBridge
     private static bool ShouldInterruptSignal = false;
     private static SynchronizationContext synchronizationContext = SynchronizationContext.Current;
 
-    private static async void OnTimerTick(object sender, object e)
+    private static void OnTimerTick(object sender, object e)
     {
         var DataPackageView = Clipboard.GetContent();
-        if (DataPackageView.Contains(StandardDataFormats.Text))
+        if (!DataPackageView.Contains(StandardDataFormats.Text))
         {
-            try
-            {
-                var text = await DataPackageView.GetTextAsync();
-                if (text != lastClipboardText)
-                {
-                    lastClipboardText = text;
-                    OnClipboardChanged(text);
-                }
-            }
-            catch(Exception) { }
+            return;
         }
+        DataPackageView.GetTextAsync().AsTask().ContinueWith(t =>
+        {
+            if (t.Result != lastClipboardText)
+            {
+                lastClipboardText = t.Result;
+                try
+                {
+                    OnClipboardChanged(t.Result);
+                }
+                catch (Exception) { }
+            }
+        }, TaskScheduler.Default).LogOnError();
     }
 
     private static void OnClipboardChanged(string newText)
@@ -103,12 +110,12 @@ public class AirXBridge
             Console.WriteLine("AirX compabilitily version: " + airx_compatibility_number());
 
             AirXInstance = airx_create(
-                (ushort)SettingsUtil.Int(DefaultKeys.DiscoveryServiceServerPort, 9818),
-                (ushort)SettingsUtil.Int(DefaultKeys.DiscoveryServiceClientPort, 0),
+                (ushort)SettingsUtil.Int(Keys.DiscoveryServiceServerPort, 9818),
+                (ushort)SettingsUtil.Int(Keys.DiscoveryServiceClientPort, 0),
                 listenAddressBuffer,
                 listenAddressSize,
-                (ushort)SettingsUtil.Int(DefaultKeys.DataServiceListenPort, 9819),
-                ((byte)SettingsUtil.Int(DefaultKeys.GroupIdentity, 0))
+                (ushort)SettingsUtil.Int(Keys.DataServiceListenPort, 9819),
+                ((byte)SettingsUtil.Int(Keys.GroupIdentity, 0))
             );
         }
         catch (Exception e)

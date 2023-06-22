@@ -8,7 +8,7 @@ using Windows.Storage;
 
 namespace AirX.Util
 {
-    public enum DefaultKeys
+    public enum Keys
     {
         IsNotFirstRun,
 
@@ -42,28 +42,29 @@ namespace AirX.Util
         public static void TryInitializeConfigurationsForFirstRun()
         {
             // TODO: remove
-            Write(DefaultKeys.BlockList, "");
+            Write(Keys.BlockList, "");
 
-            if (Bool(DefaultKeys.IsNotFirstRun, false))
+            if (Bool(Keys.IsNotFirstRun, false))
             {
                 return;
             }
             
             // 像啊，很像啊
-            Write(DefaultKeys.DiscoveryServiceClientPort, 0);
-            Write(DefaultKeys.DiscoveryServiceServerPort, 9818);
-            Write(DefaultKeys.DataServiceListenPort, 9819);
-            Write(DefaultKeys.GroupIdentity, 0);
-            Write(DefaultKeys.ShouldAutoSignIn, false);
-            Write(DefaultKeys.IsNotFirstRun, true);
+            Write(Keys.DiscoveryServiceClientPort, 0);
+            Write(Keys.DiscoveryServiceServerPort, 9818);
+            Write(Keys.DataServiceListenPort, 9819);
+            Write(Keys.DataServiceAddressIpV4, "0.0.0.0");
+            Write(Keys.GroupIdentity, 0);
+            Write(Keys.ShouldAutoSignIn, false);
+            Write(Keys.IsNotFirstRun, true);
         }
 
-        public static string String(DefaultKeys key, string def)
+        public static string String(Keys key, string def)
         {
             return localSettings.Values[key.ToString()] as string ?? def;
         }
 
-        public static bool Bool(DefaultKeys key, bool def)
+        public static bool Bool(Keys key, bool def)
         {
             if (bool.TryParse(String(key, "!"), out bool ret))
             {
@@ -72,7 +73,7 @@ namespace AirX.Util
             return def;
         }
 
-        public static int Int(DefaultKeys key, int def)
+        public static int Int(Keys key, int def)
         {
             if (int.TryParse(String(key, "!"), out int ret))
             {
@@ -81,7 +82,7 @@ namespace AirX.Util
             return def;
         }
 
-        public static double Double(DefaultKeys key, double def)
+        public static double Double(Keys key, double def)
         {
             if (double.TryParse(String(key, "!"), out double ret))
             {
@@ -90,7 +91,7 @@ namespace AirX.Util
             return def;
         }
 
-        public static void Delete(DefaultKeys key)
+        public static void Delete(Keys key)
         {
             localSettings.Values.Remove(key.ToString());
         }
@@ -98,12 +99,12 @@ namespace AirX.Util
         // Utility methods
         public static string SavedCredential()
         {
-            return String(DefaultKeys.SavedCredential, "");
+            return String(Keys.SavedCredential, "");
         }
 
         public static CredentialType ReadCredentialType()
         {
-            string rawValue = String(DefaultKeys.SavedCredentialType, CredentialType.Password.ToString());
+            string rawValue = String(Keys.SavedCredentialType, CredentialType.Password.ToString());
             return Enum.TryParse<CredentialType>(rawValue, out CredentialType credentialType)
                 ? credentialType
                 : CredentialType.Password;
@@ -111,7 +112,7 @@ namespace AirX.Util
 
         public static HashSet<string> ReadBlockList()
         {
-            string rawValue = String(DefaultKeys.BlockList, "");
+            string rawValue = String(Keys.BlockList, "");
             return rawValue.Split(
                 ",",
                 StringSplitOptions.TrimEntries 
@@ -121,22 +122,12 @@ namespace AirX.Util
 
         public static void WriteBlockList(HashSet<string> blockList)
         {
-            Write(DefaultKeys.BlockList, string.Join(',', blockList));
+            Write(Keys.BlockList, string.Join(',', blockList));
         }
 
-        public static void Write(DefaultKeys key, object value)
+        public static void Write(Keys key, object value)
         {
-            localSettings.Values[key.ToString()] = value;
-        }
-
-        public static void Write(DefaultKeys key, bool value)
-        {
-            Write(key, value.ToString());
-        }
-
-        public static void Write(DefaultKeys key, CredentialType value)
-        {
-            Write(key, value.ToString());
+            localSettings.Values[key.ToString()] = value.ToString();
         }
     }
 }

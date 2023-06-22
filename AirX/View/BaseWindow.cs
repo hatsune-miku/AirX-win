@@ -19,15 +19,15 @@ namespace AirX.View
 {
     public abstract class BaseWindow : Window
     {
-        protected readonly AppWindow AppWindow;
+        protected readonly AppWindow CurrentAppWindow;
         protected readonly OverlappedPresenter Presenter;
         protected readonly SystemBackdropConfiguration backdropConfiguration;
         protected readonly MicaController micaController;
 
         protected BaseWindow()
         {
-            AppWindow = UIUtil.GetAppWindow(this);
-            Presenter = (OverlappedPresenter) AppWindow.Presenter;
+            CurrentAppWindow = UIUtil.GetAppWindow(this);
+            Presenter = (OverlappedPresenter) CurrentAppWindow.Presenter;
 
             backdropConfiguration = new SystemBackdropConfiguration
             {
@@ -40,19 +40,19 @@ namespace AirX.View
             };
         }
 
-        protected void PrepareWindow(PrepareWindowParameters parameters)
+        protected void PrepareWindow(WindowParameters parameters)
         {
             var screenSize = UIUtil.GetPrimaryScreenSize();
             var graphics = Graphics.FromHwnd(IntPtr.Zero);
             var realWidth = (int)(parameters.WidthPortion / (graphics.DpiX / 100.0) * screenSize.Width);
             var realHeight = (int)(parameters.HeightPortion / (graphics.DpiY / 100.0) * screenSize.Height);
-            AppWindow.Resize(new SizeInt32(realWidth, realHeight));
+            CurrentAppWindow.Resize(new SizeInt32(realWidth, realHeight));
             if (parameters.CenterScreen)
             {
-                UIUtil.MoveWindowToCenterScreen(AppWindow);
+                UIUtil.MoveWindowToCenterScreen(CurrentAppWindow);
             }
 
-            AppWindow.Title = parameters.Title;
+            CurrentAppWindow.Title = parameters.Title;
             Presenter.IsResizable = parameters.Resizable;
             Presenter.IsMaximizable = parameters.HaveMaximumButton;
             Presenter.IsMinimizable = parameters.HaveMinimumButton;
@@ -136,7 +136,7 @@ namespace AirX.View
         }
     }
 
-    public partial class PrepareWindowParameters
+    public partial class WindowParameters
     {
         public string Title { get; set; }
         public double WidthPortion { get; set; }

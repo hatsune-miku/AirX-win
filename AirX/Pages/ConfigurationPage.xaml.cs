@@ -3,13 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -19,17 +12,75 @@ using WinRT.Interop;
 using AirX.Util;
 using AirX.View;
 using AirX.ViewModel;
-using System.Windows.Xps.Serialization;
+using AirX.Model;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using System.Diagnostics;
 
 namespace AirX.Pages
 {
     public sealed partial class ConfigurationPage : Page
     {
         ConfigurationViewModel ViewModel = new();
-
         public ConfigurationPage()
         {
             this.InitializeComponent();
+
+            ViewModel.SettingsItems.Add(new Model.SettingsItem
+            {
+                Title = "LAN Discovery Server Port",
+                Description = "1024 ~ 65535",
+                SettingsKey = Keys.DiscoveryServiceServerPort,
+                Validator = IsPortValid,
+                XamlRoot = Content.XamlRoot,
+                ViewModel = ViewModel,
+            });
+
+            ViewModel.SettingsItems.Add(new Model.SettingsItem
+            {
+                Title = "LAN Discovery Client Port",
+                Description = "1024 ~ 65535",
+                SettingsKey = Keys.DiscoveryServiceClientPort,
+                Validator = IsPortValid,
+                XamlRoot = Content.XamlRoot,
+                ViewModel = ViewModel,
+            });
+
+            ViewModel.SettingsItems.Add(new Model.SettingsItem
+            {
+                Title = "Data Service Listen Address (IpV4)",
+                SettingsKey = Keys.DataServiceAddressIpV4,
+                Validator = IsIpV4AddressValid,
+                XamlRoot = Content.XamlRoot,
+                ViewModel = ViewModel,
+            });
+
+            ViewModel.SettingsItems.Add(new Model.SettingsItem
+            {
+                Title = "Data Service Listen Port",
+                Description = "1024 ~ 65535",
+                SettingsKey = Keys.DataServiceListenPort,
+                Validator = IsPortValid,
+                XamlRoot = Content.XamlRoot,
+                ViewModel = ViewModel,
+            });
+
+            ViewModel.SettingsItems.Add(new Model.SettingsItem
+            {
+                Title = "Group Identity",
+                Description = "0 ~ 255. Only devices with the same group identity can discover each other.",
+                SettingsKey = Keys.GroupIdentity,
+                Validator = IsGroupIdentityValid,
+                XamlRoot = Content.XamlRoot,
+                ViewModel = ViewModel,
+            });
+        }
+
+        public string GetTitle()
+        {
+            return ViewModel.IsUnsaved
+                ? "Preferences - Edited"
+                : "Perferences";
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -75,9 +126,10 @@ namespace AirX.Pages
             }
         }
 
-        private bool IsPortValid(int port)
+        private bool IsPortValid(string portRepr)
         {
-            return port == 0 || (1024 < port && port < 65535);
+            return int.TryParse(portRepr, out int port)
+                && port == 0 || (1024 < port && port < 65535);
         }
 
         private bool IsIpV4AddressValid(string address)
@@ -87,60 +139,10 @@ namespace AirX.Pages
                 && parts.All(p => int.TryParse(p, out int res) && res >= 0 && res <= 255));
         }
 
-        private bool IsGroupIdentityValid(int groupIdentity)
+        private bool IsGroupIdentityValid(string groupIdentityRepr)
         {
-            return 0 <= groupIdentity && groupIdentity <= 255;
-        }
-
-        // TODO: !
-        private void OnLanDiscoveryServerPortSaved(object sender, RoutedEventArgs e)
-        {
-            if (!int.TryParse(ViewModel.LanDiscoveryServerPort, out int port) || !IsPortValid(port))
-            {
-                UIUtil.ShowContentDialog("Error", "Invalid port value.", Content.XamlRoot);
-                return;
-            }
-            SettingsUtil.Write(DefaultKeys.DiscoveryServiceServerPort, port);
-        }
-
-        private void OnLanDiscoveryClientPortSaved(object sender, RoutedEventArgs e)
-        {
-            if (!int.TryParse(ViewModel.LanDiscoveryClientPort, out int port) || !IsPortValid(port))
-            {
-                UIUtil.ShowContentDialog("Error", "Invalid port value.", Content.XamlRoot);
-                return;
-            }
-            SettingsUtil.Write(DefaultKeys.DiscoveryServiceClientPort, port);
-        }
-
-        private void OnDataServiceListenAddressSaved(object sender, RoutedEventArgs e)
-        {
-            if (!IsIpV4AddressValid(ViewModel.DataServiceAddressIpV4))
-            {
-                UIUtil.ShowContentDialog("Error", "Invalid IpV4 address.", Content.XamlRoot);
-                return;
-            }
-            SettingsUtil.Write(DefaultKeys.DataServiceAddressIpV4, ViewModel.DataServiceAddressIpV4);
-        }
-
-        private void OnDataServiceListenPortSaved(object sender, RoutedEventArgs e)
-        {
-            if (!int.TryParse(ViewModel.DataServiceAddressIpV4, out int port) || !IsPortValid(port))
-            {
-                UIUtil.ShowContentDialog("Error", "Invalid port value.", Content.XamlRoot);
-                return;
-            }
-            SettingsUtil.Write(DefaultKeys.DiscoveryServiceClientPort, port);
-        }
-
-        private void OnGroupIdentitySaved(object sender, RoutedEventArgs e)
-        {
-            if (!int.TryParse(ViewModel.GroupIdentity, out int gi) || !IsGroupIdentityValid(gi))
-            {
-                UIUtil.ShowContentDialog("Error", "Invalid group identity.", Content.XamlRoot);
-                return;
-            }
-            SettingsUtil.Write(DefaultKeys.GroupIdentity, gi);
+            return int.TryParse(groupIdentityRepr, out int groupIdentity)
+                && 0 <= groupIdentity && groupIdentity <= 255;
         }
     }
 }

@@ -15,8 +15,8 @@ namespace AirX.Util
 
         public static void ClearSavedUserInfoAndSignOut()
         {
-            SettingsUtil.Delete(DefaultKeys.SavedCredential);
-            SettingsUtil.Delete(DefaultKeys.LoggedInUid);
+            SettingsUtil.Delete(Keys.SavedCredential);
+            SettingsUtil.Delete(Keys.LoggedInUid);
             GlobalViewModel.Instance.IsSignedIn = false;
             GlobalViewModel.Instance.LoggingInUid = "";
             GlobalViewModel.Instance.LoggingGreetingsName = "AirX User";
@@ -37,11 +37,10 @@ namespace AirX.Util
 
         public static async Task<bool> TryGreetings()
         {
-
             AirXCloud.GreetingsResponse greetingsResponse;
             try
             {
-                var uid = SettingsUtil.String(DefaultKeys.SavedUid, "");
+                var uid = SettingsUtil.String(Keys.SavedUid, "");
                 greetingsResponse = await AirXCloud.GreetingsAsync(uid);
                 if (greetingsResponse.success)
                 {
@@ -50,6 +49,7 @@ namespace AirX.Util
                 }
             }
             catch { }
+
             return false;
         }
 
@@ -58,7 +58,7 @@ namespace AirX.Util
          */
         public static async Task<bool> TryAutomaticLogin()
         {
-            if (!SettingsUtil.Bool(DefaultKeys.ShouldAutoSignIn, false))
+            if (!SettingsUtil.Bool(Keys.ShouldAutoSignIn, false))
             {
                 return false;
             }
@@ -73,14 +73,14 @@ namespace AirX.Util
                 return false;
             }
 
-            string token = SettingsUtil.String(DefaultKeys.SavedCredential, "");
+            string token = SettingsUtil.String(Keys.SavedCredential, "");
             if (string.IsNullOrEmpty(token))
             {
                 Debug.WriteLine("Failed: empty token");
                 return false;
             }
 
-            string uid = SettingsUtil.String(DefaultKeys.SavedUid, "");
+            string uid = SettingsUtil.String(Keys.SavedUid, "");
             if (string.IsNullOrEmpty(uid))
             {
                 Debug.WriteLine("Failed: empty uid");
@@ -108,8 +108,8 @@ namespace AirX.Util
             Debug.WriteLine("Success.");
             GlobalViewModel.Instance.LoggingInUid = uid;
             GlobalViewModel.Instance.IsSignedIn = true;
-            SettingsUtil.Write(DefaultKeys.LoggedInUid, uid);
-            SettingsUtil.Write(DefaultKeys.SavedCredential, renewResponse.token);
+            SettingsUtil.Write(Keys.LoggedInUid, uid);
+            SettingsUtil.Write(Keys.SavedCredential, renewResponse.token);
             return true;
         }
     }

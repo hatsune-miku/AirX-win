@@ -63,7 +63,7 @@ namespace AirX.Services
                 {
                     throw new IncorrectCredentialTypeException();
                 }
-                var credential = SettingsUtil.String(DefaultKeys.SavedCredential, "");
+                var credential = SettingsUtil.String(Keys.SavedCredential, "");
                 request.Headers.Authorization = new("Bearer", credential);
             }
 
