@@ -4,10 +4,12 @@ using AirX.ViewModel;
 using Microsoft.UI.Xaml;
 using PInvoke;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Security.RightsManagement;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,15 +19,43 @@ using static System.Net.Mime.MediaTypeNames;
 public class AirXBridge
 {
     public delegate void OnTextReceivedHandler(string text, string from);
+    public delegate void OnFileComingHandler(UInt64 fileSize, string fileName, string from);
+    public delegate void OnFileSendingHandler(byte fileId, UInt64 progress, UInt64 total, FileStatus status);
+    public delegate void OnFilePartHandler(byte fileId, UInt32 offset, UInt32 length, byte[] data);
 
+    public enum FileStatus
+    {
+        Requested = 1,
+        Rejected = 2,
+        Accepted = 3,
+        InProgress = 4,
+        CancelledBySender = 5,
+        CancelledByReceiver = 6,
+        Completed = 7,
+        Error = 8
+    }
+
+    // AirX Threads
     private static IntPtr AirXInstance = IntPtr.Zero;
     private static Thread AirXDiscoveryThread = null;
     private static Thread AirXTextServiceThread = null;
+    private static bool ShouldInterruptSignal = false;
+
+    // AirX Alloc
+    private static IntPtr PeerListBuffer = Utf8StringAlloc(1024);
+
+    // Clipboard related
     private static DispatcherTimer Timer = null;
     private static string lastClipboardText = "";
     private static bool ShouldSkipNextEvent = false;
-    private static OnTextReceivedHandler handler = null;
-    private static bool ShouldInterruptSignal = false;
+
+    // Handlers
+    private static OnTextReceivedHandler onTextReceivedHandler = null;
+    private static OnFileComingHandler onFileComingHandler = null;
+    private static OnFileSendingHandler onFileSendingHandler = null;
+    private static OnFilePartHandler onFilePartHandler = null;
+
+    // Async
     private static SynchronizationContext synchronizationContext = SynchronizationContext.Current;
 
     private static void OnTimerTick(object sender, object e)
@@ -74,12 +104,28 @@ public class AirXBridge
         package.SetText(incomingText);
         Clipboard.SetContent(package);
 
-        handler?.Invoke(incomingText, sourceIpAddressSring);
+        onTextReceivedHandler?.Invoke(incomingText, sourceIpAddressSring);
     }
 
     private static void OnFileComing(uint fileSize, IntPtr fileName, uint fileNamelen, IntPtr sourceIpAddress, uint sourceIpAddressLen)
     {
-        // TODO
+        string fileNameString = Utf8StringFromPtr(fileName, (int)fileNamelen);
+        string sourceIpAddressString = Utf8StringFromPtr(sourceIpAddress, (int)sourceIpAddressLen);
+
+        onFileComingHandler?.Invoke(fileSize, fileNameString, sourceIpAddressString);
+    }
+
+    private static void OnFileSending(byte fileId, ulong progress, ulong total, byte status)
+    {
+        onFileSendingHandler?.Invoke(fileId, progress, total, (FileStatus)status);
+    }
+
+    private static void OnFilePart(byte fileId, uint offset, uint length, IntPtr data)
+    {
+        byte[] dataBytes = new byte[length];
+        Marshal.Copy(data, dataBytes, 0, (int)length);
+
+        onFilePartHandler?.Invoke(fileId, offset, length, dataBytes);
     }
 
     private static bool ShouldInterrupt()
@@ -89,7 +135,22 @@ public class AirXBridge
 
     public static void SetOnTextReceivedHandler(OnTextReceivedHandler handler)
     {
-        AirXBridge.handler = handler;
+        onTextReceivedHandler = handler;
+    }
+
+    public static void SetOnFileComingHandler(OnFileComingHandler handler)
+    {
+        onFileComingHandler = handler;
+    }
+
+    public static void SetOnFileSendingHandler(OnFileSendingHandler handler)
+    {
+        onFileSendingHandler = handler;
+    }
+
+    public static void SetOnFilePartHandler(OnFilePartHandler handler)
+    {
+        onFilePartHandler = handler;
     }
 
     public static bool TryStartAirXService()
@@ -144,7 +205,14 @@ public class AirXBridge
         AirXTextServiceThread = new Thread(() =>
         {
             Debug.WriteLine("Text start");
-            airx_text_service(AirXInstance, OnTextReceived, OnFileComing, ShouldInterrupt);
+            airx_data_service(
+                AirXInstance,
+                OnTextReceived, 
+                OnFileComing,
+                OnFileSending,
+                OnFilePart,
+                ShouldInterrupt
+            );
             Debug.WriteLine("Text end");
 
             synchronizationContext.Post((_) =>
@@ -183,6 +251,22 @@ public class AirXBridge
         Timer = null;
     }
 
+    public static List<string> GetPeers()
+    {
+        uint len = airx_get_peers(AirXInstance, PeerListBuffer);
+        if (len <= 0)
+        {
+            return new List<string>();
+        }
+        string peers = Utf8StringFromPtr(PeerListBuffer, (int)len);
+        return new List<string>(peers.Split(','));
+    }
+
+    public static void Deinit()
+    {
+        FreeUtf8String(PeerListBuffer);
+        PeerListBuffer = IntPtr.Zero;
+    }
 
     const string DLL_NAME = "libairx.dll";
 
@@ -208,7 +292,7 @@ public class AirXBridge
     public delegate bool InterruptFunc();
 
     [DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void airx_lan_discovery_service(IntPtr airx_ptr, InterruptFunc should_interrupt);
+    public static extern void airx_lan_discovery_service(IntPtr airxPtr, InterruptFunc should_interrupt);
 
 
     // Define delegate for the callback function
@@ -216,31 +300,33 @@ public class AirXBridge
         IntPtr text, uint textLen, IntPtr sourceIpAddress, uint sourceIpAddressLen);
     public delegate void FileComingCallbackFunction(
         uint fileSize, IntPtr fileName, uint fileNamelen, IntPtr sourceIpAddress, uint sourceIpAddressLen);
+    public delegate void FileSendingCallbackFunction(
+        byte fileId, UInt64 progress, UInt64 total, byte status);
+    public delegate void FilePartCallbackFunction(
+        byte fileId, UInt32 offset, UInt32 length, IntPtr data);
 
     [DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void airx_text_service(
-        IntPtr airx_ptr, 
+    public static extern void airx_data_service(
+        IntPtr airxPtr, 
         TextCallbackFunction textCallback,
         FileComingCallbackFunction fileComingCallback,
-        InterruptFunc should_interrupt
+        FileSendingCallbackFunction fileSendingCallback,
+        FilePartCallbackFunction filePartCallback,
+        InterruptFunc interruptCallback
     );
-
 
     [DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl)]
     [return: MarshalAs(UnmanagedType.I1)]
-    public static extern bool airx_lan_broadcast(IntPtr airx_ptr);
+    public static extern bool airx_lan_broadcast(IntPtr airxPtr);
 
     [DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl)]
-    public static extern uint airx_get_peers(IntPtr airx_ptr, string buffer);
+    public static extern uint airx_get_peers(IntPtr airxPtr, IntPtr buffer);
 
     [DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void airx_start_auto_broadcast(IntPtr airx_ptr);
+    public static extern void airx_send_text(IntPtr airxPtr, string host, uint host_len, IntPtr text, uint text_len);
 
     [DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void airx_send_text(IntPtr airx_ptr, string host, uint host_len, IntPtr text, uint text_len);
-
-    [DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void airx_broadcast_text(IntPtr airx_ptr, IntPtr text, uint len);
+    public static extern void airx_broadcast_text(IntPtr airxPtr, IntPtr text, uint len);
 
     public static IntPtr CreateUtf8String(string s, out uint size)
     {
@@ -259,5 +345,10 @@ public class AirXBridge
     public static string Utf8StringFromPtr(IntPtr ptr, int length)
     {
         return Marshal.PtrToStringUTF8(ptr, length);
+    }
+
+    public static IntPtr Utf8StringAlloc(uint size)
+    {
+        return Marshal.AllocHGlobal((int)size);
     }
 }
