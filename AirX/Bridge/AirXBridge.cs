@@ -1,4 +1,5 @@
-﻿using AirX.Extension;
+﻿using AirX.Bridge;
+using AirX.Extension;
 using AirX.Util;
 using AirX.ViewModel;
 using Microsoft.UI.Xaml;
@@ -89,7 +90,7 @@ public class AirXBridge
         Debug.WriteLine("Clipboard changed");
 
         IntPtr buffer = CreateUtf8String(newText, out uint size);
-        airx_broadcast_text(AirXInstance, buffer, size);
+        AirXNative.airx_broadcast_text(AirXInstance, buffer, size);
         FreeUtf8String(buffer);
         Debug.WriteLine("Sent");
     }
@@ -167,10 +168,10 @@ public class AirXBridge
 
         try
         {
-            Console.WriteLine("AirX version: " + airx_version());
-            Console.WriteLine("AirX compabilitily version: " + airx_compatibility_number());
+            Console.WriteLine("AirX version: " + AirXNative.airx_version());
+            Console.WriteLine("AirX compabilitily version: " + AirXNative.airx_compatibility_number());
 
-            AirXInstance = airx_create(
+            AirXInstance = AirXNative.airx_create(
                 (ushort)SettingsUtil.Int(Keys.DiscoveryServiceServerPort, 9818),
                 (ushort)SettingsUtil.Int(Keys.DiscoveryServiceClientPort, 0),
                 listenAddressBuffer,
@@ -188,7 +189,7 @@ public class AirXBridge
         AirXDiscoveryThread = new Thread(() =>
         {
             Debug.WriteLine("Discovery start");
-            airx_lan_discovery_service(AirXInstance, ShouldInterrupt);
+            AirXNative.airx_lan_discovery_service(AirXInstance, ShouldInterrupt);
             Debug.WriteLine("Discovery end");
 
             // Run in UI thread
@@ -205,7 +206,7 @@ public class AirXBridge
         AirXTextServiceThread = new Thread(() =>
         {
             Debug.WriteLine("Text start");
-            airx_data_service(
+            AirXNative.airx_data_service(
                 AirXInstance,
                 OnTextReceived, 
                 OnFileComing,
@@ -253,7 +254,7 @@ public class AirXBridge
 
     public static List<string> GetPeers()
     {
-        uint len = airx_get_peers(AirXInstance, PeerListBuffer);
+        uint len = AirXNative.airx_get_peers(AirXInstance, PeerListBuffer);
         if (len <= 0)
         {
             return new List<string>();
@@ -268,32 +269,9 @@ public class AirXBridge
         PeerListBuffer = IntPtr.Zero;
     }
 
-    const string DLL_NAME = "libairx.dll";
-
-    [DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int airx_version();
-
-    [DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int airx_compatibility_number();
-
-    [DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void airx_init();
-
-    [DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl)]
-    public static extern IntPtr airx_create(UInt16 discovery_service_server_port,
-                                            UInt16 discovery_service_client_port,
-                                            IntPtr text_service_listen_addr,
-                                            UInt32 text_service_listen_addr_len,
-                                            UInt16 text_service_listen_port,
-                                            byte group_identity);
-
 
     // Define delegate for the interrupt function
     public delegate bool InterruptFunc();
-
-    [DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void airx_lan_discovery_service(IntPtr airxPtr, InterruptFunc should_interrupt);
-
 
     // Define delegate for the callback function
     public delegate void TextCallbackFunction(
@@ -305,28 +283,6 @@ public class AirXBridge
     public delegate void FilePartCallbackFunction(
         byte fileId, UInt32 offset, UInt32 length, IntPtr data);
 
-    [DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void airx_data_service(
-        IntPtr airxPtr, 
-        TextCallbackFunction textCallback,
-        FileComingCallbackFunction fileComingCallback,
-        FileSendingCallbackFunction fileSendingCallback,
-        FilePartCallbackFunction filePartCallback,
-        InterruptFunc interruptCallback
-    );
-
-    [DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl)]
-    [return: MarshalAs(UnmanagedType.I1)]
-    public static extern bool airx_lan_broadcast(IntPtr airxPtr);
-
-    [DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl)]
-    public static extern uint airx_get_peers(IntPtr airxPtr, IntPtr buffer);
-
-    [DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void airx_send_text(IntPtr airxPtr, string host, uint host_len, IntPtr text, uint text_len);
-
-    [DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void airx_broadcast_text(IntPtr airxPtr, IntPtr text, uint len);
 
     public static IntPtr CreateUtf8String(string s, out uint size)
     {
