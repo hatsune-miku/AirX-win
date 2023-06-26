@@ -2,15 +2,11 @@
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 using WinRT.Interop;
 using Windows.Foundation;
-using Windows.Graphics.Display;
 using Windows.Graphics;
+using AirX.View;
 using Microsoft.UI.Xaml.Controls;
 
 namespace AirX.Util
@@ -48,6 +44,17 @@ namespace AirX.Util
                 XamlRoot = xamlRoot
             }.ShowAsync();
         }
+
+        public static void SetWindowVisibility(Window window, bool visible)
+        {
+            PInvoke.User32.ShowWindow(
+                WindowNative.GetWindowHandle(window),
+                visible
+                    ? PInvoke.User32.WindowShowStyle.SW_SHOW
+                    : PInvoke.User32.WindowShowStyle.SW_HIDE
+            );
+        }
+
         public static Point CalculateCenterScreenPoint(int width, int height)
         {
             var size = GetPrimaryScreenSize();
@@ -56,6 +63,15 @@ namespace AirX.Util
                 X = size.Width / 2 - width / 2,
                 Y = size.Height / 2 - height / 2
             };
+        }
+
+        public static async Task<ContentDialogResult> MessageBoxAsync(
+            string title, string content, string primaryButtonText, string secondaryButtonText)
+        {
+            var window = new MessageBoxWindow(
+                title, content, primaryButtonText, secondaryButtonText);
+            ContentDialogResult result = await window.ShowAsync();
+            return result;
         }
     }
 }

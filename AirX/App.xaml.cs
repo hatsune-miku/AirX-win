@@ -1,4 +1,5 @@
-﻿using AirX.Util;
+﻿using AirX.Bridge;
+using AirX.Util;
 
 namespace AirX
 {
@@ -14,7 +15,7 @@ namespace AirX
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
             SettingsUtil.TryInitializeConfigurationsForFirstRun();
-            AirXBridge.airx_init();
+            AirXNative.airx_init();
 
             var window = new View.TrayIconHolderWindow();
             window.Activate();

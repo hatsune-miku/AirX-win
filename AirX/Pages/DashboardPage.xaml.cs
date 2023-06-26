@@ -9,6 +9,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading;
+using AirX.Bridge;
 using AirX.Services;
 using AirX.Util;
 using AirX.ViewModel;
@@ -32,7 +33,7 @@ namespace AirX.Pages
 
         public DashboardPage()
         {
-            ViewModel.AirXVersion = AirXBridge.airx_version().ToString();
+            ViewModel.AirXVersion = AirXNative.airx_version().ToString();
             this.InitializeComponent();
         }
 

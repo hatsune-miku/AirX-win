@@ -168,8 +168,8 @@ public class AirXBridge
 
         try
         {
-            Console.WriteLine("AirX version: " + AirXNative.airx_version());
-            Console.WriteLine("AirX compabilitily version: " + AirXNative.airx_compatibility_number());
+            Debug.WriteLine("AirX version: " + AirXNative.airx_version());
+            Debug.WriteLine("AirX compabilitily version: " + AirXNative.airx_compatibility_number());
 
             AirXInstance = AirXNative.airx_create(
                 (ushort)SettingsUtil.Int(Keys.DiscoveryServiceServerPort, 9818),
@@ -191,8 +191,6 @@ public class AirXBridge
             Debug.WriteLine("Discovery start");
             AirXNative.airx_lan_discovery_service(AirXInstance, ShouldInterrupt);
             Debug.WriteLine("Discovery end");
-
-            // Run in UI thread
 
             synchronizationContext.Post((_) =>
             {

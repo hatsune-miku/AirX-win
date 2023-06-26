@@ -68,7 +68,6 @@
                         IsEnabled="{x:Bind ViewModel.IsLoggingIn, Mode=OneWay, Converter={StaticResource BooleanInvertionConverter}}"
                     />
                 </Grid>
-
                 
                 <TextBlock
                     TextWrapping="WrapWholeWords"
@@ -77,7 +76,6 @@
                     <Span xml:space="preserve"><Run>No AirX account yet? </Run><Hyperlink NavigateUri="https://airx.eggtartc.com/signup">Create One!</Hyperlink>
                     </Span>
                 </TextBlock>
-
 
                 <MenuFlyoutSeparator />
 

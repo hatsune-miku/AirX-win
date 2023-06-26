@@ -21,6 +21,7 @@
     <None Remove="Pages\LoginPage.xaml" />
     <None Remove="Pages\TrayMenuHolderPage.xaml" />
     <None Remove="View\AboutWindow.xaml" />
+    <None Remove="View\MessageBoxWindow.xaml" />
     <None Remove="View\MicaTestPage.xaml" />
     <None Remove="View\NewTextWindow.xaml" />
   </ItemGroup>
@@ -37,6 +38,12 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="PInvoke.User32" Version="0.7.124" />
     <Manifest Include="$(ApplicationManifest)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="View\MessageBoxWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <ItemGroup>

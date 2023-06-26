@@ -40,6 +40,14 @@ namespace AirX.View
             };
         }
 
+        protected void Resize(int width, int height)
+        {
+            var graphics = Graphics.FromHwnd(IntPtr.Zero);
+            var realWidth = width / (graphics.DpiX / 100.0);
+            var realHeight = height / (graphics.DpiY / 100.0);
+            CurrentAppWindow.Resize(new SizeInt32((int)realWidth, (int)realHeight));
+        }
+
         protected void PrepareWindow(WindowParameters parameters)
         {
             var screenSize = UIUtil.GetPrimaryScreenSize();
@@ -57,6 +65,7 @@ namespace AirX.View
             Presenter.IsMaximizable = parameters.HaveMaximumButton;
             Presenter.IsMinimizable = parameters.HaveMinimumButton;
             Presenter.IsAlwaysOnTop = parameters.TopMost;
+            Presenter.SetBorderAndTitleBar(parameters.HaveBorder, parameters.HaveTitleBar);
 
             if (parameters.EnableMicaEffect)
             {
@@ -136,7 +145,7 @@ namespace AirX.View
         }
     }
 
-    public partial class WindowParameters
+    public class WindowParameters
     {
         public string Title { get; set; }
         public double WidthPortion { get; set; }
@@ -147,5 +156,7 @@ namespace AirX.View
         public bool HaveMinimumButton { get; set; } = true;
         public bool TopMost { get; set; } = false;
         public bool EnableMicaEffect { get; set; } = false;
+        public bool HaveBorder { get; set; } = true;
+        public bool HaveTitleBar { get; set; } = true;
     }
 }

@@ -1,12 +1,17 @@
+﻿using AirX.Extension;
 using AirX.Helper;
-
 using AirX.Services;
 using AirX.Util;
 using AirX.View;
 using AirX.ViewModel;
+using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
+using System;
+using System.Diagnostics;
+using System.Drawing;
+using System.Threading.Tasks;
 
 namespace AirX.Pages
 {
@@ -93,6 +98,5 @@ namespace AirX.Pages
         {
             var _ = googleSignInHelper.TrySignInAsync();
         }
-
     }
 }

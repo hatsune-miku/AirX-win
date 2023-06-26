@@ -59,7 +59,7 @@ namespace AirX.View
                 {
                     Title = "New Text Window",
                     WidthPortion = WINDOW_WIDTH / 3840.0 * 1.75,
-                    HeightPortion = WINDOW_HEIGHT / 3840.0 * 1.75,
+                    HeightPortion = WINDOW_HEIGHT / 2160.0 * 1.75,
                     CenterScreen = false,
                     TopMost = true,
                     Resizable = false,

@@ -3,29 +3,12 @@
 
 using AirX.Extension;
 using AirX.Util;
-using AirX.View;
 using AirX.ViewModel;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
 using SRCounter;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using WinRT.Interop;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -38,7 +21,11 @@ namespace AirX.View
     /// </summary>
     public sealed partial class TrayIconHolderWindow : Window
     {
-        private static AirXBridge.OnTextReceivedHandler Handler = OnTextReceived;
+        private static AirXBridge.OnTextReceivedHandler TextHandler = OnTextReceived;
+        private static AirXBridge.OnFileComingHandler FileHandler = OnFileComing;
+        private static AirXBridge.OnFileSendingHandler FileSendingHandler = OnFileSending;
+        private static AirXBridge.OnFilePartHandler FilePartHandler = OnFilePart;
+
         private static SynchronizationContext context;
 
         public TrayIconHolderWindow()
@@ -49,7 +36,7 @@ namespace AirX.View
 
             TrySignInAsync().LogOnError();
             AirXBridge.TryStartAirXService();
-            AirXBridge.SetOnTextReceivedHandler(Handler);
+            AirXBridge.SetOnTextReceivedHandler(TextHandler);
         }
 
         private async Task TrySignInAsync()
@@ -62,6 +49,21 @@ namespace AirX.View
             }
             NotificationUtil.ShowNotification(
                 "Welcome back, " + GlobalViewModel.Instance.LoggingGreetingsName + "!");
+        }
+
+        private static void OnFilePart(byte fileId, uint offset, uint length, byte[] data)
+        {
+            
+        }
+
+        private static void OnFileSending(byte fileId, ulong progress, ulong total, AirXBridge.FileStatus status)
+        {
+
+        }
+
+        private static void OnFileComing(ulong fileSize, string fileName, string from)
+        {
+
         }
 
         private static void OnTextReceived(string text, string source)
