@@ -37,6 +37,9 @@ namespace AirX.View
             TrySignInAsync().LogOnError();
             AirXBridge.TryStartAirXService();
             AirXBridge.SetOnTextReceivedHandler(TextHandler);
+
+            AppWindow.Resize(new(1, 1));
+            AppWindow.Move(new(32768, 32768));
         }
 
         private async Task TrySignInAsync()
