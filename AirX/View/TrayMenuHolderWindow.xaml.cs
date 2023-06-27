@@ -9,6 +9,7 @@ using Microsoft.UI.Xaml;
 using SRCounter;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using WinRT.Interop;
@@ -23,6 +24,10 @@ namespace AirX.View
         private static AirXBridge.OnFilePartHandler FilePartHandler = OnFilePart;
 
         private static SynchronizationContext context;
+
+        private static FileStream writingFile = null;
+        private static ulong totalSize = 0;
+
 
         public TrayIconHolderWindow()
         {
@@ -53,6 +58,23 @@ namespace AirX.View
         private static void OnFilePart(byte fileId, uint offset, uint length, byte[] data)
         {
             Debug.WriteLine($"File part received: offset={offset}, length={length}");
+            if (writingFile == null)
+            {
+                Debug.WriteLine("File not accepted!");
+                return;
+            }
+            // Preallocate file size
+            if (offset == 0)
+            {
+                writingFile.SetLength((long) totalSize);
+            }
+            writingFile.Write(data, (int) offset, (int)length);
+            if (offset + length == totalSize)
+            {
+                writingFile.Close();
+                writingFile = null;
+                Debug.WriteLine("File recv completed!");
+            }
         }
 
         private static void OnFileSending(byte fileId, ulong progress, ulong total, AirXBridge.FileStatus status)
@@ -95,12 +117,18 @@ namespace AirX.View
                 "Decline!"
             ).ContinueWith(t =>
             {
+                bool accept = t.Result == Microsoft.UI.Xaml.Controls.ContentDialogResult.Primary;
+                if (accept)
+                {
+                    totalSize = fileSize;
+                    writingFile = File.Create("D:\\okokokok.txt");
+                }
                 AirXBridge.RespondToFile(
                     Peer.Parse(from), 
                     1,
                     fileSize,
                     fileName, 
-                    t.Result == Microsoft.UI.Xaml.Controls.ContentDialogResult.Primary
+                    accept
                 );
             }, TaskScheduler.Default).LogOnError();
         }
