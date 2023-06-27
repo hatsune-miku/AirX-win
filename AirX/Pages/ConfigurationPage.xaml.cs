@@ -60,13 +60,39 @@ namespace AirX.Pages
         {
             SettingsItems.Add(new Model.SettingsItem
             {
+                Title = "LAN Group Identifier",
+                Description = "0 ~ 255. Only devices with the same group identity can discover each other.",
+                SettingsKey = Keys.GroupIdentifier,
+                Validator = IsGroupIdentityValid,
+                ItemType = SettingsItemType.String,
+                IsAdvanced = false,
+            });
+
+            SettingsItems.Add(new Model.SettingsItem
+            {
                 Title = "Show Developer Console",
                 Description = "Enables debug output from libairx.",
                 SettingsKey = Keys.ShouldShowConsole,
                 ItemType = SettingsItemType.Boolean,
                 IsAdvanced = true,
-                XamlRoot = Content.XamlRoot,
-                ViewModel = ViewModel,
+            });
+
+            SettingsItems.Add(new Model.SettingsItem
+            {
+                Title = "Kafka Producer",
+                Description = "Enable to share clipboard data with peers.",
+                SettingsKey = Keys.IsKafkaProducer,
+                ItemType = SettingsItemType.Boolean,
+                IsAdvanced = true,
+            });
+
+            SettingsItems.Add(new Model.SettingsItem
+            {
+                Title = "Kafka Consumer",
+                Description = "Enable to accept clipboard data from peers.",
+                SettingsKey = Keys.IsKafkaConsumer,
+                ItemType = SettingsItemType.Boolean,
+                IsAdvanced = true,
             });
 
             SettingsItems.Add(new Model.SettingsItem
@@ -77,8 +103,6 @@ namespace AirX.Pages
                 Validator = IsPortValid,
                 ItemType = SettingsItemType.String,
                 IsAdvanced = true,
-                XamlRoot = Content.XamlRoot,
-                ViewModel = ViewModel,
             });
 
             SettingsItems.Add(new Model.SettingsItem
@@ -89,44 +113,42 @@ namespace AirX.Pages
                 Validator = IsPortValid,
                 ItemType = SettingsItemType.String,
                 IsAdvanced = true,
-                XamlRoot = Content.XamlRoot,
-                ViewModel = ViewModel,
             });
 
             SettingsItems.Add(new Model.SettingsItem
             {
-                Title = "Data Service Listen Address (IpV4)",
+                Title = "LAN Data Service Listen Address (IpV4)",
                 SettingsKey = Keys.DataServiceAddressIpV4,
                 Validator = IsIpV4AddressValid,
                 ItemType = SettingsItemType.String,
                 IsAdvanced = true,
-                XamlRoot = Content.XamlRoot,
-                ViewModel = ViewModel,
             });
 
             SettingsItems.Add(new Model.SettingsItem
             {
-                Title = "Data Service Listen Port",
+                Title = "LAN Data Service Listen Port",
                 Description = "1024 ~ 65535",
                 SettingsKey = Keys.DataServiceListenPort,
                 Validator = IsPortValid,
                 ItemType = SettingsItemType.String,
                 IsAdvanced = true,
-                XamlRoot = Content.XamlRoot,
-                ViewModel = ViewModel,
             });
 
             SettingsItems.Add(new Model.SettingsItem
             {
-                Title = "Group Identifier",
-                Description = "0 ~ 255. Only devices with the same group identity can discover each other.",
-                SettingsKey = Keys.GroupIdentifier,
-                Validator = IsGroupIdentityValid,
+                Title = "AirX Cloud Server",
+                Description = "Only connect to private servers you trust.",
+                SettingsKey = Keys.AirXCloudAddress,
                 ItemType = SettingsItemType.String,
-                IsAdvanced = false,
-                XamlRoot = Content.XamlRoot,
-                ViewModel = ViewModel,
+                IsAdvanced = true,
             });
+
+            foreach (var item in SettingsItems)
+            {
+                item.XamlRoot = Content.XamlRoot;
+                item.ViewModel = ViewModel;
+            }
+
             ApplyLatestItemFilters();
         }
 

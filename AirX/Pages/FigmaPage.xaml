@@ -9,7 +9,7 @@
     mc:Ignorable="d"
     DataContext="ViewModel"
 >
-    <ScrollViewer VerticalScrollBarVisibility="Visible" Height="600">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Height="600">
         <StackPanel Spacing="24" Margin="0, 24, 0, 0">
             <Border
                 HorizontalAlignment="Center"

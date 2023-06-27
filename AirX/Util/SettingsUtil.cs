@@ -28,6 +28,10 @@ namespace AirX.Util
 
         ShouldShowConsole,
         ShouldShowAdvancedSettings,
+
+        IsKafkaProducer,
+        IsKafkaConsumer,
+        AirXCloudAddress,
     }
 
     public enum CredentialType
@@ -61,6 +65,9 @@ namespace AirX.Util
             Write(Keys.IsNotFirstRun, true);
             Write(Keys.ShouldShowConsole, false);
             Write(Keys.ShouldShowAdvancedSettings, false);
+            Write(Keys.IsKafkaProducer, true);
+            Write(Keys.IsKafkaConsumer, true);
+            Write(Keys.AirXCloudAddress, "https://airx.eggtartc.com");
         }
 
         public static string String(Keys key, string def)

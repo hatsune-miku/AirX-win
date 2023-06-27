@@ -42,7 +42,7 @@
                     >
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <TextBox
-                                MaxLength="16"
+                                MaxLength="3600"
                                 TextChanged="{x:Bind OnTextChanged}"
                                 Text="{x:Bind ReadAsString(), BindBack=SetAsString, Mode=TwoWay}"
                             />
@@ -71,7 +71,7 @@
 
         <Pivot Margin="20, 20, 20, 0">
             <PivotItem Header="AirX Core" Margin="8">
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Height="480">
                     <StackPanel Spacing="8">
                     <labs:SettingsCard
                         Header="Show Advanced Settings"
