@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -263,15 +264,56 @@ public class AirXBridge
         Timer = null;
     }
 
-    public static List<string> GetPeers()
+    public static List<Peer> GetPeers()
     {
         uint len = AirXNative.airx_get_peers(AirXInstance, PeerListBuffer);
         if (len <= 0)
         {
-            return new List<string>();
+            return new List<Peer>();
         }
         string peers = Utf8StringFromPtr(PeerListBuffer, (int)len);
-        return new List<string>(peers.Split(','));
+        try
+        {
+            return new List<Peer>(
+                peers.Split(',')
+                .Select(ps => Peer.Parse(ps)
+                )
+            );
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+            return new List<Peer>();
+        }
+    }
+
+    public static void TrySendFile(string path, Peer peer)
+    {
+        var hostString = CreateUtf8String(peer.IpAddress, out uint hostStringSize);
+        var filePathString = CreateUtf8String(path, out uint filePathStringSize);
+        AirXNative.airx_try_send_file(
+            AirXInstance,
+            hostString,
+            hostStringSize,
+            filePathString,
+            filePathStringSize
+        );
+    }
+
+    public static void RespondToFile(Peer peer, byte fileId, UInt64 fileSize, string filePath, bool accept)
+    {
+        var hostString = CreateUtf8String(peer.IpAddress, out uint hostStringSize);
+        var filePathString = CreateUtf8String(filePath, out uint filePathStringSize);
+        AirXNative.airx_respond_to_file(
+            AirXInstance,
+            hostString,
+            hostStringSize,
+            fileId,
+            fileSize,
+            filePathString,
+            filePathStringSize,
+            accept
+        );
     }
 
     public static void Deinit()

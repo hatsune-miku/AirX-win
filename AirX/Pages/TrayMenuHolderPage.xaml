@@ -53,6 +53,12 @@
                     Text="Open Control Panel"
                 />
                 <MenuFlyoutSeparator />
+
+                <MenuFlyoutItem
+                    Command="{x:Bind SendFileCommand}"
+                    Text="Send File"
+                />
+
                 <MenuFlyoutItem
                     IsEnabled="False"
                     Visibility="{x:Bind ViewModel.IsSignedIn, Mode=OneWay, Converter={StaticResource booleanToVisibilityConverter}}"
