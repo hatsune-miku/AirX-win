@@ -1,10 +1,18 @@
 ﻿using AirX.Util;
 using AirX.ViewModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 
 namespace AirX.Model
 {
+    public enum SettingsItemType
+    {
+        Boolean,
+        String,
+    }
+
     public partial class SettingsItem : ObservableObject
     {
         public delegate bool ValidatorFunction(string valueStringRepresentation);
@@ -16,10 +24,16 @@ namespace AirX.Model
         string description;
 
         [ObservableProperty]
+        bool isAdvanced;
+
+        [ObservableProperty]
         Keys settingsKey;
 
         [ObservableProperty]
         ValidatorFunction validator;
+
+        [ObservableProperty]
+        SettingsItemType itemType;
 
         public ConfigurationViewModel ViewModel { get; set; }
         public XamlRoot XamlRoot { get; set; }
@@ -35,15 +49,39 @@ namespace AirX.Model
             return stringRepresentation;
         }
 
+        public bool ReadAsBoolean()
+        {
+            if (stringRepresentation == null)
+            {
+                stringRepresentation = SettingsUtil.String(SettingsKey, "false")
+                    .ToLower();
+            }
+            if (bool.TryParse(stringRepresentation, out bool result))
+            {
+                return result;
+            }
+            return false;
+        }
+
         public void SetAsString(string newValue)
         {
             stringRepresentation = newValue;
+        }
+
+        public void OnTextChanged(object sender, TextChangedEventArgs e)
+        {
             ViewModel.IsUnsaved = true;
         }
 
-        public void OnValueSaved(object sender, RoutedEventArgs e)
+        public void SetAsBoolean(bool newValue)
         {
-            if (!Validator(stringRepresentation))
+            stringRepresentation = newValue.ToString();
+            SettingsUtil.Write(SettingsKey, stringRepresentation.ToLower());
+        }
+
+        public void OnButtonValueSaved(object sender, RoutedEventArgs e)
+        {
+            if (Validator != null && !Validator(stringRepresentation))
             {
                 if (XamlRoot != null)
                 {

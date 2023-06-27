@@ -7,6 +7,7 @@ using PInvoke;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -59,6 +60,11 @@ public class AirXBridge
     // Async
     private static SynchronizationContext synchronizationContext = SynchronizationContext.Current;
 
+    public static void RedirectAirXStdoutToDebugConsole()
+    {
+        PInvoke.Kernel32.AllocConsole();
+    }
+
     private static void OnTimerTick(object sender, object e)
     {
         var DataPackageView = Clipboard.GetContent();
@@ -66,18 +72,25 @@ public class AirXBridge
         {
             return;
         }
-        DataPackageView.GetTextAsync().AsTask().ContinueWith(t =>
+        try
         {
-            if (t.Result != lastClipboardText)
+            DataPackageView.GetTextAsync().AsTask().ContinueWith(t =>
             {
-                lastClipboardText = t.Result;
-                try
+                if (t.Result != lastClipboardText)
                 {
-                    OnClipboardChanged(t.Result);
+                    lastClipboardText = t.Result;
+                    try
+                    {
+                        OnClipboardChanged(t.Result);
+                    }
+                    catch (Exception) { }
                 }
-                catch (Exception) { }
-            }
-        }, TaskScheduler.Default).LogOnError();
+            }, TaskScheduler.Default).LogOnError();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
     }
 
     private static void OnClipboardChanged(string newText)
@@ -177,7 +190,7 @@ public class AirXBridge
                 listenAddressBuffer,
                 listenAddressSize,
                 (ushort)SettingsUtil.Int(Keys.DataServiceListenPort, 9819),
-                ((byte)SettingsUtil.Int(Keys.GroupIdentity, 0))
+                ((byte)SettingsUtil.Int(Keys.GroupIdentifier, 0))
             );
         }
         catch (Exception e)

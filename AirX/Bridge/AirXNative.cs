@@ -29,7 +29,7 @@ namespace AirX.Bridge
             IntPtr text_service_listen_addr,
             UInt32 text_service_listen_addr_len,
             UInt16 text_service_listen_port,
-            byte group_identity
+            UInt32 group_identity
         );
 
         [DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl)]

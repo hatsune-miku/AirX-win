@@ -15,6 +15,13 @@ namespace AirX
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
             SettingsUtil.TryInitializeConfigurationsForFirstRun();
+
+            // Debug console
+            if (SettingsUtil.Bool(Keys.ShouldShowConsole, false))
+            {
+                AirXBridge.RedirectAirXStdoutToDebugConsole();
+            }
+
             AirXNative.airx_init();
 
             var window = new View.TrayIconHolderWindow();

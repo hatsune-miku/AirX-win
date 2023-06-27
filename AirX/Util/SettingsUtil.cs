@@ -16,7 +16,7 @@ namespace AirX.Util
         DiscoveryServiceServerPort,
         DataServiceListenPort,
         DataServiceAddressIpV4,
-        GroupIdentity,
+        GroupIdentifier,
 
         LoggedInUid,
         SavedUid,
@@ -25,6 +25,9 @@ namespace AirX.Util
         ShouldAutoSignIn,
 
         BlockList,
+
+        ShouldShowConsole,
+        ShouldShowAdvancedSettings,
     }
 
     public enum CredentialType
@@ -49,14 +52,15 @@ namespace AirX.Util
                 return;
             }
             
-            // 像啊，很像啊
             Write(Keys.DiscoveryServiceClientPort, 0);
             Write(Keys.DiscoveryServiceServerPort, 9818);
             Write(Keys.DataServiceListenPort, 9819);
             Write(Keys.DataServiceAddressIpV4, "0.0.0.0");
-            Write(Keys.GroupIdentity, 0);
+            Write(Keys.GroupIdentifier, 0);
             Write(Keys.ShouldAutoSignIn, false);
             Write(Keys.IsNotFirstRun, true);
+            Write(Keys.ShouldShowConsole, false);
+            Write(Keys.ShouldShowAdvancedSettings, false);
         }
 
         public static string String(Keys key, string def)

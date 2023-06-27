@@ -12,7 +12,7 @@ namespace AirX.Converters
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             return (bool)value
-                ? "Preferences - Edited"
+                ? "Preferences - Unsaved"
                 : "Preferences";
         }
 

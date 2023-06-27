@@ -18,5 +18,8 @@ namespace AirX.ViewModel
 
         [ObservableProperty]
         bool isUnsaved = false;
+
+        [ObservableProperty]
+        bool shouldShowAdvancedSettings = SettingsUtil.Bool(Keys.ShouldShowAdvancedSettings, false);
     }
 }

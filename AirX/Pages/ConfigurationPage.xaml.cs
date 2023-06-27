@@ -16,64 +16,137 @@ using AirX.Model;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System.Diagnostics;
+using Microsoft.UI.Xaml.Data;
 
 namespace AirX.Pages
 {
+    // 还有这东西？
+    public class SettingsDataTemplateSelector : DataTemplateSelector
+    {
+        public DataTemplate BooleanSettingsTemplate { get; set; }
+        public DataTemplate StringSettingsTemplate { get; set; }
+
+        protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
+        {
+            if (item is SettingsItem settingsItem)
+            {
+                switch (settingsItem.ItemType)
+                {
+                    case SettingsItemType.String:
+                        return StringSettingsTemplate;
+
+                    case SettingsItemType.Boolean:
+                        return BooleanSettingsTemplate;
+
+                    default:
+                        return StringSettingsTemplate;
+                }
+            }
+            return base.SelectTemplateCore(item, container);
+        }
+    }
+
     public sealed partial class ConfigurationPage : Page
     {
+        List<SettingsItem> SettingsItems = new();
         ConfigurationViewModel ViewModel = new();
+
         public ConfigurationPage()
         {
             this.InitializeComponent();
+        }
 
-            ViewModel.SettingsItems.Add(new Model.SettingsItem
+        private void OnPageLoaded(object sender, RoutedEventArgs e)
+        {
+            SettingsItems.Add(new Model.SettingsItem
+            {
+                Title = "Show Developer Console",
+                Description = "Enables debug output from libairx.",
+                SettingsKey = Keys.ShouldShowConsole,
+                ItemType = SettingsItemType.Boolean,
+                IsAdvanced = true,
+                XamlRoot = Content.XamlRoot,
+                ViewModel = ViewModel,
+            });
+
+            SettingsItems.Add(new Model.SettingsItem
             {
                 Title = "LAN Discovery Server Port",
                 Description = "1024 ~ 65535",
                 SettingsKey = Keys.DiscoveryServiceServerPort,
                 Validator = IsPortValid,
+                ItemType = SettingsItemType.String,
+                IsAdvanced = true,
                 XamlRoot = Content.XamlRoot,
                 ViewModel = ViewModel,
             });
 
-            ViewModel.SettingsItems.Add(new Model.SettingsItem
+            SettingsItems.Add(new Model.SettingsItem
             {
                 Title = "LAN Discovery Client Port",
-                Description = "1024 ~ 65535",
+                Description = "0 or 1024 ~ 65535",
                 SettingsKey = Keys.DiscoveryServiceClientPort,
                 Validator = IsPortValid,
+                ItemType = SettingsItemType.String,
+                IsAdvanced = true,
                 XamlRoot = Content.XamlRoot,
                 ViewModel = ViewModel,
             });
 
-            ViewModel.SettingsItems.Add(new Model.SettingsItem
+            SettingsItems.Add(new Model.SettingsItem
             {
                 Title = "Data Service Listen Address (IpV4)",
                 SettingsKey = Keys.DataServiceAddressIpV4,
                 Validator = IsIpV4AddressValid,
+                ItemType = SettingsItemType.String,
+                IsAdvanced = true,
                 XamlRoot = Content.XamlRoot,
                 ViewModel = ViewModel,
             });
 
-            ViewModel.SettingsItems.Add(new Model.SettingsItem
+            SettingsItems.Add(new Model.SettingsItem
             {
                 Title = "Data Service Listen Port",
                 Description = "1024 ~ 65535",
                 SettingsKey = Keys.DataServiceListenPort,
                 Validator = IsPortValid,
+                ItemType = SettingsItemType.String,
+                IsAdvanced = true,
                 XamlRoot = Content.XamlRoot,
                 ViewModel = ViewModel,
             });
 
-            ViewModel.SettingsItems.Add(new Model.SettingsItem
+            SettingsItems.Add(new Model.SettingsItem
             {
-                Title = "Group Identity",
+                Title = "Group Identifier",
                 Description = "0 ~ 255. Only devices with the same group identity can discover each other.",
-                SettingsKey = Keys.GroupIdentity,
+                SettingsKey = Keys.GroupIdentifier,
                 Validator = IsGroupIdentityValid,
+                ItemType = SettingsItemType.String,
+                IsAdvanced = false,
                 XamlRoot = Content.XamlRoot,
                 ViewModel = ViewModel,
             });
+            ApplyLatestItemFilters();
+        }
+
+        public void ApplyLatestItemFilters()
+        {
+            ViewModel.SettingsItems = SettingsItems.Where(
+                item => ViewModel.ShouldShowAdvancedSettings || !item.IsAdvanced
+            ).ToList();
+        }
+
+        public void SetShouldShowAdvancedSettings(bool value)
+        {
+            ViewModel.ShouldShowAdvancedSettings = value;
+            SettingsUtil.Write(Keys.ShouldShowAdvancedSettings, value.ToString().ToLower());
+            ApplyLatestItemFilters();
+        }
+
+        public bool GetShouldShowAdvancedSettings()
+        {
+            return ViewModel.ShouldShowAdvancedSettings;
         }
 
         public string GetTitle()

@@ -11,31 +11,55 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     DataContext="ViewModel"
+    Loaded="OnPageLoaded"
 >
     <Page.Resources>
         <StackLayout x:Name="VerticalStackLayout" Orientation="Vertical" Spacing="8"/>
-        
-        <DataTemplate x:Key="SettingsItemTemplate" x:DataType="model:SettingsItem">
-            <labs:SettingsCard 
-                Header="{x:Bind Title, Mode=OneWay}"
-                Description="{x:Bind Description, Mode=OneWay}"
-                ActionIcon="{ui:FontIcon Glyph={x:Null}}"
-                IsClickEnabled="True" 
-            >
-                <StackPanel Orientation="Horizontal" Spacing="8">
-                    <TextBox MaxLength="6" Text="{x:Bind ReadAsString(), BindBack=SetAsString, Mode=TwoWay}" />
-                    <Button Click="{x:Bind OnValueSaved}">
-                        <FontIcon Glyph="&#xE73E;" />
-                    </Button>
-                </StackPanel>
-            </labs:SettingsCard>
-        </DataTemplate>
+
+        <local:SettingsDataTemplateSelector x:Key="SettingsDataTemplateSelector">
+            <local:SettingsDataTemplateSelector.BooleanSettingsTemplate>
+                <DataTemplate x:DataType="model:SettingsItem">
+                    <labs:SettingsCard 
+                        Header="{x:Bind Title, Mode=OneWay}"
+                        Description="{x:Bind Description, Mode=OneWay}"
+                        ActionIcon="{ui:FontIcon Glyph={x:Null}}"
+                        IsClickEnabled="True" 
+                    >
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <ToggleSwitch IsOn="{x:Bind ReadAsBoolean(), BindBack=SetAsBoolean, Mode=TwoWay}" />
+                        </StackPanel>
+                    </labs:SettingsCard>
+                </DataTemplate>
+            </local:SettingsDataTemplateSelector.BooleanSettingsTemplate>
+            
+            <local:SettingsDataTemplateSelector.StringSettingsTemplate>
+                <DataTemplate x:DataType="model:SettingsItem">
+                    <labs:SettingsCard 
+                        Header="{x:Bind Title, Mode=OneWay}"
+                        Description="{x:Bind Description, Mode=OneWay}"
+                        ActionIcon="{ui:FontIcon Glyph={x:Null}}"
+                        IsClickEnabled="True" 
+                    >
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBox
+                                MaxLength="16"
+                                TextChanged="{x:Bind OnTextChanged}"
+                                Text="{x:Bind ReadAsString(), BindBack=SetAsString, Mode=TwoWay}"
+                            />
+                            <Button Click="{x:Bind OnButtonValueSaved}">
+                                <FontIcon Glyph="&#xE73E;" />
+                            </Button>
+                        </StackPanel>
+                    </labs:SettingsCard>
+                </DataTemplate>
+            </local:SettingsDataTemplateSelector.StringSettingsTemplate>
+        </local:SettingsDataTemplateSelector>
 
         <converters:IsUnsavedToPreferenceTitleConverter 
             x:Name="isUnsavedToPreferenceTitleConverter"
         />
     </Page.Resources>
-    
+
     <StackPanel>
         <StackPanel Margin="20, 40, 10, 0">
             <TextBlock
@@ -44,17 +68,43 @@
                 FontWeight="Bold"
             />
         </StackPanel>
-       
+
         <Pivot Margin="20, 20, 20, 0">
             <PivotItem Header="AirX Core" Margin="8">
-                <StackPanel Spacing="4">
-                    <ItemsRepeater
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Spacing="8">
+                    <labs:SettingsCard
+                        Header="Show Advanced Settings"
+                        Description="Please be sure you understand it before changing any advanced settings."
+                        ActionIcon="{ui:FontIcon Glyph={x:Null}}"
+                        IsClickEnabled="True"
+                    >
+                        <ToggleSwitch IsOn="{x:Bind GetShouldShowAdvancedSettings(), BindBack=SetShouldShowAdvancedSettings, Mode=TwoWay}" />
+                    </labs:SettingsCard>
+
+                    <ListView
+                        x:Name="ListViewSettings"
                         ItemsSource="{x:Bind ViewModel.SettingsItems, Mode=OneWay}"
-                        Layout="{StaticResource VerticalStackLayout}"
-                        ItemTemplate="{StaticResource SettingsItemTemplate}"
-                        />
-                    <TextBlock>Saved settings take effect at next launch.</TextBlock>
-                </StackPanel>
+                        ItemTemplateSelector="{StaticResource SettingsDataTemplateSelector}"
+                        SelectionMode="None"
+                        IsItemClickEnabled="False"
+                    >
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="Margin" Value="0"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical" Spacing="4" />
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                    </ListView>
+                    </StackPanel>
+                </ScrollViewer>
             </PivotItem>
 
             <PivotItem Header="Account">
@@ -71,5 +121,7 @@
                 </StackPanel>
             </PivotItem>
         </Pivot>
+
+        <TextBlock Margin="30, 0, 0, 0" FontStyle="Italic">Saved settings take effect at next launch.</TextBlock>
     </StackPanel>
 </Page>

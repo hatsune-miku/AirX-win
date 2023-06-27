@@ -91,18 +91,6 @@
                             ItemTemplate="{StaticResource NavLinkItemTemplate}"
                             SelectionMode="Single"
                         />
-                        <CalendarView
-                            SelectionMode="Single"
-                            IsGroupLabelVisible="True"
-                            IsOutOfScopeEnabled="True"
-                            Language="en"
-                            CalendarIdentifier="GregorianCalendar" 
-                        />
-                        <RatingControl AutomationProperties.Name="Simple RatingControl" 
-                                           IsClearEnabled="True"
-                                           IsReadOnly="False" 
-                                           Caption="Your rating"
-                        />
                     </StackPanel>
                 </SplitView.Pane>
                 <Frame x:Name="frame" />
