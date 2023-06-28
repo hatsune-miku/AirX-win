@@ -69,23 +69,29 @@ public class AirXBridge
     private static void OnTimerTick(object sender, object e)
     {
         var DataPackageView = Clipboard.GetContent();
-        if (!DataPackageView.Contains(StandardDataFormats.Text))
+        try
         {
-            return;
+            if (!DataPackageView.Contains(StandardDataFormats.Text))
+            {
+                return;
+            }
         }
+        catch { }
+
         try
         {
             DataPackageView.GetTextAsync().AsTask().ContinueWith(t =>
             {
-                if (t.Result != lastClipboardText)
+                try
                 {
-                    lastClipboardText = t.Result;
-                    try
+                    if (t.Result != lastClipboardText)
                     {
+                        lastClipboardText = t.Result;
                         OnClipboardChanged(t.Result);
                     }
-                    catch (Exception) { }
                 }
+                catch (Exception)
+                { }
             }, TaskScheduler.Default).LogOnError();
         }
         catch (Exception ex)

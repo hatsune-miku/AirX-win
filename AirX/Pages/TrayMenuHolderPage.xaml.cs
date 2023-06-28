@@ -85,7 +85,10 @@ namespace AirX.Pages
                 {
                     if (t.Result == ContentDialogResult.Primary)
                     {
-                        AirXBridge.TrySendFile(path, peer);
+                        foreach (var p in peers)
+                        {
+                            AirXBridge.TrySendFile(path, p);
+                        }
                     }
                 }, TaskScheduler.Default)
                 .LogOnError();

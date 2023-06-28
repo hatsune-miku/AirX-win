@@ -14,7 +14,7 @@ namespace AirX.Bridge
 
         public static Peer Parse(string s)
         {
-            var part1 = s.Split("-");
+            var part1 = s.Split("@");
             var part2 = part1[1].Split(":");
             return new Peer
             {

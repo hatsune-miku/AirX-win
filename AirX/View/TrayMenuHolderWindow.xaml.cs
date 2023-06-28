@@ -121,7 +121,7 @@ namespace AirX.View
                 if (accept)
                 {
                     totalSize = fileSize;
-                    writingFile = File.Create("D:\\okokokok.txt");
+                    writingFile = File.Create("D:\\received.dat");
                 }
                 AirXBridge.RespondToFile(
                     Peer.Parse(from), 
