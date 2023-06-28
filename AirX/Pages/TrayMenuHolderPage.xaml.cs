@@ -107,13 +107,13 @@ namespace AirX.Pages
         {
             var filePicker = new FileOpenPicker();
             filePicker.SuggestedStartLocation = PickerLocationId.Desktop;
-            filePicker.FileTypeFilter.Add("*.*");
+            filePicker.FileTypeFilter.Add("*");
             filePicker.CommitButtonText = "Send";
 
             var hwnd = WindowNative.GetWindowHandle(TrayIconHolderWindow.Instance);
             InitializeWithWindow.Initialize(filePicker, hwnd);
 
-            return await filePicker.PickMultipleFilesAsync();
+            return new List<StorageFile>() { await filePicker.PickSingleFileAsync() };
         }
     }
 }
