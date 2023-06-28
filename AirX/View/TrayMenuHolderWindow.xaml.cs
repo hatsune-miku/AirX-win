@@ -19,9 +19,9 @@ namespace AirX.View
     public sealed partial class TrayIconHolderWindow : Window
     {
         private static AirXBridge.OnTextReceivedHandler TextHandler = OnTextReceived;
-        private static AirXBridge.OnFileComingHandler FileHandler = OnFileComing;
         private static AirXBridge.OnFileSendingHandler FileSendingHandler = OnFileSending;
         private static AirXBridge.OnFilePartHandler FilePartHandler = OnFilePart;
+        private static AirXBridge.OnFileComingHandler FileComingHandler = OnFileComing;
 
         private static SynchronizationContext context;
 
@@ -38,6 +38,9 @@ namespace AirX.View
             TrySignInAsync().LogOnError();
             AirXBridge.TryStartAirXService();
             AirXBridge.SetOnTextReceivedHandler(TextHandler);
+            AirXBridge.SetOnFileComingHandler(FileComingHandler);
+            AirXBridge.SetOnFileSendingHandler(FileSendingHandler);
+            AirXBridge.SetOnFilePartHandler(FilePartHandler);
 
             AppWindow.Resize(new(1, 1));
             AppWindow.Move(new(32768, 32768));
