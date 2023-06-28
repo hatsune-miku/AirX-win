@@ -38,6 +38,7 @@ namespace AirX.View
 
         public static NewTextWindow InstanceOf(string title, string source)
         {
+            _instance = new();
             _instance.UpdateInformation(title, source);
             return _instance;
         }

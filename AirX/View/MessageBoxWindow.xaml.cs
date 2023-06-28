@@ -7,6 +7,7 @@ using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Drawing;
 using System.Threading.Tasks;
+using WinUIEx;
 
 namespace AirX.View
 {
@@ -30,6 +31,12 @@ namespace AirX.View
 
             ExtendsContentIntoTitleBar = true;
             SetTitleBar(titleBar);
+
+            var manager = WindowManager.Get(this);
+            manager.IsMaximizable = false;
+            manager.IsMinimizable = false;
+            manager.IsAlwaysOnTop = true;
+            manager.IsTitleBarVisible = false;
 
             var presenter = AppWindow.Presenter as OverlappedPresenter;
             presenter.SetBorderAndTitleBar(false, false);
@@ -73,17 +80,13 @@ namespace AirX.View
             Activate();
             await WaitUntilDialogReadyAsync();
             var screenSize = UIUtil.GetPrimaryScreenSize();
-            Graphics graphics = Graphics.FromHwnd(IntPtr.Zero);
-            _dialog.Loaded += (_, _) =>
+            _dialog.Opened += (_, _) =>
             {
                 AppWindow.Resize(new(
-                    (int)((_dialog.ActualWidth - 64) / (graphics.DpiX / 100.0)),
-                    (int)((_dialog.ActualHeight - 96) / (graphics.DpiY / 100.0))
+                    (int)((_dialog.ActualWidth) / 2.96),
+                    (int)((_dialog.ActualHeight) / 2.66)
                 ));
-                AppWindow.Move(new(
-                    (int) (screenSize.Width / 2 - AppWindow.Size.Width / 2),
-                    (int) (screenSize.Height / 2 - AppWindow.Size.Height / 2)
-                ));
+                this.CenterOnScreen();
                 UIUtil.SetWindowVisibility(this, true);
             };
             var result = await _dialog.ShowAsync();

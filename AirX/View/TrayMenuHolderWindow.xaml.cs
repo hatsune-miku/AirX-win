@@ -70,11 +70,7 @@ namespace AirX.View
                 Debug.WriteLine("File not accepted!");
                 return;
             }
-            // Preallocate file size
-            if (offset == 0)
-            {
-                writingFile.SetLength((long) totalSize);
-            }
+            
             writingFile.Write(data, (int) offset, (int)length);
             if (offset + length == totalSize)
             {
@@ -129,8 +125,10 @@ namespace AirX.View
                     bool accept = t.Result == Microsoft.UI.Xaml.Controls.ContentDialogResult.Primary;
                     if (accept)
                     {
+                        // Preallocate file size
                         totalSize = fileSize;
                         writingFile = File.Create("D:\\" + fileName.Replace("/", "\\").Split("\\").Last());
+                        writingFile.SetLength((long)totalSize);
                     }
                     AirXBridge.RespondToFile(
                         Peer.Parse(from),
@@ -152,8 +150,15 @@ namespace AirX.View
 
             context.Post(_ =>
             {
-                var window = NewTextWindow.InstanceOf(text, source);
-                window.Activate();
+                try
+                {
+                    var window = NewTextWindow.InstanceOf(text, source);
+                    window.Activate();
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e);
+                }
             }, null);
         }
 

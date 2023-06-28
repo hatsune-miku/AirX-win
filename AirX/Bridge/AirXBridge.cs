@@ -143,10 +143,17 @@ public class AirXBridge
 
     private static void OnFilePart(byte fileId, uint offset, uint length, IntPtr data)
     {
-        byte[] dataBytes = new byte[length];
-        Marshal.Copy(data, dataBytes, 0, (int)length);
+        try
+        {
+            byte[] dataBytes = new byte[length];
+            Marshal.Copy(data, dataBytes, 0, (int)length);
 
-        onFilePartHandler?.Invoke(fileId, offset, length, dataBytes);
+            onFilePartHandler?.Invoke(fileId, offset, length, dataBytes);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+        }
     }
 
     private static bool ShouldInterrupt()
