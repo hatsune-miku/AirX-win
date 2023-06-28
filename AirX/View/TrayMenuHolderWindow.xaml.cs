@@ -10,6 +10,7 @@ using SRCounter;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WinRT.Interop;
@@ -28,12 +29,15 @@ namespace AirX.View
         private static FileStream writingFile = null;
         private static ulong totalSize = 0;
 
+        public static TrayIconHolderWindow Instance { get; private set; }
+
 
         public TrayIconHolderWindow()
         {
             this.InitializeComponent();
 
             context = SynchronizationContext.Current;
+            Instance = this;
 
             TrySignInAsync().LogOnError();
             AirXBridge.TryStartAirXService();
@@ -113,27 +117,30 @@ namespace AirX.View
 
         private static void OnFileComing(ulong fileSize, string fileName, string from)
         {
-            UIUtil.MessageBoxAsync(
-                "Received File",
-                $"File {fileName} from {from} is coming! Receive?",
-                "Receive!",
-                "Decline!"
-            ).ContinueWith(t =>
+            context.Post((_) =>
             {
-                bool accept = t.Result == Microsoft.UI.Xaml.Controls.ContentDialogResult.Primary;
-                if (accept)
+                UIUtil.MessageBoxAsync(
+                    "Received File",
+                    $"File {fileName} from {from} is coming! Receive?",
+                    "Receive!",
+                    "Decline!"
+                ).ContinueWith(t =>
                 {
-                    totalSize = fileSize;
-                    writingFile = File.Create("D:\\received.dat");
-                }
-                AirXBridge.RespondToFile(
-                    Peer.Parse(from), 
-                    1,
-                    fileSize,
-                    fileName, 
-                    accept
-                );
-            }, TaskScheduler.Default).LogOnError();
+                    bool accept = t.Result == Microsoft.UI.Xaml.Controls.ContentDialogResult.Primary;
+                    if (accept)
+                    {
+                        totalSize = fileSize;
+                        writingFile = File.Create("D:\\" + fileName.Replace("/", "\\").Split("\\").Last());
+                    }
+                    AirXBridge.RespondToFile(
+                        Peer.Parse(from),
+                        1,
+                        fileSize,
+                        fileName,
+                        accept
+                    );
+                }, TaskScheduler.Default).LogOnError();
+            }, null);
         }
 
         private static void OnTextReceived(string text, string source)

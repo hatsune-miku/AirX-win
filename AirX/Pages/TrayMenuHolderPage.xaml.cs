@@ -1,4 +1,4 @@
-using AirX.Bridge;
+﻿using AirX.Bridge;
 using AirX.Extension;
 using AirX.Util;
 using AirX.View;
@@ -6,8 +6,12 @@ using AirX.ViewModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml.Controls;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.Storage;
+using Windows.Storage.Pickers;
+using WinRT.Interop;
 
 namespace AirX.Pages
 {
@@ -67,31 +71,49 @@ namespace AirX.Pages
             window.Activate();
         }
 
+// RelayCommand加上Async后缀的话会很奇怪
+#pragma warning disable VSTHRD100
         [RelayCommand]
-        public void SendFile()
+        public async void SendFile()
         {
-            var path = "D:\\test.txt";
+            var files = await OpenFileDialogAsync();
+            if (files.Count == 0)
+            {
+                return;
+            }
+
             var peers = AirXBridge.GetPeers();
             if (peers.Count == 0)
             {
-                UIUtil.MessageBoxAsync(path, "No peers available", "OK", null)
+                UIUtil.MessageBoxAsync("Error", "No peers available", "OK", null)
                     .LogOnError();
                 return;
             }
 
-            var peer = peers.First();
-            UIUtil.MessageBoxAsync(path, "Peer: " + peer.Hostname + ", Send?", "Send", "Cancel")
-                .ContinueWith(t =>
+            var result = await UIUtil.MessageBoxAsync("Send files", "Send to all " + peers.Count + " peer(s)?", "Send!", "Cancel");
+            if (result == ContentDialogResult.Primary)
+            {
+                foreach (var peer in peers)
                 {
-                    if (t.Result == ContentDialogResult.Primary)
+                    foreach (var file in files)
                     {
-                        foreach (var p in peers)
-                        {
-                            AirXBridge.TrySendFile(path, p);
-                        }
+                        AirXBridge.TrySendFile(file.Path, peer);
                     }
-                }, TaskScheduler.Default)
-                .LogOnError();
+                }
+            }
+        }
+
+        private async Task<IReadOnlyList<StorageFile>> OpenFileDialogAsync()
+        {
+            var filePicker = new FileOpenPicker();
+            filePicker.SuggestedStartLocation = PickerLocationId.Desktop;
+            filePicker.FileTypeFilter.Add("*.*");
+            filePicker.CommitButtonText = "Send";
+
+            var hwnd = WindowNative.GetWindowHandle(TrayIconHolderWindow.Instance);
+            InitializeWithWindow.Initialize(filePicker, hwnd);
+
+            return await filePicker.PickMultipleFilesAsync();
         }
     }
 }

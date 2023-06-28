@@ -12,8 +12,17 @@ namespace AirX.Bridge
         public string IpAddress { get; set; }
         public int Port { get; set; }
 
+        /// <summary>
+        /// Peer string format: <hostname>@<ip>:<port>
+        /// </summary>
         public static Peer Parse(string s)
         {
+            // Incomplete peer string?
+            if (!s.Contains("@"))
+            {
+                s = "<empty>@" + s;
+            }
+
             var part1 = s.Split("@");
             var part2 = part1[1].Split(":");
             return new Peer
