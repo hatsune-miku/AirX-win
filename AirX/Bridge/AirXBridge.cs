@@ -69,10 +69,10 @@ public class AirXBridge
 
     private static void OnTimerTick(object sender, object e)
     {
-        var DataPackageView = Clipboard.GetContent();
+        var packageView = Clipboard.GetContent();
         try
         {
-            if (!DataPackageView.Contains(StandardDataFormats.Text))
+            if (!packageView.AvailableFormats.Contains(StandardDataFormats.Text) || !packageView.Contains(StandardDataFormats.Text))
             {
                 return;
             }
@@ -81,7 +81,7 @@ public class AirXBridge
 
         try
         {
-            DataPackageView.GetTextAsync().AsTask().ContinueWith(t =>
+            packageView.GetTextAsync().AsTask().ContinueWith(t =>
             {
                 try
                 {

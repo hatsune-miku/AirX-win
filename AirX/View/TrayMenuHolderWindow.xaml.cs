@@ -91,9 +91,11 @@ namespace AirX.View
                 return;
             }
 
-            receiveFile.WritingStream.Write(data, (int) offset, (int)length);
+            receiveFile.WritingStream.Seek(offset, SeekOrigin.Begin);
+            receiveFile.WritingStream.Write(data, 0, (int)length);
             receiveFile.Progress += length;
             
+            Debug.WriteLine($"File progress: {receiveFile.Progress}/{receiveFile.TotalSize}");
             if (receiveFile.Progress == receiveFile.TotalSize)
             {
                 receiveFile.WritingStream.Close();

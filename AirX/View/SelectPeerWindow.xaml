@@ -15,6 +15,6 @@
             Background="Transparent"
             Opacity="0"
         />
-        <pages:SelectPeerPage OnPeerSelected="OnPeerSelected" />
+        <pages:SelectPeerPage Grid.Row="1" OnPeerSelected="OnPeerSelected" />
     </Grid>
 </localView:BaseWindow>

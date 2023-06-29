@@ -9,6 +9,8 @@
     xmlns:ui="using:CommunityToolkit.WinUI.UI"
     xmlns:labs="using:CommunityToolkit.Labs.WinUI"
     mc:Ignorable="d"
+    VerticalAlignment="Stretch"
+    VerticalContentAlignment="Stretch"
     DataContext="ViewModel"
 >
     <Page.Resources>
@@ -22,7 +24,7 @@
         </DataTemplate>
     </Page.Resources>
 
-    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+    <Grid>
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <StackPanel>
                 <ItemsRepeater
