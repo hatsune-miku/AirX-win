@@ -186,6 +186,12 @@ namespace AirX.View
         {
             var savingFilename = FileUtil.GetFileName(fileName);
             var fullPath = Path.Join(SettingsUtil.String(Keys.SaveFilePath, ""), savingFilename);
+            var directoryPath = Path.GetDirectoryName(fullPath);
+
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
             var writingFileStream = File.Create(fullPath);
 
             var transferFile = new ReceiveFile
