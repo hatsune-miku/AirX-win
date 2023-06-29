@@ -15,6 +15,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using WinUIEx;
 
 namespace AirX.View
 {
@@ -28,6 +29,24 @@ namespace AirX.View
         private SelectPeerWindow()
         {
             this.InitializeComponent();
+
+            PrepareWindow(
+                new WindowParameters
+                {
+                    Title = "Select Peers",
+                    WidthPortion = 850 / 3840.0 * 1.75,
+                    HeightPortion = 1125 / 2160.0 * 1.75,
+                    CenterScreen = true,
+                    TopMost = true,
+                    Resizable = false,
+                    HaveMaximumButton = false,
+                    HaveMinimumButton = false,
+                    EnableMicaEffect = true,
+                }
+            );
+
+            SetTitleBar(titleBar);
+            this.CenterOnScreen();
         }
 
         public void OnPeerSelected(Model.PeerItem peer)

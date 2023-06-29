@@ -23,11 +23,13 @@
     </Page.Resources>
 
     <Grid>
-        <StackPanel>
-            <ItemsRepeater
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <ItemsRepeater
                 ItemsSource="{x:Bind ViewModel.Peers}"
                 ItemTemplate="{StaticResource peerItem}"
             />
-        </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>
