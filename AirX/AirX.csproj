@@ -19,11 +19,15 @@
   <ItemGroup>
     <None Remove="assets\sign-in.html" />
     <None Remove="Pages\LoginPage.xaml" />
+    <None Remove="Pages\NewFilePage.xaml" />
+    <None Remove="Pages\SelectPeerPage.xaml" />
     <None Remove="Pages\TrayMenuHolderPage.xaml" />
     <None Remove="View\AboutWindow.xaml" />
     <None Remove="View\MessageBoxWindow.xaml" />
     <None Remove="View\MicaTestPage.xaml" />
+    <None Remove="View\NewFileWindow.xaml" />
     <None Remove="View\NewTextWindow.xaml" />
+    <None Remove="View\SelectPeerWindow.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,6 +43,30 @@
     <PackageReference Include="PInvoke.User32" Version="0.7.124" />
     <PackageReference Include="WinUIEx" Version="2.2.0" />
     <Manifest Include="$(ApplicationManifest)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Pages\SelectPeerPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="View\SelectPeerWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Pages\NewFilePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="View\NewFileWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <ItemGroup>

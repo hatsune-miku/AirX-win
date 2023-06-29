@@ -17,15 +17,10 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Graphics;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+using WinUIEx;
 
 namespace AirX.View
 {
-    /// <summary>
-    /// An empty window that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class NewTextWindow : BaseWindow
     {
         private const int WINDOW_WIDTH = 401;
@@ -34,13 +29,11 @@ namespace AirX.View
         private string _title;
         private string _source;
 
-        private static NewTextWindow _instance = new();
-
-        public static NewTextWindow InstanceOf(string title, string source)
+        public static NewTextWindow Create(string title, string source)
         {
-            _instance = new();
-            _instance.UpdateInformation(title, source);
-            return _instance;
+            var instance = new NewTextWindow();
+            instance.UpdateInformation(title, source);
+            return instance;
         }
 
         public void UpdateInformation(string title, string source)
@@ -66,20 +59,12 @@ namespace AirX.View
                     Resizable = false,
                     HaveMaximumButton = false,
                     HaveMinimumButton = false,
-                    EnableMicaEffect = false,
+                    EnableMicaEffect = true,
                 }
             );
 
             SetTitleBar(titleBar);
-
-            var screenSize = UIUtil.GetPrimaryScreenSize();
-            ExtendsContentIntoTitleBar = true;
-            CurrentAppWindow.Move(
-                new PointInt32(
-                    (int)(screenSize.Width - WINDOW_WIDTH - 16), 
-                    (int)(screenSize.Height - WINDOW_HEIGHT - 16)
-                )
-            );
+            this.CenterOnScreen();
         }
     }
 }

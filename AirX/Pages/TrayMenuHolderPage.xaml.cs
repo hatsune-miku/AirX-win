@@ -1,5 +1,6 @@
 ﻿using AirX.Bridge;
 using AirX.Extension;
+using AirX.Model;
 using AirX.Util;
 using AirX.View;
 using AirX.ViewModel;
@@ -72,9 +73,9 @@ namespace AirX.Pages
         }
 
 // RelayCommand加上Async后缀的话会很奇怪
-#pragma warning disable VSTHRD100
+#pragma warning disable VSTHRD200
         [RelayCommand]
-        public async void SendFile()
+        public async Task SendFile()
         {
             var files = await OpenFileDialogAsync();
             if (files.Count == 0)
@@ -82,23 +83,21 @@ namespace AirX.Pages
                 return;
             }
 
-            var peers = AirXBridge.GetPeers();
-            if (peers.Count == 0)
+            if (AirXBridge.GetPeers().Count == 0)
             {
                 UIUtil.MessageBoxAsync("Error", "No peers available", "OK", null)
                     .LogOnError();
                 return;
             }
 
-            var result = await UIUtil.MessageBoxAsync("Send files", "Send to all " + peers.Count + " peer(s)?", "Send!", "Cancel");
-            if (result == ContentDialogResult.Primary)
+            var window = SelectPeerWindow.Instance;
+            List<Peer> peers = await window.SelectPeersAsync();
+
+            foreach (var peer in peers)
             {
-                foreach (var peer in peers)
+                foreach (var file in files)
                 {
-                    foreach (var file in files)
-                    {
-                        AirXBridge.TrySendFile(file.Path, peer);
-                    }
+                    AirXBridge.TrySendFile(file.Path, peer);
                 }
             }
         }

@@ -4,13 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AirX.Bridge
+namespace AirX.Model
 {
     public class Peer
     {
         public string Hostname { get; set; }
         public string IpAddress { get; set; }
         public int Port { get; set; }
+
+        public static readonly Peer Sample = new()
+        {
+            Hostname = "chance",
+            IpAddress = "10.0.0.6",
+            Port = 12345,
+        };
 
         /// <summary>
         /// Peer string format: <hostname>@<ip>:<port>
@@ -45,6 +52,11 @@ namespace AirX.Bridge
                 peer = null;
                 return false;
             }
+        }
+
+        public override string ToString()
+        {
+            return $"{Hostname}@{IpAddress}:{Port}";
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using AirX.Services;
+﻿using AirX.Bridge;
+using AirX.Model;
+using AirX.Services;
 using AirX.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -24,14 +26,20 @@ namespace AirX.Util
 
         public static bool IsInBlockList(string ipAddress)
         {
-            string realIpAddress = ipAddress.Split(":")[0];
-            return _blockList.Contains(realIpAddress);
+            if (!Peer.TryParse(ipAddress, out Peer peer))
+            {
+                return false;
+            }
+            return _blockList.Contains(peer.IpAddress);
         }
 
         public static void AddToBlockList(string ipAddress)
         {
-            string realIpAddress = ipAddress.Split(":")[0];
-            _blockList.Add(realIpAddress);
+            if (!Peer.TryParse(ipAddress, out Peer peer))
+            {
+                return;
+            }
+            _blockList.Add(peer.IpAddress);
             SettingsUtil.WriteBlockList(_blockList);
         }
 

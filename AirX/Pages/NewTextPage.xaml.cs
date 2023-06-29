@@ -1,5 +1,6 @@
 using AirX.Util;
 using AirX.View;
+using AirX.ViewModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -31,7 +32,7 @@ namespace AirX.Pages
         private void Block()
         {
             AccountUtil.AddToBlockList(ViewModel.From);
-            _instance.Close();
+            _instance?.Close();
         }
 
         [RelayCommand]

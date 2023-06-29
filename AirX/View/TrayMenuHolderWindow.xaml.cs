@@ -3,6 +3,7 @@
 
 using AirX.Bridge;
 using AirX.Extension;
+using AirX.Model;
 using AirX.Util;
 using AirX.ViewModel;
 using Microsoft.UI.Xaml;
@@ -25,9 +26,6 @@ namespace AirX.View
         private static AirXBridge.OnFileComingHandler FileComingHandler = OnFileComing;
 
         private static SynchronizationContext context;
-
-        private static FileStream writingFile = null;
-        private static ulong totalSize = 0;
 
         public static TrayIconHolderWindow Instance { get; private set; }
 
@@ -64,18 +62,42 @@ namespace AirX.View
 
         private static void OnFilePart(byte fileId, uint offset, uint length, byte[] data)
         {
-            Debug.WriteLine($"File part received: offset={offset}, length={length}");
-            if (writingFile == null)
+            ReceiveFile receiveFile;
+            try
             {
+                receiveFile = GlobalViewModel.Instance.ReceiveFiles[fileId];
+            }
+            catch (Exception)
+            {
+                Debug.WriteLine("Unexpected file incoming: fileid=" + fileId + ", length=" + length);
+                return;
+            }
+
+            // User cancelled the file?
+            if (receiveFile.Status == AirXBridge.FileStatus.CancelledByReceiver)
+            {
+                Debug.WriteLine("File cancelled!");
+                GlobalViewModel.Instance.ReceiveFiles.Remove(fileId);
+                // TODO: Send cancel packet to sender
+                return;
+            }
+
+            receiveFile.Status = AirXBridge.FileStatus.InProgress;
+            Debug.WriteLine($"File part received: offset={offset}, length={length}");
+            if (receiveFile.WritingStream == null)
+            {
+                receiveFile.Status = AirXBridge.FileStatus.Error;
                 Debug.WriteLine("File not accepted!");
                 return;
             }
+
+            receiveFile.WritingStream.Write(data, (int) offset, (int)length);
+            receiveFile.Progress += length;
             
-            writingFile.Write(data, (int) offset, (int)length);
-            if (offset + length == totalSize)
+            if (receiveFile.Progress == receiveFile.TotalSize)
             {
-                writingFile.Close();
-                writingFile = null;
+                receiveFile.WritingStream.Close();
+                receiveFile.Status = AirXBridge.FileStatus.Completed;
                 Debug.WriteLine("File recv completed!");
             }
         }
@@ -123,16 +145,14 @@ namespace AirX.View
                 ).ContinueWith(t =>
                 {
                     bool accept = t.Result == Microsoft.UI.Xaml.Controls.ContentDialogResult.Primary;
+                    byte fileId = FileUtil.NextFileId();
                     if (accept)
                     {
-                        // Preallocate file size
-                        totalSize = fileSize;
-                        writingFile = File.Create("D:\\" + fileName.Replace("/", "\\").Split("\\").Last());
-                        writingFile.SetLength((long)totalSize);
+                        PrepareForReceiveFile(fileId, fileSize, fileName, from);
                     }
                     AirXBridge.RespondToFile(
                         Peer.Parse(from),
-                        1,
+                        fileId,
                         fileSize,
                         fileName,
                         accept
@@ -152,7 +172,7 @@ namespace AirX.View
             {
                 try
                 {
-                    var window = NewTextWindow.InstanceOf(text, source);
+                    var window = NewTextWindow.Create(text, source);
                     window.Activate();
                 }
                 catch (Exception e)
@@ -160,6 +180,35 @@ namespace AirX.View
                     Debug.WriteLine(e);
                 }
             }, null);
+        }
+
+        private static void PrepareForReceiveFile(byte fileId, ulong fileSize, string fileName, string from)
+        {
+            var savingFilename = FileUtil.GetFileName(fileName);
+            var fullPath = Path.Join(SettingsUtil.String(Keys.SaveFilePath, ""), savingFilename);
+            var writingFileStream = File.Create(fullPath);
+
+            var transferFile = new ReceiveFile
+            {
+                Filename = fileName,
+                WritingStream = writingFileStream,
+                FullPath = fullPath,
+                Progress = 0,
+                TotalSize = fileSize,
+                FileId = 1,
+                Status = AirXBridge.FileStatus.Accepted,
+                From = Peer.Parse(from),
+            };
+
+            // Preallocate file size
+            writingFileStream.SetLength((long)fileSize);
+
+            // Enqueue
+            GlobalViewModel.Instance.ReceiveFiles.TryAdd(fileId, transferFile);
+
+            // Open window
+            var window = new NewFileWindow(fileId);
+            window.Activate();
         }
 
         private void Window_Activated(object sender, WindowActivatedEventArgs args)

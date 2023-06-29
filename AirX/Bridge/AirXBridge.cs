@@ -1,5 +1,6 @@
 ﻿using AirX.Bridge;
 using AirX.Extension;
+using AirX.Model;
 using AirX.Util;
 using AirX.ViewModel;
 using Microsoft.UI.Xaml;

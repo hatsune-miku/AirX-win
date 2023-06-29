@@ -32,6 +32,8 @@ namespace AirX.Util
         IsKafkaProducer,
         IsKafkaConsumer,
         AirXCloudAddress,
+
+        SaveFilePath,
     }
 
     public enum CredentialType
@@ -68,6 +70,7 @@ namespace AirX.Util
             Write(Keys.IsKafkaProducer, true);
             Write(Keys.IsKafkaConsumer, true);
             Write(Keys.AirXCloudAddress, "https://airx.eggtartc.com");
+            Write(Keys.SaveFilePath, "D:\\AirXFiles");
         }
 
         public static string String(Keys key, string def)

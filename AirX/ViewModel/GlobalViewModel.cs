@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using AirX.Model;
+using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -33,5 +34,16 @@ namespace AirX.ViewModel
 
         [ObservableProperty]
         public string loggingGreetingsName = "AirX User";
+
+        // Key: file id
+        [ObservableProperty]
+        public Dictionary<int, ReceiveFile> receiveFiles = new()
+        {
+            { -1, ReceiveFile.Sample }
+        };
+
+        // Key: file id
+        [ObservableProperty]
+        public Dictionary<int, SendFile> sendFiles = new();
     }
 }

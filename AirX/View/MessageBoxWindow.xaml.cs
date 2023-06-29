@@ -82,6 +82,7 @@ namespace AirX.View
             var screenSize = UIUtil.GetPrimaryScreenSize();
             _dialog.Opened += (_, _) =>
             {
+                // TODO: accurate resize
                 AppWindow.Resize(new(
                     (int)((_dialog.ActualWidth) / 2.96),
                     (int)((_dialog.ActualHeight) / 2.66)
