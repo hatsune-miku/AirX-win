@@ -213,8 +213,11 @@ namespace AirX.View
             GlobalViewModel.Instance.ReceiveFiles.TryAdd(fileId, transferFile);
 
             // Open window
-            var window = new NewFileWindow(fileId);
-            window.Activate();
+            context.Post((_) =>
+            {
+                var window = new NewFileWindow(fileId);
+                window.Activate();
+            }, null);
         }
 
         private void Window_Activated(object sender, WindowActivatedEventArgs args)
