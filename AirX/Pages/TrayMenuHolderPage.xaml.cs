@@ -5,11 +5,15 @@ using AirX.Util;
 using AirX.View;
 using AirX.ViewModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using WinRT.Interop;
@@ -19,6 +23,7 @@ namespace AirX.Pages
     public sealed partial class TrayMenuHolderPage : Page
     {
         private GlobalViewModel ViewModel = GlobalViewModel.Instance;
+        private SynchronizationContext context = SynchronizationContext.Current;
 
         public TrayMenuHolderPage()
         {
@@ -72,34 +77,38 @@ namespace AirX.Pages
             window.Activate();
         }
 
-// RelayCommand加上Async后缀的话会很奇怪
-#pragma warning disable VSTHRD200
         [RelayCommand]
-        public async Task SendFile()
+        public void SendFile()
         {
-            var files = await OpenFileDialogAsync();
-            if (files.Count == 0)
+            OpenFileDialogAsync().ContinueWith(t =>
             {
-                return;
-            }
-
-            if (AirXBridge.GetPeers().Count == 0)
-            {
-                UIUtil.MessageBoxAsync("Error", "No peers available", "OK", null)
-                    .LogOnError();
-                return;
-            }
-
-            var window = SelectPeerWindow.Instance;
-            List<Peer> peers = await window.SelectPeersAsync();
-
-            foreach (var peer in peers)
-            {
-                foreach (var file in files)
+                var files = t.Result;
+                if (files.Count == 0)
                 {
-                    AirXBridge.TrySendFile(file.Path, peer);
+                    return;
                 }
-            }
+
+                if (AirXBridge.GetPeers().Count == 0)
+                {
+                    context.Post((_) =>
+                    {
+                        UIUtil.MessageBoxAsync("Error", "No peers available", "OK", null)
+                            .LogOnError();
+                    }, null);
+                    return;
+                }
+                context.Post((_) =>
+                {
+                    var window = new SelectPeerWindow();
+                    window.SelectPeers((peerItem) =>
+                    {
+                        foreach (var file in files)
+                        {
+                            AirXBridge.TrySendFile(file.Path, peerItem.Value);
+                        }
+                    });
+                }, null);
+            }, TaskScheduler.FromCurrentSynchronizationContext()).LogOnError();
         }
 
         private async Task<IReadOnlyList<StorageFile>> OpenFileDialogAsync()
@@ -112,7 +121,7 @@ namespace AirX.Pages
             var hwnd = WindowNative.GetWindowHandle(TrayIconHolderWindow.Instance);
             InitializeWithWindow.Initialize(filePicker, hwnd);
 
-            return new List<StorageFile>() { await filePicker.PickSingleFileAsync() };
+            return new List<StorageFile>(await filePicker.PickMultipleFilesAsync());
         }
     }
 }

@@ -70,7 +70,7 @@ namespace AirX.Util
             Write(Keys.IsKafkaProducer, true);
             Write(Keys.IsKafkaConsumer, true);
             Write(Keys.AirXCloudAddress, "https://airx.eggtartc.com");
-            Write(Keys.SaveFilePath, "D:\\AirXFiles");
+            Write(Keys.SaveFilePath, "C:\\AirXFiles");
         }
 
         public static string String(Keys key, string def)
