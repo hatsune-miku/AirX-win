@@ -11,13 +11,10 @@ namespace AirX.View
         private const int WINDOW_WIDTH = 640;
         private const int WINDOW_HEIGHT = 340;
 
-        private int _fileId;
-
         public NewFileWindow(int fileId)
         {
             this.InitializeComponent();
 
-            _fileId = fileId;
             newFilePage.SetWindowInstance(this);
             newFilePage.FileId = fileId;
 
@@ -42,6 +39,11 @@ namespace AirX.View
                 (int)screenSize.Width - AppWindow.Size.Width - 64,
                 (int)screenSize.Height - AppWindow.Size.Height - 92
             ));
+        }
+
+        private void OnClosed(object sender, Microsoft.UI.Xaml.WindowEventArgs args)
+        {
+
         }
     }
 }

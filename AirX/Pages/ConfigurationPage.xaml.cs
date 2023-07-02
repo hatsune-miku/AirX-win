@@ -71,6 +71,16 @@ namespace AirX.Pages
 
             SettingsItems.Add(new Model.SettingsItem
             {
+                Title = "Text Popup Display Time (ms)",
+                Description = "1000 ~ 10000.",
+                SettingsKey = Keys.NewTextPopupDisplayTimeMillis,
+                ItemType = SettingsItemType.String,
+                Validator = IsMillisTimeValid,
+                IsAdvanced = false,
+            });
+
+            SettingsItems.Add(new Model.SettingsItem
+            {
                 Title = "Show Developer Console",
                 Description = "Enables debug output from libairx.",
                 SettingsKey = Keys.ShouldShowConsole,
@@ -81,7 +91,7 @@ namespace AirX.Pages
             SettingsItems.Add(new Model.SettingsItem
             {
                 Title = "Kafka Producer",
-                Description = "Enable to share clipboard data with peers.",
+                Description = "Enable to share clipboard data over the internet.. Does not affect LAN settings.",
                 SettingsKey = Keys.IsKafkaProducer,
                 ItemType = SettingsItemType.Boolean,
                 IsAdvanced = true,
@@ -90,7 +100,7 @@ namespace AirX.Pages
             SettingsItems.Add(new Model.SettingsItem
             {
                 Title = "Kafka Consumer",
-                Description = "Enable to accept clipboard data from peers.",
+                Description = "Enable to accept clipboard data from the internet. Does not affect LAN settings.",
                 SettingsKey = Keys.IsKafkaConsumer,
                 ItemType = SettingsItemType.Boolean,
                 IsAdvanced = true,
@@ -239,6 +249,12 @@ namespace AirX.Pages
         {
             return int.TryParse(groupIdentityRepr, out int groupIdentity)
                 && 0 <= groupIdentity && groupIdentity <= 255;
+        }
+
+        private bool IsMillisTimeValid(string millisRepr)
+        {
+            return int.TryParse(millisRepr, out int res)
+                && 1000 <= res && res <= 10000;
         }
     }
 }

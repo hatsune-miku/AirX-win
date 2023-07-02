@@ -1,4 +1,7 @@
+using AirX.Extension;
 using AirX.Util;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AirX.View
 {
@@ -9,6 +12,8 @@ namespace AirX.View
 
         private string _title;
         private string _source;
+
+        private SynchronizationContext context = SynchronizationContext.Current;
 
         public static NewTextWindow Create(string title, string source)
         {
@@ -47,9 +52,19 @@ namespace AirX.View
 
             var screenSize = UIUtil.GetPrimaryScreenSize();
             AppWindow.Move(new Windows.Graphics.PointInt32(
-                (int) screenSize.Width - AppWindow.Size.Width - 64,
-                (int) screenSize.Height - AppWindow.Size.Height - 92
+                (int)screenSize.Width - AppWindow.Size.Width - 64,
+                (int)screenSize.Height - AppWindow.Size.Height - 92
             ));
+
+            Task.Delay(SettingsUtil.Int(Keys.NewTextPopupDisplayTimeMillis, 6000)).ContinueWith(t =>
+            {
+                context.Post(_ => Close(), null);
+            }, TaskScheduler.Default).LogOnError();
+        }
+
+        private void OnClosed(object sender, Microsoft.UI.Xaml.WindowEventArgs args)
+        {
+
         }
     }
 }

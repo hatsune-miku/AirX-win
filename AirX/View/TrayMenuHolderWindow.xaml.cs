@@ -62,10 +62,10 @@ namespace AirX.View
 
         private static void OnFilePart(byte fileId, UInt64 offset, UInt64 length, byte[] data)
         {
-            ReceiveFile receiveFile;
+            NewFileViewModel remoteViewModel;
             try
             {
-                receiveFile = GlobalViewModel.Instance.ReceiveFiles[fileId];
+                remoteViewModel = GlobalViewModel.Instance.ReceiveFiles[fileId];
             }
             catch (Exception)
             {
@@ -74,7 +74,7 @@ namespace AirX.View
             }
 
             // User cancelled the file?
-            if (receiveFile.Status == AirXBridge.FileStatus.CancelledByReceiver)
+            if (remoteViewModel.ReceivingFile.Status == AirXBridge.FileStatus.CancelledByReceiver)
             {
                 Debug.WriteLine("File cancelled!");
                 GlobalViewModel.Instance.ReceiveFiles.Remove(fileId);
@@ -82,24 +82,33 @@ namespace AirX.View
                 return;
             }
 
-            receiveFile.Status = AirXBridge.FileStatus.InProgress;
+            remoteViewModel.ReceivingFile.Status = AirXBridge.FileStatus.InProgress;
             Debug.WriteLine($"File part received: offset={offset}, length={length}");
-            if (receiveFile.WritingStream == null)
+            if (remoteViewModel.ReceivingFile.WritingStream == null)
             {
-                receiveFile.Status = AirXBridge.FileStatus.Error;
+                remoteViewModel.ReceivingFile.Status = AirXBridge.FileStatus.Error;
                 Debug.WriteLine("File not accepted!");
                 return;
             }
 
-            receiveFile.WritingStream.Seek((long) offset, SeekOrigin.Begin);
-            receiveFile.WritingStream.Write(data, 0, (int)length);
-            receiveFile.Progress += length;
-            
-            Debug.WriteLine($"File progress: {receiveFile.Progress}/{receiveFile.TotalSize}");
-            if (receiveFile.Progress == receiveFile.TotalSize)
+            remoteViewModel.ReceivingFile.WritingStream.Seek((long) offset, SeekOrigin.Begin);
+            remoteViewModel.ReceivingFile.WritingStream.Write(data, 0, (int)length);
+            remoteViewModel.ReceivingFile.Progress += length;
+
+            context.Post(_ =>
             {
-                receiveFile.WritingStream.Close();
-                receiveFile.Status = AirXBridge.FileStatus.Completed;
+                remoteViewModel.ReceivingFile.DisplayProgress += length;
+            }, null);
+            Debug.WriteLine($"File progress: {remoteViewModel.ReceivingFile.Progress}/{remoteViewModel.ReceivingFile.TotalSize}");
+
+            if (remoteViewModel.ReceivingFile.Progress == remoteViewModel.ReceivingFile.TotalSize)
+            {
+                remoteViewModel.ReceivingFile.WritingStream.Close();
+                remoteViewModel.ReceivingFile.Status = AirXBridge.FileStatus.Completed;
+                context.Post(_ =>
+                {
+                    remoteViewModel.ReceivingFile.DisplayStatus = AirXBridge.FileStatus.Completed;
+                }, null);
                 Debug.WriteLine("File recv completed!");
             }
         }
@@ -212,11 +221,11 @@ namespace AirX.View
             writingFileStream.SetLength((long)fileSize);
 
             // Enqueue
-            GlobalViewModel.Instance.ReceiveFiles.TryAdd(fileId, transferFile);
-
             // Open window
             context.Post((_) =>
             {
+                GlobalViewModel.Instance.ReceiveFiles.TryAdd(fileId, new(transferFile));
+
                 var window = new NewFileWindow(fileId);
                 window.Activate();
             }, null);
