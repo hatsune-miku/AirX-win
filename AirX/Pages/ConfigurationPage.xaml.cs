@@ -230,7 +230,7 @@ namespace AirX.Pages
 
         private bool IsIpV4AddressValid(string address)
         {
-            var parts = address.Split(':');
+            var parts = address.Split('.');
             return (parts.Length == 4 
                 && parts.All(p => int.TryParse(p, out int res) && res >= 0 && res <= 255));
         }
