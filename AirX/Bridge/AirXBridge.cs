@@ -348,7 +348,7 @@ public class AirXBridge
     public delegate void FileSendingCallbackFunction(
         byte fileId, UInt64 progress, UInt64 total, byte status);
     public delegate void FilePartCallbackFunction(
-        byte fileId, UInt32 offset, UInt32 length, IntPtr data);
+        byte fileId, UInt64 offset, UInt64 length, IntPtr data);
 
 
     public static IntPtr CreateUtf8String(string s, out uint size)
