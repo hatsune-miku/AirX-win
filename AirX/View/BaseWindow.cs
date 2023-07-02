@@ -44,7 +44,7 @@ namespace AirX.View
         {
             var graphics = Graphics.FromHwnd(IntPtr.Zero);
             var scale = 1; // graphics.DpiX / 100;
-            var size = new SizeInt32((int) (width / scale), (int) (height / scale));
+            var size = new SizeInt32((int) (width * scale), (int) (height * scale));
             AppWindow.Resize(size);
         }
 

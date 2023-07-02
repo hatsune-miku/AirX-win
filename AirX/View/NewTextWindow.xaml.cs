@@ -1,30 +1,11 @@
-// Copyright (c) Microsoft Corporation and Contributors.
-// Licensed under the MIT License.
-
 using AirX.Util;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.Graphics;
-using WinUIEx;
 
 namespace AirX.View
 {
     public sealed partial class NewTextWindow : BaseWindow
     {
-        private const int WINDOW_WIDTH = 401;
-        private const int WINDOW_HEIGHT = 210;
+        private const int WINDOW_WIDTH = 640;
+        private const int WINDOW_HEIGHT = 340;
 
         private string _title;
         private string _source;
@@ -59,12 +40,16 @@ namespace AirX.View
                     Resizable = false,
                     HaveMaximumButton = false,
                     HaveMinimumButton = false,
-                    EnableMicaEffect = true,
+                    EnableMicaEffect = false,
                 }
             );
+            ExtendsContentIntoTitleBar = true;
 
-            SetTitleBar(titleBar);
-            this.CenterOnScreen();
+            var screenSize = UIUtil.GetPrimaryScreenSize();
+            AppWindow.Move(new Windows.Graphics.PointInt32(
+                (int) screenSize.Width - AppWindow.Size.Width - 64,
+                (int) screenSize.Height - AppWindow.Size.Height - 92
+            ));
         }
     }
 }

@@ -1,11 +1,15 @@
+using AirX.Util;
+using System.Security.Policy;
+using System.Threading.Channels;
+using WinRT.Interop;
 using WinUIEx;
 
 namespace AirX.View
 {
     public sealed partial class NewFileWindow : BaseWindow
     {
-        private const int WINDOW_WIDTH = 401;
-        private const int WINDOW_HEIGHT = 210;
+        private const int WINDOW_WIDTH = 640;
+        private const int WINDOW_HEIGHT = 340;
 
         private int _fileId;
 
@@ -28,12 +32,16 @@ namespace AirX.View
                     Resizable = false,
                     HaveMaximumButton = false,
                     HaveMinimumButton = false,
-                    EnableMicaEffect = true,
+                    EnableMicaEffect = false,
                 }
             );
+            ExtendsContentIntoTitleBar = true;
 
-            SetTitleBar(titleBar);
-            this.CenterOnScreen();
+            var screenSize = UIUtil.GetPrimaryScreenSize();
+            AppWindow.Move(new Windows.Graphics.PointInt32(
+                (int)screenSize.Width - AppWindow.Size.Width - 64,
+                (int)screenSize.Height - AppWindow.Size.Height - 92
+            ));
         }
     }
 }
