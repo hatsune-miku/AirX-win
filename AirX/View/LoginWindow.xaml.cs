@@ -25,8 +25,8 @@ namespace AirX.View
                 new WindowParameters
                 {
                     Title = "AirX Login",
-                    WidthPortion = 827 / 3840.0 * 1.75,
-                    HeightPortion = 758 / 2160.0 * 1.75,
+                    WidthPortion = 827 / 3840.0 * 1.25,
+                    HeightPortion = 758 / 2160.0 * 1.25,
                     CenterScreen = true,
                     TopMost = false,
                     Resizable = false,

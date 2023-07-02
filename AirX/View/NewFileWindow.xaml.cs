@@ -21,8 +21,8 @@ namespace AirX.View
                 new WindowParameters
                 {
                     Title = "New File Window",
-                    WidthPortion = WINDOW_WIDTH / 3840.0 * 1.75,
-                    HeightPortion = WINDOW_HEIGHT / 2160.0 * 1.75,
+                    WidthPortion = WINDOW_WIDTH / 3840.0 * 1.25,
+                    HeightPortion = WINDOW_HEIGHT / 2160.0 * 1.25,
                     CenterScreen = false,
                     TopMost = true,
                     Resizable = false,

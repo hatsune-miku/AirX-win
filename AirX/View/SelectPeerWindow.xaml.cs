@@ -33,8 +33,8 @@ namespace AirX.View
                 new WindowParameters
                 {
                     Title = "Select Peers",
-                    WidthPortion = 850 / 3840.0 * 1.75,
-                    HeightPortion = 1125 / 2160.0 * 1.75,
+                    WidthPortion = 850 / 3840.0 * 1.25,
+                    HeightPortion = 1125 / 2160.0 * 1.25,
                     CenterScreen = true,
                     TopMost = true,
                     Resizable = false,
