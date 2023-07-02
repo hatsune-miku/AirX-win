@@ -25,7 +25,7 @@ public class AirXBridge
     public delegate void OnTextReceivedHandler(string text, string from);
     public delegate void OnFileComingHandler(UInt64 fileSize, string fileName, string from);
     public delegate void OnFileSendingHandler(byte fileId, UInt64 progress, UInt64 total, FileStatus status);
-    public delegate void OnFilePartHandler(byte fileId, UInt32 offset, UInt32 length, byte[] data);
+    public delegate void OnFilePartHandler(byte fileId, UInt64 offset, UInt64 length, byte[] data);
 
     public enum FileStatus
     {
@@ -142,7 +142,7 @@ public class AirXBridge
         onFileSendingHandler?.Invoke(fileId, progress, total, (FileStatus)status);
     }
 
-    private static void OnFilePart(byte fileId, uint offset, uint length, IntPtr data)
+    private static void OnFilePart(byte fileId, UInt64 offset, UInt64 length, IntPtr data)
     {
         try
         {

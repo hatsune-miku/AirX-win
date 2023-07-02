@@ -60,7 +60,7 @@ namespace AirX.View
                 "Welcome back, " + GlobalViewModel.Instance.LoggingGreetingsName + "!");
         }
 
-        private static void OnFilePart(byte fileId, uint offset, uint length, byte[] data)
+        private static void OnFilePart(byte fileId, UInt64 offset, UInt64 length, byte[] data)
         {
             ReceiveFile receiveFile;
             try
@@ -91,7 +91,7 @@ namespace AirX.View
                 return;
             }
 
-            receiveFile.WritingStream.Seek(offset, SeekOrigin.Begin);
+            receiveFile.WritingStream.Seek((long) offset, SeekOrigin.Begin);
             receiveFile.WritingStream.Write(data, 0, (int)length);
             receiveFile.Progress += length;
             
