@@ -20,11 +20,6 @@ namespace AirX.View
 {
     public sealed partial class TrayIconHolderWindow : Window
     {
-        private static AirXBridge.OnTextReceivedHandler TextHandler = OnTextReceived;
-        private static AirXBridge.OnFileSendingHandler FileSendingHandler = OnFileSending;
-        private static AirXBridge.OnFilePartHandler FilePartHandler = OnFilePart;
-        private static AirXBridge.OnFileComingHandler FileComingHandler = OnFileComing;
-
         private static SynchronizationContext context;
 
         public static TrayIconHolderWindow Instance { get; private set; }
@@ -37,12 +32,12 @@ namespace AirX.View
             context = SynchronizationContext.Current;
             Instance = this;
 
-            TrySignInAsync().LogOnError();
+            TrySignInAsync().FireAndForget();
             AirXBridge.TryStartAirXService();
-            AirXBridge.SetOnTextReceivedHandler(TextHandler);
-            AirXBridge.SetOnFileComingHandler(FileComingHandler);
-            AirXBridge.SetOnFileSendingHandler(FileSendingHandler);
-            AirXBridge.SetOnFilePartHandler(FilePartHandler);
+            AirXBridge.SetOnTextReceivedHandler(OnTextReceived);
+            AirXBridge.SetOnFileComingHandler(OnFileComing);
+            AirXBridge.SetOnFileSendingHandler(OnFileSending);
+            AirXBridge.SetOnFilePartHandler(OnFilePart);
 
             AppWindow.Resize(new(1, 1));
             AppWindow.Move(new(32768, 32768));
@@ -91,6 +86,7 @@ namespace AirX.View
                 return;
             }
 
+            // Move to the offset and write
             receiveFile.WritingStream.Seek(offset, SeekOrigin.Begin);
             receiveFile.WritingStream.Write(data, 0, (int)length);
             receiveFile.Progress += length;
@@ -159,7 +155,7 @@ namespace AirX.View
                         fileName,
                         accept
                     );
-                }, TaskScheduler.Default).LogOnError();
+                }, TaskScheduler.Default).FireAndForget();
             }, null);
         }
 

@@ -21,6 +21,7 @@
             x:Key="loggingInUidStringToDescriptionConverter"
         />
     </Page.Resources>
+    
     <StackPanel DataContext="SharedViewModel">
         <Grid VerticalAlignment="Top">
             <SplitView

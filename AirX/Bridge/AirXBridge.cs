@@ -93,7 +93,7 @@ public class AirXBridge
                 }
                 catch (Exception)
                 { }
-            }, TaskScheduler.Default).LogOnError();
+            }, TaskScheduler.Default).FireAndForget();
         }
         catch (Exception ex)
         {

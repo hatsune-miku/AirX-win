@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace AirX.Extension
 {
-    public static class TaskLogOnError
+    public static class TaskFireAndForget
     {
-        public static void LogOnError(this Task task)
+        public static void FireAndForget(this Task task)
         {
             _ = task.ContinueWith(it =>
             {

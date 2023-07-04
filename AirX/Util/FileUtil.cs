@@ -1,8 +1,12 @@
-﻿using System;
+﻿using AirX.View;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage.Pickers;
+using Windows.Storage;
+using WinRT.Interop;
 
 namespace AirX.Util
 {
@@ -46,6 +50,19 @@ namespace AirX.Util
                 return $"{sizeInBytes / 1024 / 1024 / 1024} GB";
             }
             return $"{sizeInBytes / 1024 / 1024 / 1024 / 1024} TB";
+        }
+
+        public static async Task<IReadOnlyList<StorageFile>> OpenFileDialogAsync()
+        {
+            var filePicker = new FileOpenPicker();
+            filePicker.SuggestedStartLocation = PickerLocationId.Desktop;
+            filePicker.FileTypeFilter.Add("*");
+            filePicker.CommitButtonText = "Send";
+
+            var hwnd = WindowNative.GetWindowHandle(TrayIconHolderWindow.Instance);
+            InitializeWithWindow.Initialize(filePicker, hwnd);
+
+            return new List<StorageFile>() { await filePicker.PickSingleFileAsync() };
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AirX.Bridge;
 using AirX.Model;
 using AirX.Services;
+using AirX.View;
 using AirX.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -119,6 +120,19 @@ namespace AirX.Util
             SettingsUtil.Write(Keys.LoggedInUid, uid);
             SettingsUtil.Write(Keys.SavedCredential, renewResponse.token);
             return true;
+        }
+
+        public static void UserToggleSignInOut()
+        {
+            if (GlobalViewModel.Instance.IsSignedIn)
+            {
+                GlobalViewModel.Instance.IsSignedIn = false;
+                ClearSavedUserInfoAndSignOut();
+                return;
+            }
+
+            var window = new LoginWindow();
+            window.Activate();
         }
     }
 }

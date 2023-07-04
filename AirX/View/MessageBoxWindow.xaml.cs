@@ -46,7 +46,7 @@ namespace AirX.View
             Title = "ContentDialog Modal Wrapping Window";
 
             WaitUntilXamlRootReadyAndInitDialogAsync()
-                .LogOnError();
+                .FireAndForget();
             UIUtil.SetWindowVisibility(this, false);
         }
 

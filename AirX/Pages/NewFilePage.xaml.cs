@@ -120,7 +120,7 @@ namespace AirX.Pages
                     }
                 }
                 catch { }
-            }, TaskScheduler.Default).LogOnError();
+            }, TaskScheduler.Default).FireAndForget();
         }
     }
 }
