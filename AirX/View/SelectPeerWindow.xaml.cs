@@ -21,12 +21,11 @@ namespace AirX.View
 {
     public sealed partial class SelectPeerWindow : BaseWindow
     {
-        private static SelectPeerWindow _instance = new();
-        private PeerItem _selectedPeer = null;
+        public delegate void OnPeerSelectedHandler(PeerItem peer);
 
-        public static SelectPeerWindow Instance { get => _instance; }
+        private OnPeerSelectedHandler _handler = null;
 
-        private SelectPeerWindow()
+        public SelectPeerWindow()
         {
             this.InitializeComponent();
 
@@ -34,8 +33,8 @@ namespace AirX.View
                 new WindowParameters
                 {
                     Title = "Select Peers",
-                    WidthPortion = 850 / 3840.0 * 1.75,
-                    HeightPortion = 1125 / 2160.0 * 1.75,
+                    WidthPortion = 850 / 3840.0 * 1.25,
+                    HeightPortion = 1125 / 2160.0 * 1.25,
                     CenterScreen = true,
                     TopMost = true,
                     Resizable = false,
@@ -51,20 +50,17 @@ namespace AirX.View
 
         public void OnPeerSelected(Model.PeerItem peer)
         {
-            _selectedPeer = peer;
+            Close();
+            if (_handler != null)
+            {
+                _handler(peer);
+            }
         }
 
-        public async Task<List<Peer>> SelectPeersAsync()
+        public void SelectPeers(OnPeerSelectedHandler handler)
         {
+            _handler = handler;
             Activate();
-            while (_selectedPeer == null)
-            {
-                await Task.Delay(100);
-            }
-
-            // TODO: impl multiple peers selection
-            Close();
-            return new List<Peer> { _selectedPeer.Value };
         }
     }
 }

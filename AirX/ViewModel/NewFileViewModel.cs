@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using AirX.Model;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.UI.Xaml.Media;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,11 @@ namespace AirX.ViewModel
 {
     public partial class NewFileViewModel : ObservableObject
     {
+        public NewFileViewModel(ReceiveFile receiveFile)
+        {
+            receivingFile = receiveFile;
+        }
+
         [ObservableProperty]
         Brush backgroundColor = GetSolidColorBrush("#FFD9D9D9");
 
@@ -18,6 +24,9 @@ namespace AirX.ViewModel
 
         [ObservableProperty]
         Brush dimmedAccentColor = GetSolidColorBrush("#FF1B4E5E");
+
+        [ObservableProperty]
+        ReceiveFile receivingFile;
 
         private static SolidColorBrush GetSolidColorBrush(string hex)
         {

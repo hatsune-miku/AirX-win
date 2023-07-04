@@ -22,7 +22,7 @@ namespace AirX.Pages
 {
     public sealed partial class NewFilePage : Page
     {
-        private NewFileViewModel ViewModel = new();
+        private NewFileViewModel ViewModel;
         private GlobalViewModel GlobalViewModel = GlobalViewModel.Instance;
 
         private NewFileWindow _instance;
@@ -32,6 +32,8 @@ namespace AirX.Pages
         public NewFilePage()
         {
             this.InitializeComponent();
+            ViewModel = GlobalViewModel.Instance.ReceiveFiles[FileId];
+            DataContext = ViewModel;
         }
 
         public void SetWindowInstance(NewFileWindow instance)
@@ -39,24 +41,12 @@ namespace AirX.Pages
             this._instance = instance;
         }
 
-        public string GetFileName()
-        {
-            try
-            {
-                return GlobalViewModel.ReceiveFiles[FileId].Filename;
-            }
-            catch
-            {
-                return "<error>";
-            }
-        }
-
         public string GetFileSizeDescription()
         {
             ulong sizeInBytes;
             try
             {
-                sizeInBytes = GlobalViewModel.ReceiveFiles[FileId].TotalSize;
+                sizeInBytes = ViewModel.ReceivingFile.TotalSize;
                 return FileUtil.GetFileSizeDescription(sizeInBytes);
             }
             catch
@@ -69,7 +59,7 @@ namespace AirX.Pages
         {
             try
             {
-                return "File from " + GlobalViewModel.ReceiveFiles[FileId].From.ToString();
+                return "File from " + ViewModel.ReceivingFile.From.ToString();
             }
             catch
             {
@@ -77,32 +67,16 @@ namespace AirX.Pages
             }
         }
 
-        public double GetProgressOutOf100()
-        {
-            try
-            {
-                var actualProgress = GlobalViewModel.ReceiveFiles[FileId].Progress;
-                var totalSize = GlobalViewModel.ReceiveFiles[FileId].TotalSize;
-                var percentage = 1.0 * actualProgress / totalSize;
-                var hundredBasedProgress = (int)(percentage * 100);
-                return hundredBasedProgress;
-            }
-            catch
-            {
-                return 0;
-            }
-        }
-
         private void OnStopClicked(object sender, RoutedEventArgs e)
         {
-            GlobalViewModel.ReceiveFiles[FileId].Status = AirXBridge.FileStatus.CancelledByReceiver;
+            ViewModel.ReceivingFile.Status = AirXBridge.FileStatus.CancelledByReceiver;
             _instance?.Close();
         }
 
 
         private void OnBlockClicked(object sender, RoutedEventArgs e)
         {
-            var target = GlobalViewModel.ReceiveFiles[FileId].From.ToString();
+            var target = ViewModel.ReceivingFile.From.ToString();
             new ContentDialog()
             {
                 Title = "Blocking " + target,

@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -37,9 +38,9 @@ namespace AirX.ViewModel
 
         // Key: file id
         [ObservableProperty]
-        public Dictionary<int, ReceiveFile> receiveFiles = new()
+        public Dictionary<int, NewFileViewModel> receiveFiles = new()
         {
-            { -1, ReceiveFile.Sample }
+            { -1, new(ReceiveFile.Sample) }
         };
 
         // Key: file id

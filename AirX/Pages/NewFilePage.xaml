@@ -18,11 +18,18 @@
         <converters:StringToFixedLengthStringConverter
             x:Name="stringToFixedLengthStringConverter"
         />
+        <converters:ProgressTo100BasedProgressConverter
+            x:Name="progressTo100BasedProgressConverter"
+            TotalSize="{x:Bind ViewModel.ReceivingFile.TotalSize}"
+        />
+        <converters:ProgressToProgressStringConverter
+            x:Name="progressToProgressStringConverter"
+            TotalSize="{x:Bind ViewModel.ReceivingFile.TotalSize}"
+        />
     </Page.Resources>
     <Border
         HorizontalAlignment="Center"
         Background="{x:Bind ViewModel.BackgroundColor, Mode=OneWay}"
-        Width="317" Height="168"
         CornerRadius="12"
     >
         <Grid>
@@ -34,15 +41,15 @@
 
             <StackPanel Grid.Row="0" Padding="20, 30, 30, 0">
                 <TextBlock
-                    Text="{x:Bind GetFileName(), Mode=OneWay}"
+                    Text="{x:Bind ViewModel.ReceivingFile.Filename}"
                     FontFamily="Inter" FontSize="20" FontWeight="Black" Foreground="Black"
                 />
                 <TextBlock
-                    Text="{x:Bind GetFileSizeDescription(), Mode=OneWay}"
+                    Text="{x:Bind GetFileSizeDescription()}"
                     FontFamily="Inter" FontSize="16" Margin="0,0,0,5" Foreground="Black"
                 />
                 <TextBlock
-                    Text="{x:Bind GetFrom(), Mode=OneWay}"
+                    Text="{x:Bind GetFrom()}"
                     FontFamily="Inter" FontSize="13" Margin="0,20,0,5" Foreground="DimGray"
                 />
             </StackPanel>
@@ -61,14 +68,14 @@
                 </Grid.ColumnDefinitions>
                 
                 <muxc:ProgressBar
-                    Value="{x:Bind GetProgressOutOf100(), Mode=OneWay}" 
+                    Value="{x:Bind ViewModel.ReceivingFile.DisplayProgress, Converter={StaticResource progressTo100BasedProgressConverter}, Mode=OneWay}" 
                     Maximum="100"
                     IsIndeterminate="False" 
                     Grid.Column="0"
                     Width="80"
                 />
-                
-                <TextBlock Grid.Column="1" FontFamily="Inter" Text="65%" Foreground="LightGray" FontWeight="Bold" FontSize="10" VerticalAlignment="Center" />
+
+                <TextBlock Grid.Column="1" FontFamily="Inter" Text="{x:Bind ViewModel.ReceivingFile.DisplayProgress, Converter={StaticResource progressToProgressStringConverter}, Mode=OneWay}" Foreground="LightGray" FontWeight="Bold" FontSize="10" VerticalAlignment="Center" />
                 <TextBlock Grid.Column="2"></TextBlock>
                 <HyperlinkButton
                     Click="OnStopClicked"

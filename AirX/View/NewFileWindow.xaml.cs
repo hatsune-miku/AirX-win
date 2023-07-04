@@ -1,19 +1,20 @@
+using AirX.Util;
+using System.Security.Policy;
+using System.Threading.Channels;
+using WinRT.Interop;
 using WinUIEx;
 
 namespace AirX.View
 {
     public sealed partial class NewFileWindow : BaseWindow
     {
-        private const int WINDOW_WIDTH = 401;
-        private const int WINDOW_HEIGHT = 210;
-
-        private int _fileId;
+        private const int WINDOW_WIDTH = 640;
+        private const int WINDOW_HEIGHT = 340;
 
         public NewFileWindow(int fileId)
         {
             this.InitializeComponent();
 
-            _fileId = fileId;
             newFilePage.SetWindowInstance(this);
             newFilePage.FileId = fileId;
 
@@ -21,19 +22,28 @@ namespace AirX.View
                 new WindowParameters
                 {
                     Title = "New File Window",
-                    WidthPortion = WINDOW_WIDTH / 3840.0 * 1.75,
-                    HeightPortion = WINDOW_HEIGHT / 2160.0 * 1.75,
+                    WidthPortion = WINDOW_WIDTH / 3840.0 * 1.25,
+                    HeightPortion = WINDOW_HEIGHT / 2160.0 * 1.25,
                     CenterScreen = false,
                     TopMost = true,
                     Resizable = false,
                     HaveMaximumButton = false,
                     HaveMinimumButton = false,
-                    EnableMicaEffect = true,
+                    EnableMicaEffect = false,
                 }
             );
+            ExtendsContentIntoTitleBar = true;
 
-            SetTitleBar(titleBar);
-            this.CenterOnScreen();
+            var screenSize = UIUtil.GetPrimaryScreenSize();
+            AppWindow.Move(new Windows.Graphics.PointInt32(
+                (int)screenSize.Width - AppWindow.Size.Width - 64,
+                (int)screenSize.Height - AppWindow.Size.Height - 92
+            ));
+        }
+
+        private void OnClosed(object sender, Microsoft.UI.Xaml.WindowEventArgs args)
+        {
+
         }
     }
 }

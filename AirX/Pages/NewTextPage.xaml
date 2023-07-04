@@ -18,9 +18,9 @@
             x:Name="stringToFixedLengthStringConverter"
         />
     </Page.Resources>
+    <!-- Width="317" Height="168" -->
     <Border
         Background="{x:Bind ViewModel.BackgroundColor, Mode=OneWay}"
-        Width="317" Height="168"
         CornerRadius="12"
     >
         <Grid RowDefinitions="Auto, *, Auto">

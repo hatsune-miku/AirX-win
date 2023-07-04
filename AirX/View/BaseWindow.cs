@@ -1,9 +1,6 @@
 ﻿using AirX.Helper;
 using AirX.Util;
 using Lombok.NET;
-using Microsoft.Graphics.Display;
-using Microsoft.UI.Windowing;
-using Microsoft.UI.Xaml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +11,9 @@ using WinRT;
 using Microsoft.UI.Composition.SystemBackdrops;
 using Microsoft.UI.Composition;
 using System.Drawing;
+using Windows.Graphics.Display;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Windowing;
 
 namespace AirX.View
 {
@@ -43,18 +43,18 @@ namespace AirX.View
         protected void Resize(int width, int height)
         {
             var graphics = Graphics.FromHwnd(IntPtr.Zero);
-            var realWidth = width / (graphics.DpiX / 100.0);
-            var realHeight = height / (graphics.DpiY / 100.0);
-            CurrentAppWindow.Resize(new SizeInt32((int)realWidth, (int)realHeight));
+            var scale = 1; // graphics.DpiX / 100;
+            var size = new SizeInt32((int) (width * scale), (int) (height * scale));
+            AppWindow.Resize(size);
         }
 
         protected void PrepareWindow(WindowParameters parameters)
         {
             var screenSize = UIUtil.GetPrimaryScreenSize();
-            var graphics = Graphics.FromHwnd(IntPtr.Zero);
-            var realWidth = (int)(parameters.WidthPortion / (graphics.DpiX / 100.0) * screenSize.Width);
-            var realHeight = (int)(parameters.HeightPortion / (graphics.DpiY / 100.0) * screenSize.Height);
-            CurrentAppWindow.Resize(new SizeInt32(realWidth, realHeight));
+            var realWidth = (int)(parameters.WidthPortion * screenSize.Width);
+            var realHeight = (int)(parameters.HeightPortion * screenSize.Height);
+            Resize(realWidth, realHeight);
+
             if (parameters.CenterScreen)
             {
                 UIUtil.MoveWindowToCenterScreen(CurrentAppWindow);

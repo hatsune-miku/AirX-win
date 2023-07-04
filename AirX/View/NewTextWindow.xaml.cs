@@ -1,33 +1,19 @@
-// Copyright (c) Microsoft Corporation and Contributors.
-// Licensed under the MIT License.
-
+using AirX.Extension;
 using AirX.Util;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.Graphics;
-using WinUIEx;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AirX.View
 {
     public sealed partial class NewTextWindow : BaseWindow
     {
-        private const int WINDOW_WIDTH = 401;
-        private const int WINDOW_HEIGHT = 210;
+        private const int WINDOW_WIDTH = 640;
+        private const int WINDOW_HEIGHT = 340;
 
         private string _title;
         private string _source;
+
+        private SynchronizationContext context = SynchronizationContext.Current;
 
         public static NewTextWindow Create(string title, string source)
         {
@@ -52,19 +38,33 @@ namespace AirX.View
                 new WindowParameters
                 {
                     Title = "New Text Window",
-                    WidthPortion = WINDOW_WIDTH / 3840.0 * 1.75,
-                    HeightPortion = WINDOW_HEIGHT / 2160.0 * 1.75,
+                    WidthPortion = WINDOW_WIDTH / 3840.0 * 1.25,
+                    HeightPortion = WINDOW_HEIGHT / 2160.0 * 1.25,
                     CenterScreen = false,
                     TopMost = true,
                     Resizable = false,
                     HaveMaximumButton = false,
                     HaveMinimumButton = false,
-                    EnableMicaEffect = true,
+                    EnableMicaEffect = false,
                 }
             );
+            ExtendsContentIntoTitleBar = true;
 
-            SetTitleBar(titleBar);
-            this.CenterOnScreen();
+            var screenSize = UIUtil.GetPrimaryScreenSize();
+            AppWindow.Move(new Windows.Graphics.PointInt32(
+                (int)screenSize.Width - AppWindow.Size.Width - 64,
+                (int)screenSize.Height - AppWindow.Size.Height - 92
+            ));
+
+            Task.Delay(SettingsUtil.Int(Keys.NewTextPopupDisplayTimeMillis, 6000)).ContinueWith(t =>
+            {
+                context.Post(_ => Close(), null);
+            }, TaskScheduler.Default).LogOnError();
+        }
+
+        private void OnClosed(object sender, Microsoft.UI.Xaml.WindowEventArgs args)
+        {
+
         }
     }
 }
