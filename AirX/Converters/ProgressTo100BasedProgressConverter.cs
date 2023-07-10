@@ -24,8 +24,6 @@ namespace AirX.Converters
             throw new NotImplementedException();
         }
 
-
-
         public double GetProgressOutOf100(UInt64 progress)
         {
             try

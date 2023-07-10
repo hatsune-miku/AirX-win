@@ -1,28 +1,19 @@
 <Page
-    x:Class="AirX.Pages.FigmaPage"
+    x:Class="AirX.Pages.SentFilesPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:AirX.Pages"
-    xmlns:controls="using:Microsoft.UI.Xaml.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     DataContext="ViewModel"
 >
-    <ScrollViewer VerticalScrollBarVisibility="Auto" Height="600">
-        <StackPanel Spacing="24" Margin="0, 24, 0, 0">
+    <StackPanel>
+        <StackPanel Margin="20, 40, 10, 0">
+            <TextBlock Text="Dashboard" FontSize="24" FontWeight="Bold"/>
+        </StackPanel>
 
-            <local:NewFilePage FileId="-1" />
-            <local:NewTextPage />
-
-            <CalendarView
-                SelectionMode="Single"
-                IsGroupLabelVisible="True"
-                IsOutOfScopeEnabled="True"
-                Language="en"
-                CalendarIdentifier="GregorianCalendar" 
-            />
-        
+        <StackPanel Margin="20, 40, 10, 0">
             <RatingControl
                 AutomationProperties.Name="Simple RatingControl" 
                 IsClearEnabled="True"
@@ -30,5 +21,5 @@
                 Caption="Your rating"
             />
         </StackPanel>
-    </ScrollViewer>
+    </StackPanel>
 </Page>

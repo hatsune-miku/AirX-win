@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace AirX.Pages
 {
-    public sealed partial class FigmaPage : Page
+    public sealed partial class SentFilesPage : Page
     {
         private NewTextViewModel ViewModel = new();
 
@@ -52,7 +52,7 @@ namespace AirX.Pages
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        public FigmaPage()
+        public SentFilesPage()
         {
             this.InitializeComponent();
             httpClient = new HttpClient();
@@ -142,52 +142,5 @@ namespace AirX.Pages
             }
             e.Handled = true;
         }
-
-       
-        private async void OpenButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (_selectedFile != null)
-            {
-                // Open the selected file using the default program
-                await Launcher.LaunchFileAsync(_selectedFile);
-            }
-        }
-
-        private const string ApiEndpoint = "https://api.example.com/share"; // Replace with the actual API endpoint of the file-sharing service
-
-        public async Task ShareFile(string filePath, string apiToken)
-        {
-            using (var httpClient = new HttpClient())
-            {
-                using (var form = new MultipartFormDataContent())
-                {
-                   
-                    byte[] fileBytes = File.ReadAllBytes(filePath);
-
-                    
-                    var fileContent = new ByteArrayContent(fileBytes);
-                    fileContent.Headers.Add("Content-Type", "application/octet-stream");
-                    fileContent.Headers.Add("Content-Disposition", $"form-data; name=\"file\"; filename=\"{Path.GetFileName(filePath)}\"");
-
-                    
-                    form.Add(fileContent);
-                   
-                    form.Add(new StringContent(apiToken), "api_key");
-               
-                    var response = await httpClient.PostAsync(ApiEndpoint, form);
-                 
-                    if (response.IsSuccessStatusCode)
-                    {
-                        Debug.WriteLine("File shared successfully!");
-                    }
-                    else
-                    {
-                        Debug.WriteLine($"File sharing failed. Error: {response.StatusCode}");
-                    }
-                }
-            }
-        }
-
     }
-
 }

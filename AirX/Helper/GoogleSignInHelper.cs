@@ -171,7 +171,7 @@ namespace AirX.Helper
                     if (response != null)
                     {
                         Debug.WriteLine("HTTP: " + response.StatusCode);
-                        using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                        using (StreamReader reader = new(response.GetResponseStream()))
                         {
                             // reads response body
                             string responseText = await reader.ReadToEndAsync();

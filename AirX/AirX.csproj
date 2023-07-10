@@ -20,6 +20,7 @@
     <None Remove="assets\sign-in.html" />
     <None Remove="Pages\LoginPage.xaml" />
     <None Remove="Pages\NewFilePage.xaml" />
+    <None Remove="Pages\ReceivedFilesPage.xaml" />
     <None Remove="Pages\SelectPeerPage.xaml" />
     <None Remove="Pages\TrayMenuHolderPage.xaml" />
     <None Remove="View\AboutWindow.xaml" />
@@ -43,6 +44,17 @@
     <PackageReference Include="PInvoke.User32" Version="0.7.124" />
     <PackageReference Include="WinUIEx" Version="2.2.0" />
     <Manifest Include="$(ApplicationManifest)" />
+  </ItemGroup>
+  
+  <!-- Needed for CommunityToolkit.Labs.WinUI.SettingsControls. -->
+  <PropertyGroup>
+    <RestoreAdditionalProjectSources>https://pkgs.dev.azure.com/dotnet/CommunityToolkit/_packaging/CommunityToolkit-Labs/nuget/v3/index.json</RestoreAdditionalProjectSources>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <Page Update="Pages\ReceivedFilesPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <ItemGroup>
@@ -148,7 +160,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Update="Pages\FigmaPage.xaml">
+    <Page Update="Pages\SentFilesPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

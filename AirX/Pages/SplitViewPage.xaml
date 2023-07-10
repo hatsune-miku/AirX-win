@@ -7,6 +7,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    Loaded="OnPageLoaded"
+    Unloaded="OnPageUnloaded"
+    DataContext="ViewModel"
 >
     <!-- Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" -->
     <Page.Resources>
@@ -17,24 +20,47 @@
                 <TextBlock Text="{x:Bind Label}" Margin="20,10,0,10" VerticalAlignment="Center" />
             </StackPanel>
         </DataTemplate>
+        
         <converters:LoggingInUidStringToDescriptionConverter
             x:Key="loggingInUidStringToDescriptionConverter"
         />
+        
+        <converters:BooleanInvertionConverter
+            x:Key="booleanInvertionConverter"
+        />
+
+        <converters:BooleanToVisibilityConverter
+            x:Key="booleanToVisibilityConverter"
+        />
+
+        <converters:CombinedConverter
+            Converter1="{StaticResource booleanInvertionConverter}"
+            Converter2="{StaticResource booleanToVisibilityConverter}"
+            x:Key="booleanInvertionToVisibilityConverter"
+        />
     </Page.Resources>
-    
+
     <StackPanel DataContext="SharedViewModel">
         <Grid VerticalAlignment="Top">
             <SplitView
                 x:Name="splitView"
-                IsPaneOpen="True"
+                IsPaneOpen="{x:Bind ViewModel.ShouldExpandPane, Mode=OneWay}"
                 DisplayMode="CompactInline"
                 IsTabStop="False"
-                OpenPaneLength="320"
+                OpenPaneLength="280"
+                CompactPaneLength="70"
                 PaneBackground="Transparent"
             >
                 <SplitView.Pane>
                     <StackPanel Margin="0, 0, 0, 0">
-                        <Grid Margin="24, 24, 12, 24" ColumnSpacing="12">
+                        <Grid
+                            Margin="12, 24, 12, 4"
+                            ColumnSpacing="12"
+                            Padding="24"
+                            CornerRadius="12"
+                            Background="{ThemeResource AccentAcrylicBackgroundFillColorBaseBrush}"
+                            Visibility="{x:Bind ViewModel.ShouldExpandPane, Converter={StaticResource booleanToVisibilityConverter}, Mode=OneWay}"
+                        >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
@@ -84,13 +110,14 @@
                         </Grid>
                         <ListView
                             x:Name="NavLinksList"
-                            Margin="8,0,8,0"
+                            Margin="8, 20, 8, 0"
                             VerticalAlignment="Stretch"
-                            ItemClick="NavLinksList_ItemClick"
+                            ItemClick="OnNavLinksListItemClicked"
                             IsItemClickEnabled="True"
                             ItemsSource="{x:Bind NavLinks}"
                             ItemTemplate="{StaticResource NavLinkItemTemplate}"
                             SelectionMode="Single"
+                            SelectedIndex="0"
                         />
                     </StackPanel>
                 </SplitView.Pane>

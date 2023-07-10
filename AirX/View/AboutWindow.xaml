@@ -33,7 +33,7 @@
                 Margin="25"
                 ColumnSpacing="25"
                 ColumnDefinitions="120, *"
-                RowDefinitions="*, *, *, *, *, *"
+                RowDefinitions="*, *, *, *, *, *, *"
             >
                 <TextBlock
                     Grid.Row="0" Grid.Column="0"
@@ -91,7 +91,16 @@
                     HorizontalAlignment="Left"
                     Text="{x:Bind ViewModel.AirXVersion}"
                 />
-                
+
+                <TextBlock Grid.Row="6" Grid.Column="0" HorizontalAlignment="Right">
+                    Version Code
+                </TextBlock>
+
+                <TextBlock
+                    Grid.Row="6" Grid.Column="1"
+                    HorizontalAlignment="Left"
+                    Text="{x:Bind ViewModel.AirXVersionString}"
+                />
             </Grid>
         </StackPanel>
     </Grid>

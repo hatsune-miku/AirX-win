@@ -9,7 +9,8 @@
     mc:Ignorable="d"
     xmlns:muxc="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-    DataContext="GlobalViewModel"
+    Loading="OnPageLoading"
+    Loaded="OnPageLoaded"
 >
     <Page.Resources>
         <converters:IpAdrressToTextSourceConverter
@@ -32,13 +33,7 @@
         Background="{x:Bind ViewModel.BackgroundColor, Mode=OneWay}"
         CornerRadius="12"
     >
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-
+        <Grid RowDefinitions="Auto, *, Auto">
             <StackPanel Grid.Row="0" Padding="20, 30, 30, 0">
                 <TextBlock
                     Text="{x:Bind ViewModel.ReceivingFile.Filename}"

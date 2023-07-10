@@ -7,19 +7,18 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-    <Grid DataContext="ViewModel" RowDefinitions="32, *">
-        <Grid
-            Grid.Row="0"
-            x:Name="titleBar"
-            Background="Transparent"
-            Opacity="0"
-        />
+    <StackPanel DataContext="ViewModel">
+        <Grid x:Name="titleBar" Height="32">
+            <TextBlock VerticalAlignment="Center" Margin="24, 22, 0, 0" FontSize="12">
+                AirX Control Panel
+            </TextBlock>
+        </Grid>
 
         <!-- Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" -->
-        <StackPanel Grid.Row="1" Orientation="Vertical">
+        <StackPanel Orientation="Vertical">
             <pages:SplitViewPage></pages:SplitViewPage>
         </StackPanel>
         
         
-    </Grid>
+    </StackPanel>
 </localView:BaseWindow>

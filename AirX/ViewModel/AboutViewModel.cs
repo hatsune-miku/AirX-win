@@ -20,5 +20,8 @@ namespace AirX.ViewModel
 
         [ObservableProperty]
         string copyright;
+
+        [ObservableProperty]
+        string airXVersionString;
     }
 }

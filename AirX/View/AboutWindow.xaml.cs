@@ -14,8 +14,9 @@ namespace AirX.View
             ViewModel = new()
             {
                 AirXVersion = AirXNative.airx_version().ToString(),
-                BuildValue = "1",
-                VersionValue = "1.0.0",
+                AirXVersionString = AirXBridge.GetVersionString(),
+                BuildValue = "2",
+                VersionValue = "1.1",
                 Copyright = "© 2023 Chang Guan",
             };
 

@@ -32,8 +32,16 @@ namespace AirX.Pages
         public NewFilePage()
         {
             this.InitializeComponent();
+        }
+
+        private void OnPageLoading(FrameworkElement sender, object args)
+        {
             ViewModel = GlobalViewModel.Instance.ReceiveFiles[FileId];
             DataContext = ViewModel;
+        }
+
+        private void OnPageLoaded(object sender, RoutedEventArgs e)
+        {
         }
 
         public void SetWindowInstance(NewFileWindow instance)
@@ -49,7 +57,7 @@ namespace AirX.Pages
                 sizeInBytes = ViewModel.ReceivingFile.TotalSize;
                 return FileUtil.GetFileSizeDescription(sizeInBytes);
             }
-            catch
+            catch (Exception)
             {
                 return "<error>";
             }
@@ -61,7 +69,7 @@ namespace AirX.Pages
             {
                 return "File from " + ViewModel.ReceivingFile.From.ToString();
             }
-            catch
+            catch (Exception)
             {
                 return "<error>";
             }
@@ -93,7 +101,7 @@ namespace AirX.Pages
                         AccountUtil.AddToBlockList(target);
                     }
                 }
-                catch { }
+                catch (Exception) { }
             }, TaskScheduler.Default).FireAndForget();
         }
     }

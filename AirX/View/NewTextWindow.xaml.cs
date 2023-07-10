@@ -59,7 +59,7 @@ namespace AirX.View
             Task.Delay(SettingsUtil.Int(Keys.NewTextPopupDisplayTimeMillis, 6000)).ContinueWith(t =>
             {
                 context.Post(_ => Close(), null);
-            }, TaskScheduler.Default).LogOnError();
+            }, TaskScheduler.Default).FireAndForget();
         }
 
         private void OnClosed(object sender, Microsoft.UI.Xaml.WindowEventArgs args)

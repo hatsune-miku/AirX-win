@@ -330,6 +330,15 @@ public class AirXBridge
         );
     }
 
+    public static string GetVersionString()
+    {
+        var versionString = Utf8StringAlloc(128);
+        var actualLength = AirXNative.airx_version_string(versionString);
+        var ret = Utf8StringFromPtr(versionString, (int) actualLength);
+        FreeUtf8String(versionString);
+        return ret;
+    }
+
     public static void Deinit()
     {
         FreeUtf8String(PeerListBuffer);

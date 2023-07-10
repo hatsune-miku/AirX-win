@@ -1,0 +1,86 @@
+<Page
+    x:Class="AirX.Pages.ReceivedFilesPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AirX.Pages"
+    xmlns:converters="using:AirX.Converters"
+    xmlns:model="using:AirX.Model"
+    xmlns:muxc="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Loading="OnPageLoading"
+>
+    <Page.Resources>
+        <converters:SizeInBytesToSizeDescriptionConverter
+            x:Name="sizeInBytesToSizeDescriptionConverter"
+        />
+
+        <converters:UInt64ToDoubleConverter
+            x:Name="uint64ToDoubleConverter"
+        />
+
+        <DataTemplate x:DataType="model:ReceiveFile" x:Key="ReceiveFileTemplate">
+            <Grid CornerRadius="8" Height="100" Padding="24,12,24,12" Background="{ThemeResource SystemAccentColorDark2}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    
+                    <Grid Grid.Row="0" Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="22" />
+                            <RowDefinition Height="18" />
+                        </Grid.RowDefinitions>
+                        
+                        <TextBlock
+                            Grid.Row="0" Grid.Column="0"
+                            Text="{x:Bind Filename, Mode=OneWay}"
+                            FontSize="18" FontWeight="Bold"
+                        />
+                        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="4">
+                            <TextBlock
+                                Text="{x:Bind TotalSize, Converter={
+                                StaticResource sizeInBytesToSizeDescriptionConverter}, Mode=OneWay}"
+                            />
+                            <TextBlock>from</TextBlock>
+                            <TextBlock Text="{x:Bind From, Mode=OneWay}" />
+                        </StackPanel>
+                        <muxc:ProgressBar
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Value="{x:Bind DisplayProgress, Converter={StaticResource uint64ToDoubleConverter}, Mode=OneWay}"
+                            Maximum="{x:Bind TotalSize, Converter={StaticResource uint64ToDoubleConverter}, Mode=OneWay}"
+                            IsIndeterminate="False"
+                            HorizontalAlignment="Left"
+                            Width="100"
+                        />
+                    </Grid>
+                    <Grid Grid.Row="0" Grid.Column="1"></Grid>
+                    <StackPanel Grid.Row="0" Grid.Column="2" Spacing="4" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button>Cancel &amp; Delete</Button>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+
+    <StackPanel>
+        <StackPanel Margin="20, 40, 10, 0">
+            <TextBlock Text="Received Files" FontSize="24" FontWeight="Bold"/>
+        </StackPanel>
+
+        <ScrollViewer>
+            <ListView
+                x:Name="receivedFilesListView"
+                Margin="20, 20, 20, 0"
+                ItemsSource="{x:Bind ReceiveFiles, Mode=OneWay}"
+                ItemTemplate="{StaticResource ReceiveFileTemplate}"
+                SelectionMode="None"
+            />
+        </ScrollViewer>
+    </StackPanel>
+</Page>

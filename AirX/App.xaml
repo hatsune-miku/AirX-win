@@ -8,6 +8,15 @@
 >
     <Application.Resources>
         <ResourceDictionary>
+            <!-- Other app resources here -->
+            <SolidColorBrush x:Key="WindowCaptionBackground">Transparent</SolidColorBrush>
+            <SolidColorBrush x:Key="WindowCaptionBackgroundDisabled">Transparent</SolidColorBrush>
+
+            <!-- 
+            <SolidColorBrush x:Key="WindowCaptionForeground">Transparent</SolidColorBrush>
+            <SolidColorBrush x:Key="WindowCaptionForegroundDisabled">Transparent</SolidColorBrush>
+            -->
+            
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Dark">
                     <SolidColorBrush x:Key="ApplicationPageBackgroundThemeBrush" Color="Black"/>

@@ -39,6 +39,9 @@ namespace AirX.Bridge
         public static extern uint airx_get_peers(IntPtr airxPtr, IntPtr buffer);
 
         [DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl)]
+        public static extern UInt64 airx_version_string(IntPtr buffer);
+
+        [DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl)]
         public static extern void airx_send_text(
             IntPtr airxPtr,
             string host,

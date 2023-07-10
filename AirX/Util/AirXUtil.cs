@@ -15,7 +15,7 @@ namespace AirX.Util
         public static async Task UserSendFileAsync()
         {
             var files = await FileUtil.OpenFileDialogAsync();
-            if (files.Count == 0)
+            if (files.Count == 0 || files.First() == null)
             {
                 return;
             }
@@ -27,16 +27,14 @@ namespace AirX.Util
                 return;
             }
 
-            var window = SelectPeerWindow.Instance;
-            List<Peer> peers = await window.SelectPeersAsync();
-
-            foreach (var peer in peers)
+            var window = new SelectPeerWindow();
+            window.SelectPeer(peer =>
             {
                 foreach (var file in files)
                 {
-                    AirXBridge.TrySendFile(file.Path, peer);
+                    AirXBridge.TrySendFile(file.Path, peer.Value);
                 }
-            }
+            });
         }
 
         public static void UserToggleService()

@@ -57,7 +57,7 @@ namespace AirX.View
             }
         }
 
-        public void SelectPeers(OnPeerSelectedHandler handler)
+        public void SelectPeer(OnPeerSelectedHandler handler)
         {
             _handler = handler;
             Activate();
