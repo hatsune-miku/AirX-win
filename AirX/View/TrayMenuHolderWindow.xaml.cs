@@ -92,14 +92,10 @@ namespace AirX.View
             file.WritingStream.Write(data, 0, (int)length);
             file.Progress += length;
 
-            // Update UI every 10MB
-            if (file.Progress - file.DisplayProgress > 1024 * 1024 * 10)
+            context.Post(_ =>
             {
-                context.Post(_ =>
-                {
-                    file.DisplayProgress = file.Progress;
-                }, null);
-            }
+                file.DisplayProgress = file.Progress;
+            }, null);
             Debug.WriteLine($"File progress: {file.Progress}/{file.TotalSize}");
 
             if (file.Progress == file.TotalSize)

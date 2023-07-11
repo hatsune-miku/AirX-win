@@ -1,4 +1,5 @@
-﻿using AirX.Model;
+﻿using AirX.Data;
+using AirX.Model;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
@@ -38,13 +39,13 @@ namespace AirX.ViewModel
 
         // Key: file id
         [ObservableProperty]
-        public Dictionary<int, NewFileViewModel> receiveFiles = new()
+        public ObservableDictionary<int, NewFileViewModel> receiveFiles = new()
         {
             { -1, new(ReceiveFile.Sample) }
         };
 
         // Key: file id
         [ObservableProperty]
-        public Dictionary<int, SendFile> sendFiles = new();
+        public ObservableDictionary<int, SendFile> sendFiles = new();
     }
 }

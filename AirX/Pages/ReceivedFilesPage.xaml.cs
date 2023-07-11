@@ -19,7 +19,7 @@ namespace AirX.Pages
 {
     public sealed partial class ReceivedFilesPage : Page
     {
-        private List<ReceiveFile> ReceiveFiles;
+        private ReceiveFilesPageViewModel ViewModel = new();
 
         public ReceivedFilesPage()
         {
@@ -28,7 +28,18 @@ namespace AirX.Pages
 
         private void OnPageLoading(FrameworkElement sender, object args)
         {
-            ReceiveFiles = GlobalViewModel.Instance.ReceiveFiles.Values
+            GlobalViewModel.Instance.ReceiveFiles.MapChanged += OnMapChanged;
+            RefreshView();
+        }
+
+        private void OnMapChanged(IObservableMap<int, NewFileViewModel> sender, IMapChangedEventArgs<int> @event)
+        {
+            RefreshView();
+        }
+
+        private void RefreshView()
+        {
+            ViewModel.ReceiveFiles = GlobalViewModel.Instance.ReceiveFiles.Values
                 .Select(item => item.ReceivingFile)
                 .ToList();
         }

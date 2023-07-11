@@ -10,6 +10,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Loading="OnPageLoading"
+    DataContext="ViewModel"
 >
     <Page.Resources>
         <converters:SizeInBytesToSizeDescriptionConverter
@@ -20,8 +21,12 @@
             x:Name="uint64ToDoubleConverter"
         />
 
+        <converters:ReceiveFileStatusToShouldEnableCancelButtonConverter
+            x:Name="receiveFileStatusToShouldEnableCancelButtonConverter"
+        />
+
         <DataTemplate x:DataType="model:ReceiveFile" x:Key="ReceiveFileTemplate">
-            <Grid CornerRadius="8" Height="100" Padding="24,12,24,12" Background="{ThemeResource SystemAccentColorDark2}">
+            <Grid CornerRadius="8" Height="100" Padding="24,12,24,12" Background="{ThemeResource SystemAccentColorDark2}" Margin="0,0,0,12">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -61,7 +66,10 @@
                     </Grid>
                     <Grid Grid.Row="0" Grid.Column="1"></Grid>
                     <StackPanel Grid.Row="0" Grid.Column="2" Spacing="4" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button>Cancel &amp; Delete</Button>
+                        <Button IsEnabled="{x:Bind Status, Converter={
+                            StaticResource receiveFileStatusToShouldEnableCancelButtonConverter}, Mode=OneWay}" Click="{x:Bind OnCancelAndDelete}">
+                            Cancel &amp; Delete
+                        </Button>
                     </StackPanel>
                 </Grid>
             </Grid>
@@ -77,7 +85,7 @@
             <ListView
                 x:Name="receivedFilesListView"
                 Margin="20, 20, 20, 0"
-                ItemsSource="{x:Bind ReceiveFiles, Mode=OneWay}"
+                ItemsSource="{x:Bind ViewModel.ReceiveFiles, Mode=OneWay}"
                 ItemTemplate="{StaticResource ReceiveFileTemplate}"
                 SelectionMode="None"
             />

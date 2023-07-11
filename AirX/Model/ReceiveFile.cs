@@ -1,6 +1,8 @@
 ﻿using AirX.Bridge;
+using AirX.ViewModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Lombok.NET;
+using Microsoft.UI.Xaml;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -40,5 +42,11 @@ namespace AirX.Model
             DisplayProgress = (ulong)(100 * 1024 * 0.65),
             DisplayStatus = AirXBridge.FileStatus.InProgress,
         };
+
+        public void OnCancelAndDelete(object sender, RoutedEventArgs e)
+        {
+            Status = AirXBridge.FileStatus.CancelledByReceiver;
+            GlobalViewModel.Instance.ReceiveFiles.TriggerNotifyChanged();
+        }
     }
 }
