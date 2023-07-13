@@ -27,16 +27,23 @@
             x:Name="progressToProgressStringConverter"
             TotalSize="{x:Bind ViewModel.ReceivingFile.TotalSize}"
         />
+        <converters:FilePathToNameConverter
+            x:Name="filePathToNameConverter"
+        />
+        <converters:ProgressToStopOrOpenTextConverter
+            x:Name="progressToStopOrOpenTextConverter"
+            TotalSize="{x:Bind ViewModel.ReceivingFile.TotalSize}"
+        />
     </Page.Resources>
-    <Border
-        HorizontalAlignment="Center"
+    <Grid
+        HorizontalAlignment="Stretch"
         Background="{x:Bind ViewModel.BackgroundColor, Mode=OneWay}"
         CornerRadius="12"
     >
         <Grid RowDefinitions="Auto, *, Auto">
             <StackPanel Grid.Row="0" Padding="20, 30, 30, 0">
                 <TextBlock
-                    Text="{x:Bind ViewModel.ReceivingFile.Filename}"
+                    Text="{x:Bind ViewModel.ReceivingFile.RemoteFullPath, Converter={StaticResource filePathToNameConverter}, Mode=OneWay}"
                     FontFamily="Inter" FontSize="20" FontWeight="Black" Foreground="Black"
                 />
                 <TextBlock
@@ -73,8 +80,10 @@
                 <TextBlock Grid.Column="1" FontFamily="Inter" Text="{x:Bind ViewModel.ReceivingFile.DisplayProgress, Converter={StaticResource progressToProgressStringConverter}, Mode=OneWay}" Foreground="LightGray" FontWeight="Bold" FontSize="10" VerticalAlignment="Center" />
                 <TextBlock Grid.Column="2"></TextBlock>
                 <HyperlinkButton
-                    Click="OnStopClicked"
-                    Grid.Column="3" FontFamily="Inter" Content="STOP" FontSize="15" Foreground="{x:Bind ViewModel.DimmedAccentColor, Mode=OneWay}" FontWeight="Bold"
+                    Click="OnStopOrOpenFolderClicked"
+                    Grid.Column="3" FontFamily="Inter"
+                    Content="{x:Bind ViewModel.ReceivingFile.DisplayProgress, Converter={StaticResource progressToStopOrOpenTextConverter}, Mode=OneWay}"
+                    FontSize="15" Foreground="{x:Bind ViewModel.DimmedAccentColor, Mode=OneWay}" FontWeight="Bold"
                 />
                 <HyperlinkButton
                     Click="OnBlockClicked"
@@ -82,5 +91,5 @@
                 />
             </Grid>
         </Grid>
-    </Border>
+    </Grid>
 </Page>

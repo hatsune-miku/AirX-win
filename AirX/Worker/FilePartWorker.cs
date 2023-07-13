@@ -47,8 +47,8 @@ namespace AirX.Worker
             if (file.Status == AirXBridge.FileStatus.CancelledByReceiver)
             {
                 Debug.WriteLine("File cancelled!");
+                file.WritingStream?.Close();
                 GlobalViewModel.Instance.ReceiveFiles.Remove(workload.FileId);
-                // TODO: Send cancel packet to sender
                 return;
             }
 
@@ -80,6 +80,7 @@ namespace AirX.Worker
                 }, null);
 
                 file.WritingStream.Close();
+                file.WritingStream = null;
                 file.Status = AirXBridge.FileStatus.Completed;
                 Debug.WriteLine("File recv completed!");
             }
