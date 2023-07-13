@@ -1,27 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.ApplicationModel.DataTransfer;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.Storage.Pickers;
-using Windows.Storage;
-using WinRT.Interop;
 using AirX.Util;
-using AirX.View;
 using AirX.ViewModel;
 using AirX.Model;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using System.Diagnostics;
-using Microsoft.UI.Xaml.Data;
-using System.Threading.Tasks;
+using AirX.Extension;
 
 namespace AirX.Pages
 {
-    // 还有这东西？
     public class SettingsDataTemplateSelector : DataTemplateSelector
     {
         public DataTemplate BooleanSettingsTemplate { get; set; }
@@ -189,49 +176,6 @@ namespace AirX.Pages
                 : "Perferences";
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-        private void CopyText_Click(object sender, RoutedEventArgs args)
-        {
-            var package = new DataPackage();
-            package.SetText("Copy this text");
-            Clipboard.SetContent(package);
-        }
-
-        private async void PasteText_Click(object sender, RoutedEventArgs args)
-        {
-            var package = Clipboard.GetContent();
-            if (package.Contains(StandardDataFormats.Text))
-            {
-                var text = await package.GetTextAsync();
-            }
-        }
-
-        private async void OpenFolderButton_Click(object sender, RoutedEventArgs e)
-        {
-            var folderPicker = new FolderPicker();
-            folderPicker.SuggestedStartLocation = PickerLocationId.Desktop;
-            folderPicker.FileTypeFilter.Add("*");
-
-            var window = ControlPanelWindow.Instance;
-            var hwnd = WindowNative.GetWindowHandle(window);
-            InitializeWithWindow.Initialize(folderPicker, hwnd);
-
-            StorageFolder folder = await folderPicker.PickSingleFolderAsync();
-            if (folder != null)
-            {
-                Windows.Storage.AccessCache.StorageApplicationPermissions.
-                FutureAccessList.AddOrReplace("PickedFolderToken", folder);
-                this.textBlock.Text = "Picked folder: " + folder.Name;
-            }
-            else
-            {
-                this.textBlock.Text = "Operation cancelled.";
-            }
-        }
-
         private bool IsPortValid(string portRepr)
         {
             return int.TryParse(portRepr, out int port)
@@ -255,6 +199,14 @@ namespace AirX.Pages
         {
             return int.TryParse(millisRepr, out int res)
                 && 1000 <= res && res <= 10000;
+        }
+
+        private void OnCleanCacheClicked(object sender, RoutedEventArgs args)
+        {
+            // TODO: Clean cache
+            UIUtil.ShowContentDialogYesNoAsync("Clean Cache", "This will delete all cached data.",
+                "Clean", "Cancel", Content.XamlRoot)
+                .FireAndForget();
         }
     }
 }

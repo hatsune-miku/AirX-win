@@ -22,15 +22,7 @@ namespace AirX.Pages
         [RelayCommand]
         public void ExitApplication()
         {
-            UIUtil.MessageBoxAsync("Exit", "Confirm to exit AirX?", "Exit", "Cancel")
-                .ContinueWith(t =>
-                {
-                    if (t.Result == ContentDialogResult.Primary)
-                    {
-                        Application.Current.Exit();
-                    }
-                }, TaskScheduler.Default)
-                .FireAndForget();
+            Application.Current.Exit();
         }
 
         [RelayCommand]

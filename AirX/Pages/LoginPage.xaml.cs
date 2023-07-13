@@ -28,7 +28,7 @@ namespace AirX.Pages
             textBoxUid.Focus(FocusState.Programmatic);
         }
 
-        private async void onLoginButtonClicked(object sender, RoutedEventArgs e)
+        private async Task HandleLoginAsync()
         {
             if (ViewModel.IsLoggingIn)
             {
@@ -80,9 +80,14 @@ namespace AirX.Pages
                 ViewModel.ShouldRememberPassword
             );
 
-            await AccountUtil.TryGreetings();
+            await AccountUtil.SendGreetingsAsync();
 
             LoginWindow.Instance?.Close();
+        }
+
+        private void OnLoginButtonClicked(object sender, RoutedEventArgs e)
+        {
+            HandleLoginAsync().FireAndForget();
         }
 
         private void onTextBoxesKeyDown(object sender, KeyRoutedEventArgs e)
@@ -91,7 +96,7 @@ namespace AirX.Pages
             {
                 return;
             }
-            onLoginButtonClicked(sender, null);
+            OnLoginButtonClicked(sender, null);
         }
 
         private void GoogleLoginButton_Click(object sender, RoutedEventArgs e)

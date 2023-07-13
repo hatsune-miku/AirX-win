@@ -44,7 +44,7 @@ namespace AirX.Util
             SettingsUtil.WriteBlockList(_blockList);
         }
 
-        public static async Task<bool> TryGreetings()
+        public static async Task<bool> SendGreetingsAsync()
         {
             AirXCloud.GreetingsResponse greetingsResponse;
             try
@@ -65,7 +65,7 @@ namespace AirX.Util
         /**
          * Return: true if successfully logged in, otherwise, false.
          */
-        public static async Task<bool> TryAutomaticLogin()
+        public static async Task<bool> TryAutomaticLoginAsync()
         {
             if (!SettingsUtil.Bool(Keys.ShouldAutoSignIn, false))
             {
@@ -111,7 +111,7 @@ namespace AirX.Util
                 return false;
             }
 
-            await TryGreetings();
+            await SendGreetingsAsync();
 
             // Almost there!
             Debug.WriteLine("Success.");

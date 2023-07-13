@@ -107,17 +107,9 @@
                 </ScrollViewer>
             </PivotItem>
 
-            <PivotItem Header="Account">
+            <PivotItem Header="Debug">
                 <StackPanel>
-                    <Button Content="Copy Text to the Clipboard" Margin="5,30,0,30" Click="CopyText_Click" FontWeight="Bold"/>
-                    <Button Content="Paste Text from the Clipboard" Margin="5,30,0,30" Click="PasteText_Click" FontWeight="Bold"/>
-                </StackPanel>
-            </PivotItem>
-
-            <PivotItem Header="Customization">
-                <StackPanel>
-                    <Button x:Name="OpenFolderButton" Click="OpenFolderButton_Click" Content="OpenFolder" Background="MediumSeaGreen" Margin="8,0,0,0" Padding="10" CornerRadius="25"/>
-                    <TextBlock x:Name="textBlock" Margin="12,30,0,30" Text="Lan Clipboard Server Port" FontWeight="Bold"/>
+                    <Button Content="Clean Cache" Margin="5,5,5,5" Click="OnCleanCacheClicked" FontWeight="Bold"/>
                 </StackPanel>
             </PivotItem>
         </Pivot>

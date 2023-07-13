@@ -8,6 +8,7 @@ using Windows.Foundation;
 using Windows.Graphics;
 using AirX.View;
 using Microsoft.UI.Xaml.Controls;
+using AirX.Extension;
 
 namespace AirX.Util
 {
@@ -34,15 +35,29 @@ namespace AirX.Util
             return new Size(screenWidth, screenHeight);
         }
 
-        public static async void ShowContentDialog(string title, string content, XamlRoot xamlRoot)
+        public static void ShowContentDialog(string title, string content, XamlRoot xamlRoot)
         {
-            _ = await new ContentDialog()
+            new ContentDialog()
             {
                 Title = title,
                 Content = content,
                 CloseButtonText = "OK",
                 XamlRoot = xamlRoot
-            }.ShowAsync();
+            }.ShowAsync()
+            .AsTask()
+            .FireAndForget();
+        }
+
+        public static async Task<ContentDialogResult> ShowContentDialogYesNoAsync(string title, string content, string primaryButtonText, string secondaryButtonText, XamlRoot xamlRoot)
+        {
+            return await new ContentDialog()
+            {
+                Title = title,
+                Content = content,
+                PrimaryButtonText = primaryButtonText,
+                SecondaryButtonText = secondaryButtonText,
+                XamlRoot = xamlRoot
+            }.ShowAsync().AsTask();
         }
 
         public static void SetWindowVisibility(Window window, bool visible)

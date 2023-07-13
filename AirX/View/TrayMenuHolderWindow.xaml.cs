@@ -51,7 +51,7 @@ namespace AirX.View
 
         private async Task TrySignInAsync()
         {
-            if (!await AccountUtil.TryAutomaticLogin())
+            if (!await AccountUtil.TryAutomaticLoginAsync())
             {
                 // Prompt to login if token expired.
                 var window = new LoginWindow();
@@ -66,9 +66,25 @@ namespace AirX.View
 
         // Called when a FilePartPacket is received.
         // In most cases, multiple calls will be made for a single file.
-        private static void OnFilePart(byte fileId, UInt64 offset, UInt64 length, byte[] data)
+        // Return true to stop receiving the file.
+        private static bool OnFilePart(byte fileId, UInt64 offset, UInt64 length, byte[] data)
         {
+            try
+            {
+                NewFileViewModel remoteViewModel = GlobalViewModel.Instance.ReceiveFiles[fileId];
+                var file = remoteViewModel.ReceivingFile;
+                if (file == null || file.Status == AirXBridge.FileStatus.CancelledByReceiver || file.Status == AirXBridge.FileStatus.CancelledBySender)
+                {
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                return true;
+            }
+
             filePartWorker.PostWorkload(new(fileId, offset, length, data));
+            return false;
         }
 
         private static void OnFileSending(byte fileId, ulong progress, ulong total, AirXBridge.FileStatus status)

@@ -33,23 +33,17 @@ namespace AirX.Util
 
         public static string GetFileSizeDescription(ulong sizeInBytes)
         {
-            if (sizeInBytes < 1024)
+            string[] units = { "B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB", "要上天啊", "nb" };
+            double size = sizeInBytes;
+            int unitIndex = 0;
+
+            while (size >= 1024 && unitIndex < units.Length - 1)
             {
-                return $"{sizeInBytes} B";
+                size /= 1024;
+                unitIndex++;
             }
-            if (sizeInBytes < 1024 * 1024)
-            {
-                return $"{sizeInBytes / 1024} KB";
-            }
-            if (sizeInBytes < 1024 * 1024 * 1024)
-            {
-                return $"{sizeInBytes / 1024 / 1024} MB";
-            }
-            if (sizeInBytes < 1024UL * 1024 * 1024 * 1024)
-            {
-                return $"{sizeInBytes / 1024 / 1024 / 1024} GB";
-            }
-            return $"{sizeInBytes / 1024 / 1024 / 1024 / 1024} TB";
+
+            return $"{Math.Round(size, 2)} {units[unitIndex]}";
         }
 
         public static async Task<IReadOnlyList<StorageFile>> OpenFileDialogAsync()

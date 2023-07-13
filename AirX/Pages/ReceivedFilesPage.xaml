@@ -82,7 +82,7 @@
         </DataTemplate>
     </Page.Resources>
 
-    <Grid HorizontalAlignment="Stretch">
+    <StackPanel HorizontalAlignment="Stretch">
         <StackPanel Margin="20, 40, 10, 0">
             <TextBlock Text="Received Files" FontSize="24" FontWeight="Bold"/>
         </StackPanel>
@@ -96,5 +96,5 @@
                 SelectionMode="None"
             />
         </ScrollViewer>
-    </Grid>
+    </StackPanel>
 </Page>

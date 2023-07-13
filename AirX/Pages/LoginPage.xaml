@@ -54,7 +54,7 @@
                     <Button 
                         Grid.Row="0" Grid.Column="0"
                         x:Name="loginButton"
-                        Click="onLoginButtonClicked"
+                        Click="OnLoginButtonClicked"
                         Content="{x:Bind ViewModel.ButtonTitle, Mode=TwoWay}"
                         HorizontalAlignment="Stretch"
                         IsEnabled="{x:Bind ViewModel.IsLoggingIn, Mode=OneWay, Converter={StaticResource BooleanInvertionConverter}}"

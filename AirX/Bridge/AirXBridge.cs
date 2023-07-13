@@ -25,7 +25,7 @@ public class AirXBridge
     public delegate void OnTextReceivedHandler(string text, string from);
     public delegate void OnFileComingHandler(UInt64 fileSize, string fileName, string from);
     public delegate void OnFileSendingHandler(byte fileId, UInt64 progress, UInt64 total, FileStatus status);
-    public delegate void OnFilePartHandler(byte fileId, UInt64 offset, UInt64 length, byte[] data);
+    public delegate bool OnFilePartHandler(byte fileId, UInt64 offset, UInt64 length, byte[] data);
 
     public enum FileStatus
     {
@@ -142,18 +142,19 @@ public class AirXBridge
         onFileSendingHandler?.Invoke(fileId, progress, total, (FileStatus)status);
     }
 
-    private static void OnFilePart(byte fileId, UInt64 offset, UInt64 length, IntPtr data)
+    private static bool OnFilePart(byte fileId, UInt64 offset, UInt64 length, IntPtr data)
     {
         try
         {
             byte[] dataBytes = new byte[length];
             Marshal.Copy(data, dataBytes, 0, (int)length);
 
-            onFilePartHandler?.Invoke(fileId, offset, length, dataBytes);
+            return onFilePartHandler?.Invoke(fileId, offset, length, dataBytes) ?? false;
         }
         catch (Exception ex)
         {
             Debug.WriteLine(ex);
+            return false;
         }
     }
 
@@ -356,7 +357,7 @@ public class AirXBridge
         uint fileSize, IntPtr fileName, uint fileNamelen, IntPtr sourceIpAddress, uint sourceIpAddressLen);
     public delegate void FileSendingCallbackFunction(
         byte fileId, UInt64 progress, UInt64 total, byte status);
-    public delegate void FilePartCallbackFunction(
+    public delegate bool FilePartCallbackFunction(
         byte fileId, UInt64 offset, UInt64 length, IntPtr data);
 
 

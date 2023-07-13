@@ -25,19 +25,6 @@ namespace AirX.Pages
         private HttpClient httpClient;
         private Stopwatch stopwatch;
 
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private static int _clicks = 0;
-
-        private void RepeatButton_Click(object sender, RoutedEventArgs e)
-        {
-            _clicks += 1;
-        }
-
         private double _percent;
 
         public double Percent

@@ -14,9 +14,9 @@ namespace AirX.Worker
 {
     class FilePartWorker
     {
-        private ConcurrentQueue<FilePartWorkload> queue = new();
-        private Thread worker;
+        private BlockingCollection<FilePartWorkload> queue = new();
         private SynchronizationContext context = SynchronizationContext.Current;
+        private Thread worker;
 
         public FilePartWorker()
         {
@@ -25,7 +25,7 @@ namespace AirX.Worker
 
         public void PostWorkload(FilePartWorkload workload)
         {
-            queue.Enqueue(workload);
+            queue.Add(workload);
         }
 
         private void HandleSingleWorkload(FilePartWorkload workload)
@@ -60,38 +60,44 @@ namespace AirX.Worker
                 return;
             }
 
+            // Update UI.
+            context.Post(_ =>
+            {
+                file.DisplayProgress = file.Progress;
+                file.DisplayStatus = AirXBridge.FileStatus.InProgress;
+            }, null);
+
             file.WritingStream.Seek((long)workload.Offset, SeekOrigin.Begin);
             file.WritingStream.Write(workload.Data, 0, (int)workload.Length);
             file.Progress += workload.Length;
 
-            context.Post(_ =>
-            {
-                file.DisplayProgress = file.Progress;
-            }, null);
-
             if (file.Progress == file.TotalSize)
             {
-                file.WritingStream.Close();
-                file.Status = AirXBridge.FileStatus.Completed;
                 context.Post(_ =>
                 {
                     file.DisplayProgress = file.Progress;
                     file.DisplayStatus = AirXBridge.FileStatus.Completed;
                 }, null);
+
+                file.WritingStream.Close();
+                file.Status = AirXBridge.FileStatus.Completed;
                 Debug.WriteLine("File recv completed!");
             }
         }
 
         public void Run()
         {
-            while (true)
+            while (!queue.IsCompleted)
             {
-                Thread.Sleep(1000);
-                if (!queue.TryDequeue(out var workload))
+                try
                 {
-                    continue;
+                    var workload = queue.Take();
+                    HandleSingleWorkload(workload);
                 }
-                HandleSingleWorkload(workload);
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e);
+                }
             }
         }
 
