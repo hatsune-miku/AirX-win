@@ -24,7 +24,11 @@
         <converters:ReceiveFileStatusToShouldEnableCancelButtonConverter
             x:Name="receiveFileStatusToShouldEnableCancelButtonConverter"
         />
-
+        
+        <converters:FilePathToNameConverter
+            x:Name="filePathToNameConverter"
+        />
+        
         <DataTemplate x:DataType="model:ReceiveFile" x:Key="ReceiveFileTemplate">
             <Grid
                 CornerRadius="8"
@@ -49,7 +53,7 @@
                         
                         <TextBlock
                             Grid.Row="0" Grid.Column="0"
-                            Text="{x:Bind Filename, Mode=OneWay}"
+                            Text="{x:Bind RemoteFullPath, Converter={StaticResource filePathToNameConverter}, Mode=OneWay}"
                             FontSize="18" FontWeight="Bold"
                         />
                         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Spacing="4">

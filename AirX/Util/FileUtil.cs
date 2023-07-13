@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Windows.Storage.Pickers;
 using Windows.Storage;
 using WinRT.Interop;
+using System.Diagnostics;
 
 namespace AirX.Util
 {
@@ -20,6 +21,24 @@ namespace AirX.Util
                 .Replace('/', '\\')
                 .Split('\\')
                 .Last();
+        }
+
+        public static string GetPath(string fullPath)
+        {
+            return fullPath
+                .Replace('/', '\\')
+                .Substring(0, fullPath.LastIndexOf('\\'));
+        }
+
+        public static void OpenFolderInExplorer(string fullPath)
+        {
+            string args = $"/select, \"{fullPath}\"";
+            ProcessStartInfo info = new()
+            {
+                FileName = "explorer",
+                Arguments = args,
+            };
+            Process.Start(info);
         }
 
         public static byte NextFileId()

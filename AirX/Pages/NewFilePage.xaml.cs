@@ -75,10 +75,29 @@ namespace AirX.Pages
             }
         }
 
-        private void OnStopClicked(object sender, RoutedEventArgs e)
+        private async Task HandleStopAsync()
         {
-            ViewModel.ReceivingFile.Status = AirXBridge.FileStatus.CancelledByReceiver;
-            _instance?.Close();
+            var result = await UIUtil.ShowContentDialogYesNoAsync(
+                "Stop", "Are you sure to stop receiving this file?", "Stop", "Don't Stop", Content.XamlRoot);
+
+            if (result == ContentDialogResult.Primary)
+            {
+                ViewModel.ReceivingFile.Status = AirXBridge.FileStatus.CancelledByReceiver;
+                _instance?.Close();
+            }
+        }
+
+        private void OnStopOrOpenFolderClicked(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel.ReceivingFile.Status == AirXBridge.FileStatus.Completed)
+            {
+                FileUtil.OpenFolderInExplorer(ViewModel.ReceivingFile.LocalSaveFullPath);
+                _instance?.Close();
+            }
+            else
+            {
+                HandleStopAsync().FireAndForget();
+            }
         }
 
 
@@ -88,7 +107,7 @@ namespace AirX.Pages
             new ContentDialog()
             {
                 Title = "Blocking " + target,
-                Content = "Are you sure to block " + target + "?",
+                Content = "Are you sure you want to block (" + target + ") and stop receiving everything from them?",
                 PrimaryButtonText = "Block",
                 SecondaryButtonText = "Cancel",
                 XamlRoot = Content.XamlRoot,

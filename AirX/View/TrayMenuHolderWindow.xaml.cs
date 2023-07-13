@@ -181,9 +181,9 @@ namespace AirX.View
 
             var transferFile = new ReceiveFile
             {
-                Filename = fileName,
+                RemoteFullPath = fileName,
                 WritingStream = writingFileStream,
-                FullPath = fullPath,
+                LocalSaveFullPath = fullPath,
                 Progress = 0,
                 TotalSize = fileSize,
                 FileId = 1,
