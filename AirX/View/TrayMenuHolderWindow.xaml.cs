@@ -6,6 +6,7 @@ using AirX.Extension;
 using AirX.Model;
 using AirX.Util;
 using AirX.ViewModel;
+using AirX.Worker;
 using Microsoft.UI.Xaml;
 using SRCounter;
 using System;
@@ -21,6 +22,7 @@ namespace AirX.View
     public sealed partial class TrayIconHolderWindow : Window
     {
         private static SynchronizationContext context;
+        private static FilePartWorker filePartWorker = new();
 
         public static TrayIconHolderWindow Instance { get; private set; }
 
@@ -39,76 +41,34 @@ namespace AirX.View
             AirXBridge.SetOnFileSendingHandler(OnFileSending);
             AirXBridge.SetOnFilePartHandler(OnFilePart);
 
+            // Hide the window visually.
             AppWindow.Resize(new(1, 1));
             AppWindow.Move(new(32768, 32768));
+
+            // Start workers.
+            filePartWorker.Start();
         }
 
         private async Task TrySignInAsync()
         {
             if (!await AccountUtil.TryAutomaticLogin())
             {
+                // Prompt to login if token expired.
                 var window = new LoginWindow();
                 window.Activate();
                 return;
             }
+
+            var displayName = GlobalViewModel.Instance.LoggingGreetingsName;
             NotificationUtil.ShowNotification(
-                "Welcome back, " + GlobalViewModel.Instance.LoggingGreetingsName + "!");
+                $"Welcome back, {displayName}!");
         }
 
+        // Called when a FilePartPacket is received.
+        // In most cases, multiple calls will be made for a single file.
         private static void OnFilePart(byte fileId, UInt64 offset, UInt64 length, byte[] data)
         {
-            NewFileViewModel remoteViewModel;
-            try
-            {
-                remoteViewModel = GlobalViewModel.Instance.ReceiveFiles[fileId];
-            }
-            catch (Exception)
-            {
-                Debug.WriteLine("Unexpected file incoming: fileid=" + fileId + ", length=" + length);
-                return;
-            }
-
-            var file = remoteViewModel.ReceivingFile;
-
-            // User cancelled the file?
-            if (file.Status == AirXBridge.FileStatus.CancelledByReceiver)
-            {
-                Debug.WriteLine("File cancelled!");
-                GlobalViewModel.Instance.ReceiveFiles.Remove(fileId);
-                // TODO: Send cancel packet to sender
-                return;
-            }
-
-            file.Status = AirXBridge.FileStatus.InProgress;
-            Debug.WriteLine($"File part received: offset={offset}, length={length}");
-            if (file.WritingStream == null)
-            {
-                file.Status = AirXBridge.FileStatus.Error;
-                Debug.WriteLine("File not accepted!");
-                return;
-            }
-
-            file.WritingStream.Seek((long) offset, SeekOrigin.Begin);
-            file.WritingStream.Write(data, 0, (int)length);
-            file.Progress += length;
-
-            context.Post(_ =>
-            {
-                file.DisplayProgress = file.Progress;
-            }, null);
-            Debug.WriteLine($"File progress: {file.Progress}/{file.TotalSize}");
-
-            if (file.Progress == file.TotalSize)
-            {
-                file.WritingStream.Close();
-                file.Status = AirXBridge.FileStatus.Completed;
-                context.Post(_ =>
-                {
-                    file.DisplayProgress = file.Progress;
-                    file.DisplayStatus = AirXBridge.FileStatus.Completed;
-                }, null);
-                Debug.WriteLine("File recv completed!");
-            }
+            filePartWorker.PostWorkload(new(fileId, offset, length, data));
         }
 
         private static void OnFileSending(byte fileId, ulong progress, ulong total, AirXBridge.FileStatus status)
@@ -149,8 +109,8 @@ namespace AirX.View
                 UIUtil.MessageBoxAsync(
                     "Received File",
                     $"File {fileName} from {from} is coming! Receive?",
-                    "Receive!",
-                    "Decline!"
+                    "Receive",
+                    "Decline"
                 ).ContinueWith(t =>
                 {
                     bool accept = t.Result == Microsoft.UI.Xaml.Controls.ContentDialogResult.Primary;

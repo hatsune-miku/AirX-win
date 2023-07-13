@@ -26,7 +26,13 @@
         />
 
         <DataTemplate x:DataType="model:ReceiveFile" x:Key="ReceiveFileTemplate">
-            <Grid CornerRadius="8" Height="100" Padding="24,12,24,12" Background="{ThemeResource SystemAccentColorDark2}" Margin="0,0,0,12">
+            <Grid
+                CornerRadius="8"
+                Height="100"
+                Padding="24,12,24,12"
+                Background="{ThemeResource SystemAccentColorDark2}"
+                Margin="0,0,0,12"
+            >
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -76,7 +82,7 @@
         </DataTemplate>
     </Page.Resources>
 
-    <StackPanel>
+    <Grid HorizontalAlignment="Stretch">
         <StackPanel Margin="20, 40, 10, 0">
             <TextBlock Text="Received Files" FontSize="24" FontWeight="Bold"/>
         </StackPanel>
@@ -90,5 +96,5 @@
                 SelectionMode="None"
             />
         </ScrollViewer>
-    </StackPanel>
+    </Grid>
 </Page>

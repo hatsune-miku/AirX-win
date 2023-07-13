@@ -20,7 +20,7 @@
     </Page.Resources>
     <!-- Width="317" Height="168" -->
     <Border
-        HorizontalAlignment="Center"
+        HorizontalAlignment="Stretch"
         Background="{x:Bind ViewModel.BackgroundColor, Mode=OneWay}"
         CornerRadius="12"
     >
