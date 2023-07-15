@@ -122,14 +122,18 @@ public class AirXBridge
         string incomingText = Utf8StringFromPtr(text, (int)textLen);
         string sourceIpAddressSring = Utf8StringFromPtr(sourceIpAddress, (int)sourceIpAddressLen);
 
-        var package = new DataPackage();
-        package.SetText(incomingText);
-        Clipboard.SetContent(package);
+        try
+        {
+            var package = new DataPackage();
+            package.SetText(incomingText);
+            Clipboard.SetContent(package);
+        }
+        catch (Exception) { }
 
         onTextReceivedHandler?.Invoke(incomingText, sourceIpAddressSring);
     }
 
-    private static void OnFileComing(uint fileSize, IntPtr fileName, uint fileNamelen, IntPtr sourceIpAddress, uint sourceIpAddressLen)
+    private static void OnFileComing(UInt64 fileSize, IntPtr fileName, uint fileNamelen, IntPtr sourceIpAddress, uint sourceIpAddressLen)
     {
         string fileNameString = Utf8StringFromPtr(fileName, (int)fileNamelen);
         string sourceIpAddressString = Utf8StringFromPtr(sourceIpAddress, (int)sourceIpAddressLen);
@@ -354,7 +358,7 @@ public class AirXBridge
     public delegate void TextCallbackFunction(
         IntPtr text, uint textLen, IntPtr sourceIpAddress, uint sourceIpAddressLen);
     public delegate void FileComingCallbackFunction(
-        uint fileSize, IntPtr fileName, uint fileNamelen, IntPtr sourceIpAddress, uint sourceIpAddressLen);
+        UInt64 fileSize, IntPtr fileName, uint fileNamelen, IntPtr sourceIpAddress, uint sourceIpAddressLen);
     public delegate void FileSendingCallbackFunction(
         byte fileId, UInt64 progress, UInt64 total, byte status);
     public delegate bool FilePartCallbackFunction(

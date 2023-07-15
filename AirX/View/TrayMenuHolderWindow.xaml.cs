@@ -124,7 +124,7 @@ namespace AirX.View
             {
                 UIUtil.MessageBoxAsync(
                     "Received File",
-                    $"File {fileName} from {from} is coming! Receive?",
+                    $"File {fileName} from {from} ({FileUtil.GetFileSizeDescription(fileSize)}) is coming! Receive?",
                     "Receive",
                     "Decline"
                 ).ContinueWith(t =>

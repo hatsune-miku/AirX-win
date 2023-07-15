@@ -10,8 +10,8 @@
 
   <Identity
     Name="f64f651b-9bb7-4977-8750-9d4c6c75d1fc"
-    Publisher="CN=86135"
-    Version="1.0.0.0" />
+    Publisher="CN=l2a1knla"
+    Version="0.1.0.0" />
 
   <Properties>
     <DisplayName>AirX (Package)</DisplayName>
