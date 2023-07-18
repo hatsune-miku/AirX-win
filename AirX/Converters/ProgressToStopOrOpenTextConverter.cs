@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 
 namespace AirX.Converters
 {
+    /// <summary>
+    /// 进度到停止或打开文本的转换器
+    /// 进度未满: STOP
+    /// 进度已满: OPEN FOLDER
+    /// </summary>
     public class ProgressToStopOrOpenTextConverter : IValueConverter
     {
         public UInt64 TotalSize { get; set; }

@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace AirX.Converters
 {
+    /// <summary>
+    /// 文件路径到文件名的转换器
+    /// </summary>
     public class FilePathToNameConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)

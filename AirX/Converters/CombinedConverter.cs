@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace AirX.Converters
 {
+    /// <summary>
+    /// 串联转换器，将两个转换器串联起来。
+    /// </summary>
     class CombinedConverter : IValueConverter
     {
         public IValueConverter Converter1 { get; set; }

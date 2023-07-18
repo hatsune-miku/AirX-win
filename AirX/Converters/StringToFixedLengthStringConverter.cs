@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace AirX.Converters
 {
+    /// <summary>
+    /// 字符串到固定长度字符串的转换器
+    /// </summary>
     public class StringToFixedLengthStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)

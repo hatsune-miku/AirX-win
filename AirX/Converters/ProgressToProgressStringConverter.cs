@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace AirX.Converters
 {
+    /// <summary>
+    /// 进度到进度字符串的转换器
+    /// </summary>
     public class ProgressToProgressStringConverter : IValueConverter
     {
         public UInt64 TotalSize { get; set; }

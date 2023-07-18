@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace AirX.Converters
 {
+    /// <summary>
+    /// 登录中的UID字符串到描述的转换器
+    /// </summary>
     public class LoggingInUidStringToDescriptionConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)

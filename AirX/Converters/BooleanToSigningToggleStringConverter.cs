@@ -8,6 +8,11 @@ using System.Threading.Tasks;
 
 namespace AirX.Converters
 {
+    /// <summary>
+    /// 登录按钮的文本转换器
+    /// true: Sign Out
+    /// false: Sign In
+    /// </summary>
     public class BooleanToSigningToggleStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)

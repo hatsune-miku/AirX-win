@@ -1,6 +1,3 @@
-// Copyright (c) Microsoft Corporation and Contributors.
-// Licensed under the MIT License.
-
 using AirX.Bridge;
 using AirX.Extension;
 using AirX.Model;

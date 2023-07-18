@@ -8,6 +8,11 @@ using System.Threading.Tasks;
 
 namespace AirX.Converters
 {
+    /// <summary>
+    /// 可视性转换器，将布尔值转换为可视性。
+    /// true: Visible
+    /// false: Invisible
+    /// </summary>
     public class BooleanToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)

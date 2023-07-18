@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace AirX.Converters
 {
+    /// <summary>
+    /// IP地址到文本源的转换器
+    /// </summary>
     public class IpAdrressToTextSourceConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)

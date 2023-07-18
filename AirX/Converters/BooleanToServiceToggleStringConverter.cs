@@ -8,6 +8,11 @@ using System.Threading.Tasks;
 
 namespace AirX.Converters
 {
+    /// <summary>
+    /// 服务开启钮的文本转换器
+    /// true: Stop Service
+    /// false: Start Service
+    /// </summary>
     public class BooleanToServiceToggleStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)

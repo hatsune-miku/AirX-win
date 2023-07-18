@@ -8,6 +8,11 @@ using System.Threading.Tasks;
 
 namespace AirX.Converters
 {
+    /// <summary>
+    /// 在线状态转换器
+    /// true: Online
+    /// false: Offline
+    /// </summary>
     public class BooleanToOnlineStatusDescriptionConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)

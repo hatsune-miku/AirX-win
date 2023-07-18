@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace AirX.Converters
 {
+    /// <summary>
+    /// 进度到100分制进度的转换器
+    /// </summary>
     public class ProgressTo100BasedProgressConverter : IValueConverter
     {
         public UInt64 TotalSize { get; set; }
@@ -15,7 +18,6 @@ namespace AirX.Converters
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             UInt64 progress = (UInt64)value;
-            Debug.WriteLine("Progress in UI: " + progress);
             return GetProgressOutOf100(progress);
         }
 

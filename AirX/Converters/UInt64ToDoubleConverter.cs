@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace AirX.Converters
 {
+    /// <summary>
+    /// 无符号64位整数到双精度浮点数的转换器
+    /// </summary>
     class UInt64ToDoubleConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)

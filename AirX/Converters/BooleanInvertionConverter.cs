@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace AirX.Converters
 {
+    /// <summary>
+    /// 反转转换器，将布尔值取反。
+    /// </summary>
     public class BooleanInvertionConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)

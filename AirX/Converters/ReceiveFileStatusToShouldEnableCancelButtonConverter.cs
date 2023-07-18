@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace AirX.Converters
 {
+    /// <summary>
+    /// 接收文件状态到是否应启用取消按钮的转换器
+    /// </summary>
     class ReceiveFileStatusToShouldEnableCancelButtonConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
