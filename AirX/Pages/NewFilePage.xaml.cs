@@ -1,4 +1,4 @@
-using AirX.Extension;
+﻿using AirX.Extension;
 using AirX.Util;
 using AirX.View;
 using AirX.ViewModel;
@@ -25,8 +25,10 @@ namespace AirX.Pages
         private NewFileViewModel ViewModel;
         private GlobalViewModel GlobalViewModel = GlobalViewModel.Instance;
 
+        // NewFilePage持有一个对自身窗口的引用，用于关闭窗口
         private NewFileWindow _instance;
 
+        // 每个NewFilePage都有一个FileId，用于在GlobalViewModel中找到对应的ReceivingFile
         public int FileId { get; set; } = 0;
 
         public NewFilePage()
@@ -36,6 +38,7 @@ namespace AirX.Pages
 
         private void OnPageLoading(FrameworkElement sender, object args)
         {
+            // 页面加载时，从GlobalViewModel中获取对应的ReceivingFile
             ViewModel = GlobalViewModel.Instance.ReceiveFiles[FileId];
             DataContext = ViewModel;
         }
@@ -44,6 +47,7 @@ namespace AirX.Pages
         {
         }
 
+        // 开放给外部使用，用于设置NewFilePage持有的窗口实例
         public void SetWindowInstance(NewFileWindow instance)
         {
             this._instance = instance;

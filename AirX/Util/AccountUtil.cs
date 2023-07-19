@@ -12,10 +12,13 @@ using System.Threading.Tasks;
 
 namespace AirX.Util
 {
+    /// 用户账户工具类
     public class AccountUtil
     {
+        /// 黑名单信息
         private static HashSet<string> _blockList = SettingsUtil.ReadBlockList();
 
+        /// 登出，清除登录信息
         public static void ClearSavedUserInfoAndSignOut()
         {
             SettingsUtil.Delete(Keys.SavedCredential);
@@ -25,6 +28,9 @@ namespace AirX.Util
             GlobalViewModel.Instance.LoggingGreetingsName = "AirX User";
         }
 
+        /// <summary>
+        /// 用户是否在黑名单中
+        /// </summary>
         public static bool IsInBlockList(string ipAddress)
         {
             if (!Peer.TryParse(ipAddress, out Peer peer))
@@ -34,6 +40,9 @@ namespace AirX.Util
             return _blockList.Contains(peer.IpAddress);
         }
 
+        /// <summary>
+        /// 把用户加入黑名单
+        /// </summary>
         public static void AddToBlockList(string ipAddress)
         {
             if (!Peer.TryParse(ipAddress, out Peer peer))
@@ -44,6 +53,9 @@ namespace AirX.Util
             SettingsUtil.WriteBlockList(_blockList);
         }
 
+        /// <summary>
+        /// 发送Greetings请求，用于token有效性测试和用户账户信息的获取
+        /// </summary>
         public static async Task<bool> SendGreetingsAsync()
         {
             AirXCloud.GreetingsResponse greetingsResponse;
@@ -62,6 +74,7 @@ namespace AirX.Util
             return false;
         }
 
+        /// 尝试自动登录，返回是否登陆成功
         /**
          * Return: true if successfully logged in, otherwise, false.
          */
@@ -99,9 +112,11 @@ namespace AirX.Util
             AirXCloud.RenewResponse renewResponse;
             try
             {
+                /// 尝试续期Token
                 renewResponse = await AirXCloud.RenewAsync(uid);
                 if (!renewResponse.success)
                 {
+                    /// 续期失败
                     Debug.WriteLine($"Failed: renew failed: {renewResponse.message}");
                     return false;
                 }
@@ -113,7 +128,7 @@ namespace AirX.Util
 
             await SendGreetingsAsync();
 
-            // Almost there!
+            /// 续期成功，更新新的token
             Debug.WriteLine("Success.");
             GlobalViewModel.Instance.LoggingInUid = uid;
             GlobalViewModel.Instance.IsSignedIn = true;
@@ -122,6 +137,9 @@ namespace AirX.Util
             return true;
         }
 
+        /// <summary>
+        /// 切换用户登录状态
+        /// </summary>
         public static void UserToggleSignInOut()
         {
             if (GlobalViewModel.Instance.IsSignedIn)

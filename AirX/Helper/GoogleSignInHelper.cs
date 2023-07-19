@@ -2,18 +2,19 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Sockets;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Web.Http;
-using Windows.Storage.Streams;
 using System.Diagnostics;
 
 namespace AirX.Helper
 {
+    /// <summary>
+    /// Google给的登录帮助类
+    /// </summary>
     class GoogleSignInHelper
     {
         // client configuration

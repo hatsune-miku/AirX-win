@@ -11,6 +11,9 @@ using WinUIEx;
 
 namespace AirX.View
 {
+    /// <summary>
+    /// 这个窗口写的不好，不太好解释一些细节，最后会换成好一些的实现！
+    /// </summary>
     public sealed partial class MessageBoxWindow : Window
     {
         private MessageBoxViewModel ViewModel = new();

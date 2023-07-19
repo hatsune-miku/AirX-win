@@ -9,6 +9,9 @@ namespace AirX.Util
 {
     public static class HashUtil
     {
+        /// <summary>
+        /// SHA-256哈希函数的封装
+        /// </summary>
         public static string Sha256(string randomString)
         {
             var crypt = SHA256.Create();

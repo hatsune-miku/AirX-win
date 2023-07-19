@@ -7,6 +7,9 @@ using System.Runtime.InteropServices;
 
 namespace AirX.Helper
 {
+    /// <summary>
+    /// 微软给的帮助类，作为启用Mica特效的一部分
+    /// </summary>
     class WindowsSystemDispatcherQueueHelper
     {
         [StructLayout(LayoutKind.Sequential)]

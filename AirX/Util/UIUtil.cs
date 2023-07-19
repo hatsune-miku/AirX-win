@@ -12,8 +12,15 @@ using AirX.Extension;
 
 namespace AirX.Util
 {
+    /// <summary>
+    /// /// UI相关工具函数
+    /// </summary>
     public static class UIUtil
     {
+        /// <summary>
+        /// 从WinUI3 Window对象得到对应的AppWindow对象
+        /// 两种Window功能不同
+        /// </summary>
         public static AppWindow GetAppWindow(Window window)
         {
             var hWnd = WindowNative.GetWindowHandle(window);
@@ -21,6 +28,9 @@ namespace AirX.Util
             return AppWindow.GetFromWindowId(wndId);
         }
 
+        /// <summary>
+        /// 把AppWindow移动到屏幕正中央
+        /// </summary>
         public static void MoveWindowToCenterScreen(AppWindow window)
         {
             var point = CalculateCenterScreenPoint(
@@ -28,6 +38,9 @@ namespace AirX.Util
             window.Move(new PointInt32((int) point.X, (int) point.Y));
         }
 
+        /// <summary>
+        /// 获得屏幕宽度和高度，单位：像素
+        /// </summary>
         public static Size GetPrimaryScreenSize()
         {
             int screenWidth = PInvoke.User32.GetSystemMetrics(PInvoke.User32.SystemMetric.SM_CXSCREEN);
@@ -35,6 +48,9 @@ namespace AirX.Util
             return new Size(screenWidth, screenHeight);
         }
 
+        /// <summary>
+        /// 显示一个消息框，但是只能依托窗口作为宿主才能显示
+        /// </summary>
         public static void ShowContentDialog(string title, string content, XamlRoot xamlRoot)
         {
             new ContentDialog()
@@ -48,6 +64,9 @@ namespace AirX.Util
             .FireAndForget();
         }
 
+        /// <summary>
+        /// 显示一个消息框，但是只能依托窗口作为宿主才能显示。返回用户的选择。
+        /// </summary>
         public static async Task<ContentDialogResult> ShowContentDialogYesNoAsync(string title, string content, string primaryButtonText, string secondaryButtonText, XamlRoot xamlRoot)
         {
             return await new ContentDialog()
@@ -60,6 +79,9 @@ namespace AirX.Util
             }.ShowAsync().AsTask();
         }
 
+        /// <summary>
+        /// 设置一个窗口的可见性
+        /// </summary>
         public static void SetWindowVisibility(Window window, bool visible)
         {
             PInvoke.User32.ShowWindow(
@@ -70,6 +92,9 @@ namespace AirX.Util
             );
         }
 
+        /// <summary>
+        /// 获取电脑屏幕的正中心点的X和Y坐标
+        /// </summary>
         public static Point CalculateCenterScreenPoint(int width, int height)
         {
             var size = GetPrimaryScreenSize();
@@ -80,6 +105,10 @@ namespace AirX.Util
             };
         }
 
+        /// <summary>
+        /// 显示一个消息框，其不以窗口作为宿主，能够在无窗口的情况下显示，是真正的消息框。
+        /// 原理为其自己自带一个窗口，只不过这个窗口时刻调整自己的大小，变成和消息框一样大。
+        /// </summary>
         public static async Task<ContentDialogResult> MessageBoxAsync(
             string title, string content, string primaryButtonText, string secondaryButtonText)
         {

@@ -1,4 +1,4 @@
-using AirX.Model;
+﻿using AirX.Model;
 using AirX.ViewModel;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -28,12 +28,15 @@ namespace AirX.Pages
 
         private void OnPageLoading(FrameworkElement sender, object args)
         {
+            // 页面加载时，从GlobalViewModel中获取对应的ReceivingFile
+            // 然后监听ReceiveFiles的MapChanged事件，当有新的ReceivingFile时，刷新页面
             GlobalViewModel.Instance.ReceiveFiles.MapChanged += OnMapChanged;
             RefreshView();
         }
 
         private void OnMapChanged(IObservableMap<int, NewFileViewModel> sender, IMapChangedEventArgs<int> @event)
         {
+            // 当有新的ReceivingFile时，刷新页面
             RefreshView();
         }
 

@@ -1,4 +1,4 @@
-<Page
+﻿<Page
     x:Class="AirX.Pages.DashboardPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -10,9 +10,12 @@
     DataContext="ViewModel"
 >
     <Page.Resources>
+        <!-- 参见 ServiceOnlineStatusToDescriptionConverter.cs -->
         <converters:ServiceOnlineStatusToDescriptionConverter
             x:Key="serviceOnlineStatusToDescriptionConverter"
         />
+
+        <!-- 参见 BooleanToOnlineStatusDescriptionConverter.cs -->
         <converters:BooleanToOnlineStatusDescriptionConverter
             x:Key="booleanToOnlineStatusDescriptionConverter"
         />

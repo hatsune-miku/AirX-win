@@ -1,4 +1,4 @@
-using AirX.Extension;
+﻿using AirX.Extension;
 using AirX.Util;
 using System.Threading;
 using System.Threading.Tasks;
@@ -45,7 +45,7 @@ namespace AirX.View
                     Resizable = false,
                     HaveMaximumButton = false,
                     HaveMinimumButton = false,
-                    EnableMicaEffect = false,
+                    EnableMicaEffect = false, // 不能启用Mica否则ExtendsContentIntoTitleBar失效！
                 }
             );
             ExtendsContentIntoTitleBar = true;

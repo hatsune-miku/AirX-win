@@ -1,4 +1,4 @@
-using AirX.Util;
+﻿using AirX.Util;
 using AirX.View;
 using AirX.ViewModel;
 using CommunityToolkit.Mvvm.Input;
@@ -22,6 +22,9 @@ namespace AirX.Pages
             this._instance = instance;
         }
 
+        /// <summary>
+        /// 文本弹窗更新内容
+        /// </summary>
         public void UpdateInformation(string title, string source)
         {
             ViewModel.Title = title;
@@ -43,6 +46,7 @@ namespace AirX.Pages
 
         private void OnBlockClicked(object sender, RoutedEventArgs e)
         {
+            // 文本这边儿的拉黑功能还没实装过去
             _ = new ContentDialog()
             {
                 Title = "Blocking " + ViewModel.From,

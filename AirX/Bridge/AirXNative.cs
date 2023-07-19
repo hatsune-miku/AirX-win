@@ -9,6 +9,8 @@ using static AirXBridge;
 namespace AirX.Bridge
 {
     // Source: bridge.h
+    // 从libairx中的bridge.h照搬的内容
+    // 只不过转换为C#语法
     internal class AirXNative
     {
         const string DLL_NAME = "libairx.dll";

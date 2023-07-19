@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using AirX.View;
 using AirX.ViewModel;
@@ -61,6 +61,7 @@ namespace AirX.Pages
 
         private void OnPageLoaded(object sender, RoutedEventArgs e)
         {
+            // 页面加载完毕时，率先加载DashboardPage
             frame.Navigate(typeof(DashboardPage));
             ControlPanelWindow.Instance.SizeChanged += OnWindowSizeChanged;
         }
@@ -69,7 +70,8 @@ namespace AirX.Pages
         {
             ControlPanelWindow.Instance.SizeChanged -= OnWindowSizeChanged;
         }
-
+         
+        // 用于控制SplitView的展开与收起
         private void OnWindowSizeChanged(object sender, WindowSizeChangedEventArgs args)
         {
             ViewModel.ShouldExpandPane = args.Size.Width > 850;
@@ -77,6 +79,7 @@ namespace AirX.Pages
 
         private void OnNavLinksListItemClicked(object sender, ItemClickEventArgs e)
         {
+            // 相同页面不触发多余加载
             if (_navLinks[NavLinksList.SelectedIndex] == e.ClickedItem)
             {
                 return;

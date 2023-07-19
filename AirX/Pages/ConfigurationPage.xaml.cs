@@ -9,6 +9,12 @@ using AirX.Extension;
 
 namespace AirX.Pages
 {
+    /// <summary>
+    /// 定义一个设置模板选择器
+    /// 根据设置项的类型，选择不同的模板
+    /// String类型：显示一个TextBox，用户可以输入字符串
+    /// Bool类型：显示一个ToggleSwitch，用户可以切换开关
+    /// </summary>
     public class SettingsDataTemplateSelector : DataTemplateSelector
     {
         public DataTemplate BooleanSettingsTemplate { get; set; }
@@ -21,9 +27,11 @@ namespace AirX.Pages
                 switch (settingsItem.ItemType)
                 {
                     case SettingsItemType.String:
+                        /// String类型：显示一个TextBox，用户可以输入字符串
                         return StringSettingsTemplate;
 
                     case SettingsItemType.Boolean:
+                        /// Bool类型：显示一个ToggleSwitch，用户可以切换开关
                         return BooleanSettingsTemplate;
 
                     default:
@@ -44,6 +52,9 @@ namespace AirX.Pages
             this.InitializeComponent();
         }
 
+        /// <summary>
+        /// 当页面加载完成后，加载设置项
+        /// </summary>
         private void OnPageLoaded(object sender, RoutedEventArgs e)
         {
             SettingsItems.Add(new Model.SettingsItem
@@ -141,22 +152,26 @@ namespace AirX.Pages
                 IsAdvanced = true,
             });
 
+            // 最后给每个设置项设置XamlRoot和ViewModel
             foreach (var item in SettingsItems)
             {
                 item.XamlRoot = Content.XamlRoot;
                 item.ViewModel = ViewModel;
             }
 
+            // 根据是否显示高级设置，过滤设置项
             ApplyLatestItemFilters();
         }
 
         public void ApplyLatestItemFilters()
         {
+            // 要么开启了高级设置，要么设置项不是高级设置，才显示
             ViewModel.SettingsItems = SettingsItems.Where(
                 item => ViewModel.ShouldShowAdvancedSettings || !item.IsAdvanced
             ).ToList();
         }
 
+        // 设置并记忆是否显示高级设置
         public void SetShouldShowAdvancedSettings(bool value)
         {
             ViewModel.ShouldShowAdvancedSettings = value;
@@ -164,11 +179,13 @@ namespace AirX.Pages
             ApplyLatestItemFilters();
         }
 
+        // 获取是否显示高级设置
         public bool GetShouldShowAdvancedSettings()
         {
             return ViewModel.ShouldShowAdvancedSettings;
         }
 
+        // 根据是否有未保存的设置项，设置标题
         public string GetTitle()
         {
             return ViewModel.IsUnsaved
@@ -176,12 +193,14 @@ namespace AirX.Pages
                 : "Perferences";
         }
 
+        // 判断端口是否合法
         private bool IsPortValid(string portRepr)
         {
             return int.TryParse(portRepr, out int port)
                 && port == 0 || (1024 < port && port < 65535);
         }
 
+        // 判断IpV4地址是否合法
         private bool IsIpV4AddressValid(string address)
         {
             var parts = address.Split('.');
@@ -189,18 +208,21 @@ namespace AirX.Pages
                 && parts.All(p => int.TryParse(p, out int res) && res >= 0 && res <= 255));
         }
 
+        // 判断AirX组标识是否合法
         private bool IsGroupIdentityValid(string groupIdentityRepr)
         {
             return int.TryParse(groupIdentityRepr, out int groupIdentity)
                 && 0 <= groupIdentity && groupIdentity <= 255;
         }
 
+        // 判断毫秒时间是否在合法范围内
         private bool IsMillisTimeValid(string millisRepr)
         {
             return int.TryParse(millisRepr, out int res)
                 && 1000 <= res && res <= 10000;
         }
 
+        // 清理缓存按钮，目前没有实现
         private void OnCleanCacheClicked(object sender, RoutedEventArgs args)
         {
             // TODO: Clean cache

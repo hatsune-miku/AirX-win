@@ -1,14 +1,20 @@
-using AirX.ViewModel;
+﻿using AirX.ViewModel;
 using CommunityToolkit.Labs.WinUI;
 using Microsoft.UI.Xaml.Controls;
 using System.Linq;
 
 namespace AirX.Pages
 {
+    /// <summary>
+    /// 选人界面，从在线Peers中选择一位
+    /// </summary>
     public sealed partial class SelectPeerPage : Page
     {
         private SelectPeerWindowViewModel ViewModel = new();
 
+        /// <summary>
+        /// 当用户选完人，调用
+        /// </summary>
         public delegate void OnPeerSelectedHandler(Model.PeerItem peer);
 
         public event OnPeerSelectedHandler OnPeerSelected;

@@ -14,6 +14,9 @@ using System.Threading.Tasks;
 
 namespace AirX.Pages
 {
+    /// <summary>
+    /// 这个页面暂时还没施工！
+    /// </summary>
     public sealed partial class SentFilesPage : Page
     {
         private NewTextViewModel ViewModel = new();
