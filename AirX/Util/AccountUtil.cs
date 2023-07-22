@@ -1,4 +1,5 @@
 ﻿using AirX.Bridge;
+using AirX.Extension;
 using AirX.Model;
 using AirX.Services;
 using AirX.View;
@@ -50,14 +51,17 @@ namespace AirX.Util
             try
             {
                 var uid = SettingsUtil.String(Keys.SavedUid, "");
-                greetingsResponse = await AirXCloud.GreetingsAsync(uid);
+                greetingsResponse = await AirXCloud.GreetingsAsync();
                 if (greetingsResponse.success)
                 {
                     GlobalViewModel.Instance.LoggingGreetingsName = greetingsResponse.name;
                     return true;
                 }
             }
-            catch { }
+            catch (Exception e)
+            {
+                Debug.WriteLine($"Failed: greetings failed: {e.Message}");
+            }
 
             return false;
         }
@@ -65,7 +69,7 @@ namespace AirX.Util
         /**
          * Return: true if successfully logged in, otherwise, false.
          */
-        public static async Task<bool> TryAutomaticLoginAsync()
+        public static async Task<bool> TryLoginWithSavedTokenAsync()
         {
             if (!SettingsUtil.Bool(Keys.ShouldAutoSignIn, false))
             {
@@ -106,19 +110,34 @@ namespace AirX.Util
                     return false;
                 }
             }
-            catch
+            catch (Exception e)
             {
+                Debug.WriteLine($"Failed: renew failed: {e.Message}");
                 return false;
             }
 
             await SendGreetingsAsync();
 
-            // Almost there!
-            Debug.WriteLine("Success.");
+            Debug.WriteLine("Token renewal success.");
+
+            // Update state.
             GlobalViewModel.Instance.LoggingInUid = uid;
             GlobalViewModel.Instance.IsSignedIn = true;
+
+            // Update storage.
             SettingsUtil.Write(Keys.LoggedInUid, uid);
             SettingsUtil.Write(Keys.SavedCredential, renewResponse.token);
+
+            // Initialize websocket.
+            WebSocketService.Instance.InitializeAsync().ContinueWith(task =>
+            {
+                Debug.WriteLine(
+                    task.Result
+                        ? "Successfully initialized websocket."
+                        : "Failed to initialize websocket."
+                );
+            }, TaskScheduler.Default).FireAndForget();
+
             return true;
         }
 

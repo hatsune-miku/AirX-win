@@ -82,6 +82,9 @@ namespace AirX.Pages
 
             await AccountUtil.SendGreetingsAsync();
 
+            // Initialize WebSocket
+            WebSocketService.Instance.InitializeAsync().FireAndForget();
+
             LoginWindow.Instance?.Close();
         }
 

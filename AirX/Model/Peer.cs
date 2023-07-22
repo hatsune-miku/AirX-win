@@ -54,6 +54,16 @@ namespace AirX.Model
             }
         }
 
+        public static Peer FromUid(int uid)
+        {
+            return new Peer
+            {
+                Hostname = $"UID={uid}",
+                IpAddress = "AirX Kafka Cluster",
+                Port = 0,
+            };
+        }
+
         public override string ToString()
         {
             return $"{Hostname}@{IpAddress}:{Port}";

@@ -1,29 +1,24 @@
 ﻿using AirX.Bridge;
 using AirX.Extension;
 using AirX.Model;
+using AirX.Services;
 using AirX.Util;
 using AirX.ViewModel;
 using Microsoft.UI.Xaml;
-using PInvoke;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Net.Http.Headers;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Security.RightsManagement;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
-using static System.Net.Mime.MediaTypeNames;
 
 public class AirXBridge
 {
-    public delegate void OnTextReceivedHandler(string text, string from);
-    public delegate void OnFileComingHandler(UInt64 fileSize, string fileName, string from);
+    public delegate void OnTextReceivedHandler(string text, Peer from);
+    public delegate void OnFileComingHandler(UInt64 fileSize, string fileName, Peer from);
     public delegate void OnFileSendingHandler(byte fileId, UInt64 progress, UInt64 total, FileStatus status);
     public delegate bool OnFilePartHandler(byte fileId, UInt64 offset, UInt64 length, byte[] data);
 
@@ -69,36 +64,14 @@ public class AirXBridge
 
     private static void OnTimerTick(object sender, object e)
     {
-        var packageView = Clipboard.GetContent();
-        try
+        ClipboardUtils.GetTextAsync().ContinueWith(t =>
         {
-            if (!packageView.AvailableFormats.Contains(StandardDataFormats.Text) || !packageView.Contains(StandardDataFormats.Text))
+            if (t.Result != lastClipboardText)
             {
-                return;
+                lastClipboardText = t.Result;
+                OnClipboardChanged(t.Result);
             }
-        }
-        catch { }
-
-        try
-        {
-            packageView.GetTextAsync().AsTask().ContinueWith(t =>
-            {
-                try
-                {
-                    if (t.Result != lastClipboardText)
-                    {
-                        lastClipboardText = t.Result;
-                        OnClipboardChanged(t.Result);
-                    }
-                }
-                catch (Exception)
-                { }
-            }, TaskScheduler.Default).FireAndForget();
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine(ex);
-        }
+        }, TaskScheduler.Default).FireAndForget();
     }
 
     private static void OnClipboardChanged(string newText)
@@ -108,29 +81,50 @@ public class AirXBridge
             ShouldSkipNextEvent = false;
             return;
         }
-        Debug.WriteLine("Clipboard changed");
+        Debug.WriteLine("Clipboard changed.");
 
         IntPtr buffer = CreateUtf8String(newText, out uint size);
         AirXNative.airx_broadcast_text(AirXInstance, buffer, size);
         FreeUtf8String(buffer);
-        Debug.WriteLine("Sent");
+        Debug.WriteLine("Sent over LAN.");
+
+        if (GlobalViewModel.Instance.IsSignedIn)
+        {
+            AirXCloud.SendMessageAsync(newText, MessageType.Text).FireAndForget();
+            Debug.WriteLine("Sent over Inet.");
+        }
     }
 
     private static void OnTextReceived(IntPtr text, uint textLen, IntPtr sourceIpAddress, uint sourceIpAddressLen)
     {
         ShouldSkipNextEvent = true;
         string incomingText = Utf8StringFromPtr(text, (int)textLen);
-        string sourceIpAddressSring = Utf8StringFromPtr(sourceIpAddress, (int)sourceIpAddressLen);
+        string sourceIpAddressString = Utf8StringFromPtr(sourceIpAddress, (int)sourceIpAddressLen);
 
         try
         {
-            var package = new DataPackage();
-            package.SetText(incomingText);
-            Clipboard.SetContent(package);
+            Peer peer = Peer.Parse(sourceIpAddressString);
+            OnTextReceived(incomingText, peer);
         }
-        catch (Exception) { }
+        catch (Exception)
+        {
+            Debug.WriteLine("Failed to parse source IP address");
+        }
+    }
 
-        onTextReceivedHandler?.Invoke(incomingText, sourceIpAddressSring);
+    public static void OnTextReceived(string incomingText, Peer peer)
+    {
+        ClipboardUtils.GetTextAsync().ContinueWith(t =>
+        {
+            if (t.Result == incomingText)
+            {
+                Debug.WriteLine("Text received from myself. Ignored.");
+                return;
+            }
+
+            ClipboardUtils.SetText(incomingText);
+            onTextReceivedHandler?.Invoke(incomingText, peer);
+        }, TaskScheduler.Default).FireAndForget();
     }
 
     private static void OnFileComing(UInt64 fileSize, IntPtr fileName, uint fileNamelen, IntPtr sourceIpAddress, uint sourceIpAddressLen)
@@ -138,7 +132,15 @@ public class AirXBridge
         string fileNameString = Utf8StringFromPtr(fileName, (int)fileNamelen);
         string sourceIpAddressString = Utf8StringFromPtr(sourceIpAddress, (int)sourceIpAddressLen);
 
-        onFileComingHandler?.Invoke(fileSize, fileNameString, sourceIpAddressString);
+        try
+        {
+            Peer peer = Peer.Parse(sourceIpAddressString);
+            onFileComingHandler?.Invoke(fileSize, fileNameString, peer);
+        }
+        catch (Exception)
+        {
+            Debug.WriteLine("Failed to parse source IP address");
+        }
     }
 
     private static void OnFileSending(byte fileId, ulong progress, ulong total, byte status)

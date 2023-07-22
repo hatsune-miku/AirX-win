@@ -1,3 +1,4 @@
+using AirX.Model;
 using AirX.Util;
 using AirX.View;
 using AirX.ViewModel;
@@ -22,16 +23,16 @@ namespace AirX.Pages
             this._instance = instance;
         }
 
-        public void UpdateInformation(string title, string source)
+        public void UpdateInformation(string title, Peer peer)
         {
             ViewModel.Title = title;
-            ViewModel.From = source;
+            ViewModel.Peer = peer;
         }
 
         [RelayCommand]
         private void Block()
         {
-            AccountUtil.AddToBlockList(ViewModel.From);
+            AccountUtil.AddToBlockList(ViewModel.Peer.IpAddress);
             _instance?.Close();
         }
 
@@ -45,8 +46,8 @@ namespace AirX.Pages
         {
             _ = new ContentDialog()
             {
-                Title = "Blocking " + ViewModel.From,
-                Content = "Are you sure to block " + ViewModel.From + "?",
+                Title = "Blocking " + ViewModel.Peer,
+                Content = "Are you sure to block " + ViewModel.Peer + "?",
                 PrimaryButtonText = "Block",
                 SecondaryButtonText = "Cancel",
                 PrimaryButtonCommand = BlockCommand,

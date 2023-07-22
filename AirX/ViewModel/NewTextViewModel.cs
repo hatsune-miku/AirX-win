@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using AirX.Model;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.UI;
 using Microsoft.UI.Xaml.Media;
 using System;
@@ -16,7 +17,7 @@ namespace AirX
         string title;
 
         [ObservableProperty]
-        string from;
+        Peer peer;
 
         [ObservableProperty]
         Brush backgroundColor = GetSolidColorBrush("#FFD9D9D9");

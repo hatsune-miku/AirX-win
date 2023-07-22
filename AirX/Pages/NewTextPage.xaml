@@ -33,7 +33,7 @@
 
                 <TextBlock
                     FontFamily="Inter" FontSize="13" Margin="0,40,0,5" Foreground="DimGray"
-                    Text="{x:Bind ViewModel.From, Mode=OneWay, Converter={StaticResource ipAdrressToTextSourceConverter}}"
+                    Text="{x:Bind ViewModel.Peer.IpAddress, Mode=OneWay, Converter={StaticResource ipAdrressToTextSourceConverter}}"
                 />
 
             </StackPanel>

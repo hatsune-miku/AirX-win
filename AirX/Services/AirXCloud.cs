@@ -1,4 +1,5 @@
-﻿using AirX.Util;
+﻿using AirX.Model;
+using AirX.Util;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -16,7 +17,13 @@ namespace AirX.Services
 {
     public static class AirXCloud
     {
-        private const string BaseURL = "https://airx.eggtartc.com";
+#if DEBUG
+        public const string ApiBaseUrl = "http://10.0.0.205:2479";
+        public const string WebSocketBaseUrl = "ws://10.0.0.205:2479/device-register";
+#else
+        public const string ApiBaseUrl = "https://airx.eggtartc.com";
+        public const string WebSocketBaseUrl = "ws://airx.eggtartc.com/device-register";
+#endif
 
         public class UnauthorizedException : Exception { }
         public class IncorrectCredentialTypeException : Exception { }
@@ -47,14 +54,19 @@ namespace AirX.Services
             HttpRequestMessage request = null;
             if (method == HttpMethod.Post)
             {
-                request = new HttpRequestMessage(method, BaseURL + path);
+                request = new HttpRequestMessage(method, ApiBaseUrl + path);
                 var jsonBody = JsonConvert.SerializeObject(body);
                 var content = new StringContent(jsonBody, null, "application/json");
                 request.Content = content;
             }
             else
             {
-                request = new HttpRequestMessage(method, BaseURL + path + "?" + GetParametersFromDictionary(body));
+                string fullPath = ApiBaseUrl + path;
+                if (body != null)
+                {
+                    fullPath += "?" + GetParametersFromDictionary(body);
+                }
+                request = new HttpRequestMessage(method, fullPath);
             }
 
             if (needToken)
@@ -86,31 +98,6 @@ namespace AirX.Services
             }
         }
 
-        public class LoginResponse
-        {
-            public bool success;
-            public string message;
-            public string name;
-            public string token;
-        }
-
-        public class RenewResponse
-        {
-
-            public bool success;
-            public string message;
-            public string token;
-        }
-
-        public class GreetingsResponse
-        {
-            public bool success;
-            public string message;
-            public string name;
-            public int uid;
-            public DateTime validBefore;
-        }
-
         public static async Task<LoginResponse> LoginAsync(string uid, string password, string salt = "114514")
         {
             password = HashUtil.Sha256(HashUtil.Sha256(password));
@@ -140,17 +127,58 @@ namespace AirX.Services
             );
         }
 
-        public static async Task<GreetingsResponse> GreetingsAsync(string uid)
+        public static async Task<GreetingsResponse> GreetingsAsync()
         {
             return await RequestAsync<GreetingsResponse>(
                 HttpMethod.Get,
                 "/api/v1/greetings",
-                new()
-                {
-                    { "uid", uid }
-                },
+                null,
                 true
             );
+        }
+
+        public static async Task<MessageSendResponse> SendMessageAsync(string content, MessageType type)
+        {
+            return await RequestAsync<MessageSendResponse>(
+                HttpMethod.Post,
+                 "/api/v1/message",
+                new()
+                {
+                    { "content", content },
+                    { "type", (int)type }
+                },
+                 true
+            );
+        }
+
+        public class LoginResponse
+        {
+            public bool success;
+            public string message;
+            public string name;
+            public string token;
+        }
+
+        public class RenewResponse
+        {
+
+            public bool success;
+            public string message;
+            public string token;
+        }
+
+        public class GreetingsResponse
+        {
+            public bool success;
+            public string message;
+            public string name;
+            public int uid;
+        }
+
+        public class MessageSendResponse
+        {
+            public bool success;
+            public string message;
         }
     }
 }

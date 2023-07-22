@@ -51,7 +51,7 @@ namespace AirX.View
 
         private async Task TrySignInAsync()
         {
-            if (!await AccountUtil.TryAutomaticLoginAsync())
+            if (!await AccountUtil.TryLoginWithSavedTokenAsync())
             {
                 // Prompt to login if token expired.
                 var window = new LoginWindow();
@@ -118,13 +118,13 @@ namespace AirX.View
             }
         }
 
-        private static void OnFileComing(ulong fileSize, string fileName, string from)
+        private static void OnFileComing(ulong fileSize, string fileName, Peer peer)
         {
             context.Post((_) =>
             {
                 UIUtil.MessageBoxAsync(
                     "Received File",
-                    $"File {fileName} from {from} ({FileUtil.GetFileSizeDescription(fileSize)}) is coming! Receive?",
+                    $"File {fileName} from {peer} ({FileUtil.GetFileSizeDescription(fileSize)}) is coming! Receive?",
                     "Receive",
                     "Decline"
                 ).ContinueWith(t =>
@@ -133,10 +133,10 @@ namespace AirX.View
                     byte fileId = FileUtil.NextFileId();
                     if (accept)
                     {
-                        PrepareForReceiveFile(fileId, fileSize, fileName, from);
+                        PrepareForReceiveFile(fileId, fileSize, fileName, peer);
                     }
                     AirXBridge.RespondToFile(
-                        Peer.Parse(from),
+                        peer,
                         fileId,
                         fileSize,
                         fileName,
@@ -146,9 +146,9 @@ namespace AirX.View
             }, null);
         }
 
-        private static void OnTextReceived(string text, string source)
+        private static void OnTextReceived(string text, Peer peer)
         {
-            if (AccountUtil.IsInBlockList(source))
+            if (AccountUtil.IsInBlockList(peer.IpAddress))
             {
                 return;
             }
@@ -157,7 +157,7 @@ namespace AirX.View
             {
                 try
                 {
-                    var window = NewTextWindow.Create(text, source);
+                    var window = NewTextWindow.Create(text, peer);
                     window.Activate();
                 }
                 catch (Exception e)
@@ -167,7 +167,7 @@ namespace AirX.View
             }, null);
         }
 
-        private static void PrepareForReceiveFile(byte fileId, ulong fileSize, string fileName, string from)
+        private static void PrepareForReceiveFile(byte fileId, ulong fileSize, string fileName, Peer peer)
         {
             var savingFilename = FileUtil.GetFileName(fileName);
             var fullPath = Path.Join(SettingsUtil.String(Keys.SaveFilePath, ""), savingFilename);
@@ -188,7 +188,7 @@ namespace AirX.View
                 TotalSize = fileSize,
                 FileId = 1,
                 Status = AirXBridge.FileStatus.Accepted,
-                From = Peer.Parse(from),
+                From = peer,
             };
 
             // Preallocate file size
