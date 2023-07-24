@@ -5,6 +5,7 @@ using AirX.ViewModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace AirX.Pages
@@ -22,7 +23,7 @@ namespace AirX.Pages
         [RelayCommand]
         public void ExitApplication()
         {
-            Application.Current.Exit();
+            Process.GetCurrentProcess().Kill();
         }
 
         [RelayCommand]

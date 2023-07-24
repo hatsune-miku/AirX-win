@@ -17,12 +17,12 @@ namespace AirX.Services
 {
     public static class AirXCloud
     {
-#if DEBUG
+#if !DEBUG
         public const string ApiBaseUrl = "http://10.0.0.205:2479";
         public const string WebSocketBaseUrl = "ws://10.0.0.205:2479/device-register";
 #else
         public const string ApiBaseUrl = "https://airx.eggtartc.com";
-        public const string WebSocketBaseUrl = "ws://airx.eggtartc.com/device-register";
+        public const string WebSocketBaseUrl = "wss://airx.eggtartc.com/device-register";
 #endif
 
         public class UnauthorizedException : Exception { }
