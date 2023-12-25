@@ -36,23 +36,24 @@ public class AirXBridge
 
     // AirX Threads
     private static IntPtr AirXInstance = IntPtr.Zero;
-    private static Thread AirXDiscoveryThread = null;
-    private static Thread AirXTextServiceThread = null;
+    private static Thread AirXDiscoveryThread;
+    private static Thread AirXTextServiceThread;
+    private static Thread AirXAutoDiscoveryThread;
     private static bool ShouldInterruptSignal = false;
 
     // AirX Alloc
     private static IntPtr PeerListBuffer = Utf8StringAlloc(1024);
 
     // Clipboard related
-    private static DispatcherTimer Timer = null;
+    private static DispatcherTimer Timer;
     private static string lastClipboardText = "";
     private static bool ShouldSkipNextEvent = false;
 
     // Handlers
-    private static OnTextReceivedHandler onTextReceivedHandler = null;
-    private static OnFileComingHandler onFileComingHandler = null;
-    private static OnFileSendingHandler onFileSendingHandler = null;
-    private static OnFilePartHandler onFilePartHandler = null;
+    private static OnTextReceivedHandler onTextReceivedHandler;
+    private static OnFileComingHandler onFileComingHandler;
+    private static OnFileSendingHandler onFileSendingHandler;
+    private static OnFilePartHandler onFilePartHandler;
 
     // Async
     private static SynchronizationContext synchronizationContext = SynchronizationContext.Current;
@@ -189,6 +190,56 @@ public class AirXBridge
         onFilePartHandler = handler;
     }
 
+    private static void DiscoveryThreadRoutine()
+    {
+        Debug.WriteLine("Discovery start");
+        AirXNative.airx_lan_discovery_service(AirXInstance, ShouldInterrupt);
+        Debug.WriteLine("Discovery end");
+
+        synchronizationContext.Post((_) =>
+        {
+            GlobalViewModel.Instance.IsDiscoveryServiceOnline = false;
+            if (!GlobalViewModel.Instance.IsTextServiceOnline)
+            {
+                GlobalViewModel.Instance.IsServiceOnline = false;
+            }
+        }, null);
+    }
+
+    private static void TextServiceRoutine()
+    {
+        Debug.WriteLine("Text start");
+        AirXNative.airx_data_service(
+            AirXInstance,
+            OnTextReceived,
+            OnFileComing,
+            OnFileSending,
+            OnFilePart,
+            ShouldInterrupt
+        );
+        Debug.WriteLine("Text end");
+
+        synchronizationContext.Post((_) =>
+        {
+            GlobalViewModel.Instance.IsTextServiceOnline = false;
+            if (!GlobalViewModel.Instance.IsDiscoveryServiceOnline)
+            {
+                GlobalViewModel.Instance.IsServiceOnline = false;
+            }
+        }, null);
+    }
+
+    private static void AutoDiscoveryRoutine()
+    {
+        Debug.WriteLine("Auto discovery start");
+        while (!ShouldInterrupt())
+        {
+            Thread.Sleep(10000);
+            AirXNative.airx_lan_broadcast(AirXInstance);
+        }
+        Debug.WriteLine("Auto discovery end");
+    }
+
     public static bool TryStartAirXService()
     {
         if (GlobalViewModel.Instance.IsServiceOnline)
@@ -221,46 +272,17 @@ public class AirXBridge
         }
         FreeUtf8String(listenAddressBuffer);
 
-        AirXDiscoveryThread = new Thread(() =>
-        {
-            Debug.WriteLine("Discovery start");
-            AirXNative.airx_lan_discovery_service(AirXInstance, ShouldInterrupt);
-            Debug.WriteLine("Discovery end");
-
-            synchronizationContext.Post((_) =>
-            {
-                GlobalViewModel.Instance.IsDiscoveryServiceOnline = false;
-                if (!GlobalViewModel.Instance.IsTextServiceOnline)
-                {
-                    GlobalViewModel.Instance.IsServiceOnline = false;
-                }
-            }, null);
-        });
-        AirXTextServiceThread = new Thread(() =>
-        {
-            Debug.WriteLine("Text start");
-            AirXNative.airx_data_service(
-                AirXInstance,
-                OnTextReceived, 
-                OnFileComing,
-                OnFileSending,
-                OnFilePart,
-                ShouldInterrupt
-            );
-            Debug.WriteLine("Text end");
-
-            synchronizationContext.Post((_) =>
-            {
-                GlobalViewModel.Instance.IsTextServiceOnline = false;
-                if (!GlobalViewModel.Instance.IsDiscoveryServiceOnline)
-                {
-                    GlobalViewModel.Instance.IsServiceOnline = false;
-                }
-            }, null);
-        });
+        AirXDiscoveryThread = new Thread(DiscoveryThreadRoutine);
+        AirXTextServiceThread = new Thread(TextServiceRoutine);
 
         AirXDiscoveryThread.Start();
         AirXTextServiceThread.Start();
+        
+        if (SettingsUtil.ShouldEnableAutoDiscovery())
+        {
+            AirXAutoDiscoveryThread = new Thread(AutoDiscoveryRoutine);
+            AirXAutoDiscoveryThread.Start();
+        }
 
         Timer = new DispatcherTimer();
         Timer.Interval = TimeSpan.FromMilliseconds(500);

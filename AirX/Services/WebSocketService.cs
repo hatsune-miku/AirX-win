@@ -1,13 +1,8 @@
-﻿using AirX.Extension;
-using AirX.Model;
+﻿using AirX.Model;
 using AirX.ViewModel;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Net.WebSockets;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Websocket.Client;
 using Websocket.Client.Models;

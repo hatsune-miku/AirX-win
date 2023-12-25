@@ -68,6 +68,15 @@ namespace AirX.Pages
 
             SettingsItems.Add(new Model.SettingsItem
             {
+                Title = "Enhanced Discovery",
+                Description = "Periodically send LAN discovery packets to ensure peer list up to date. May increase load to the router, especially for large amount of AirX users under the same network.",
+                SettingsKey = Keys.AutoDiscovery,
+                ItemType = SettingsItemType.Boolean,
+                IsAdvanced = false,
+            });
+
+            SettingsItems.Add(new Model.SettingsItem
+            {
                 Title = "Show Developer Console",
                 Description = "Enables debug output from libairx.",
                 SettingsKey = Keys.ShouldShowConsole,
@@ -77,8 +86,8 @@ namespace AirX.Pages
 
             SettingsItems.Add(new Model.SettingsItem
             {
-                Title = "Kafka Producer",
-                Description = "Enable to share clipboard data over the internet.. Does not affect LAN settings.",
+                Title = "Share Clipboard Over Internet",
+                Description = "Agree and enable to share clipboard data over the Internet. Relavent data will be uploaded to AirX cloud.",
                 SettingsKey = Keys.IsKafkaProducer,
                 ItemType = SettingsItemType.Boolean,
                 IsAdvanced = true,
@@ -86,8 +95,8 @@ namespace AirX.Pages
 
             SettingsItems.Add(new Model.SettingsItem
             {
-                Title = "Kafka Consumer",
-                Description = "Enable to accept clipboard data from the internet. Does not affect LAN settings.",
+                Title = "Receive Clipboard From Internet",
+                Description = "Enable to accept peers' clipboard data from the Internet.",
                 SettingsKey = Keys.IsKafkaConsumer,
                 ItemType = SettingsItemType.Boolean,
                 IsAdvanced = true,
