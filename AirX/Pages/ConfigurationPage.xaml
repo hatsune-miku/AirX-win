@@ -74,8 +74,8 @@
                 <ScrollViewer VerticalScrollBarVisibility="Auto" Height="480">
                     <StackPanel Spacing="8">
                     <labs:SettingsCard
-                        Header="Show Advanced Settings"
-                        Description="Please be sure you understand it before changing any advanced settings."
+                        Header="{x:Bind ViewModel.ShowAdvancedSettingsHeaderText}"
+                        Description="{x:Bind ViewModel.ShowAdvancedSettingsDescriptionText}"
                         ActionIcon="{ui:FontIcon Glyph={x:Null}}"
                         IsClickEnabled="True"
                     >

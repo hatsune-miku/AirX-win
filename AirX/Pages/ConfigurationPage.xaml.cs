@@ -6,6 +6,7 @@ using AirX.Model;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using AirX.Extension;
+using AirX.Utils;
 
 namespace AirX.Pages
 {
@@ -48,8 +49,8 @@ namespace AirX.Pages
         {
             SettingsItems.Add(new Model.SettingsItem
             {
-                Title = "LAN Group Identifier",
-                Description = "0 ~ 255. Only devices with the same group identity can discover each other.",
+                Title = "LANGroupIdentifier.Text".Tr(),
+                Description = "LANGroupIdentifier.Description".Tr(),
                 SettingsKey = Keys.GroupIdentifier,
                 Validator = IsGroupIdentityValid,
                 ItemType = SettingsItemType.String,
@@ -58,8 +59,8 @@ namespace AirX.Pages
 
             SettingsItems.Add(new Model.SettingsItem
             {
-                Title = "Text Popup Display Time (ms)",
-                Description = "1000 ~ 10000.",
+                Title = "TextPopupDisplayTime.Text".Tr(),
+                Description = "TextPopupDisplayTime.Description".Tr(),
                 SettingsKey = Keys.NewTextPopupDisplayTimeMillis,
                 ItemType = SettingsItemType.String,
                 Validator = IsMillisTimeValid,
@@ -68,8 +69,17 @@ namespace AirX.Pages
 
             SettingsItems.Add(new Model.SettingsItem
             {
-                Title = "Show Developer Console",
-                Description = "Enables debug output from libairx.",
+                Title = "EnhancedDiscovery.Text".Tr(),
+                Description = "EnhancedDiscovery.Description".Tr(),
+                SettingsKey = Keys.AutoDiscovery,
+                ItemType = SettingsItemType.Boolean,
+                IsAdvanced = false,
+            });
+
+            SettingsItems.Add(new Model.SettingsItem
+            {
+                Title = "ShowDeveloperConsole.Text".Tr(),
+                Description = "ShowDeveloperConsole.Description".Tr(),
                 SettingsKey = Keys.ShouldShowConsole,
                 ItemType = SettingsItemType.Boolean,
                 IsAdvanced = true,
@@ -77,8 +87,8 @@ namespace AirX.Pages
 
             SettingsItems.Add(new Model.SettingsItem
             {
-                Title = "Kafka Producer",
-                Description = "Enable to share clipboard data over the internet.. Does not affect LAN settings.",
+                Title = "ShareClipboardOverInternet.Text".Tr(),
+                Description = "ShareClipboardOverInternet.Description".Tr(),
                 SettingsKey = Keys.IsKafkaProducer,
                 ItemType = SettingsItemType.Boolean,
                 IsAdvanced = true,
@@ -86,8 +96,8 @@ namespace AirX.Pages
 
             SettingsItems.Add(new Model.SettingsItem
             {
-                Title = "Kafka Consumer",
-                Description = "Enable to accept clipboard data from the internet. Does not affect LAN settings.",
+                Title = "ReceiveClipboardFromInternet.Text".Tr(),
+                Description = "ReceiveClipboardFromInternet.Description".Tr(),
                 SettingsKey = Keys.IsKafkaConsumer,
                 ItemType = SettingsItemType.Boolean,
                 IsAdvanced = true,
@@ -95,8 +105,8 @@ namespace AirX.Pages
 
             SettingsItems.Add(new Model.SettingsItem
             {
-                Title = "LAN Discovery Server Port",
-                Description = "1024 ~ 65535",
+                Title = "LANDiscoveryServerPort.Text".Tr(),
+                Description = "LANDiscoveryServerPort.Description".Tr(),
                 SettingsKey = Keys.DiscoveryServiceServerPort,
                 Validator = IsPortValid,
                 ItemType = SettingsItemType.String,
@@ -105,8 +115,8 @@ namespace AirX.Pages
 
             SettingsItems.Add(new Model.SettingsItem
             {
-                Title = "LAN Discovery Client Port",
-                Description = "0 or 1024 ~ 65535",
+                Title = "LANDiscoveryClientPort.Text".Tr(),
+                Description = "LANDiscoveryClientPort.Description".Tr(),
                 SettingsKey = Keys.DiscoveryServiceClientPort,
                 Validator = IsPortValid,
                 ItemType = SettingsItemType.String,
@@ -115,7 +125,7 @@ namespace AirX.Pages
 
             SettingsItems.Add(new Model.SettingsItem
             {
-                Title = "LAN Data Service Listen Address (IpV4)",
+                Title = "LANDataServiceListenAddress.Text".Tr(),
                 SettingsKey = Keys.DataServiceAddressIpV4,
                 Validator = IsIpV4AddressValid,
                 ItemType = SettingsItemType.String,
@@ -124,8 +134,8 @@ namespace AirX.Pages
 
             SettingsItems.Add(new Model.SettingsItem
             {
-                Title = "LAN Data Service Listen Port",
-                Description = "1024 ~ 65535",
+                Title = "LANDataServiceListenPort.Text".Tr(),
+                Description = "LANDataServiceListenPort.Description".Tr(),
                 SettingsKey = Keys.DataServiceListenPort,
                 Validator = IsPortValid,
                 ItemType = SettingsItemType.String,
@@ -134,8 +144,8 @@ namespace AirX.Pages
 
             SettingsItems.Add(new Model.SettingsItem
             {
-                Title = "AirX Cloud Server",
-                Description = "Only connect to private servers you trust.",
+                Title = "AirXCloudServer.Text".Tr(),
+                Description = "AirXCloudServer.Description".Tr(),
                 SettingsKey = Keys.AirXCloudAddress,
                 ItemType = SettingsItemType.String,
                 IsAdvanced = true,

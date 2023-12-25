@@ -9,8 +9,7 @@
     mc:Ignorable="d">
     <StackPanel DataContext="ViewModel">
         <Grid x:Name="titleBar" Height="32">
-            <TextBlock VerticalAlignment="Center" Margin="24, 22, 0, 0" FontSize="12">
-                AirX Control Panel
+            <TextBlock VerticalAlignment="Center" Margin="24, 22, 0, 0" FontSize="12" Text="{x:Bind ViewModel.ControlPanelTitle}">
             </TextBlock>
         </Grid>
 

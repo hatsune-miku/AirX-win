@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using AirX.Utils;
 using AirX.View;
 using AirX.ViewModel;
 using Microsoft.UI.Windowing;
@@ -23,27 +24,27 @@ namespace AirX.Pages
         private ObservableCollection<NavLink> _navLinks = new ObservableCollection<NavLink>()
         {
             new() {
-                Label = "Dashboard",
+                Label = "Dashboard".Text(),
                 Symbol = Symbol.Message,
                 ViewType = typeof(DashboardPage),
             },
             new() {
-                Label = "Preferences",
+                Label = "Preferences".Text(),
                 Symbol = Symbol.Globe,
                 ViewType = typeof(ConfigurationPage),
             },
             new() {
-                Label = "Sent Files",
+                Label = "SentFiles".Text(),
                 Symbol = Symbol.Send,
                 ViewType = typeof(SentFilesPage),
             },
             new() {
-                Label = "Received Files",
+                Label = "ReceivedFiles".Text(),
                 Symbol = Symbol.Download,
                 ViewType = typeof(ReceivedFilesPage),
             },
             new() {
-                Label = "Contacts",
+                Label = "Contacts".Text(),
                 Symbol = Symbol.People,
                 ViewType = typeof(AboutPage),
             },

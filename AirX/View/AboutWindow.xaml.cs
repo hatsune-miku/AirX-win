@@ -1,4 +1,5 @@
 ﻿using AirX.Bridge;
+using AirX.Utils;
 using AirX.ViewModel;
 
 namespace AirX.View
@@ -23,9 +24,9 @@ namespace AirX.View
             PrepareWindow(
                 new WindowParameters
                 {
-                    Title = "About AirX",
-                    WidthPortion = 890 / 3840.0 * 1.25,
-                    HeightPortion = 525 / 2160.0 * 1.25,
+                    Title = "AboutAirX".Text(),
+                    WidthPortion = 800 / 3840.0 * 1.25,
+                    HeightPortion = 705 / 2160.0 * 1.25,
                     CenterScreen = true,
                     TopMost = true,
                     Resizable = false,

@@ -2,11 +2,13 @@
 using AirX.Helper;
 using AirX.Services;
 using AirX.Util;
+using AirX.Utils;
 using AirX.View;
 using AirX.ViewModel;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Documents;
 using Microsoft.UI.Xaml.Input;
 using System;
 using System.Diagnostics;
@@ -26,6 +28,11 @@ namespace AirX.Pages
 
             ViewModel = new LoginWindowViewModel();
             textBoxUid.Focus(FocusState.Programmatic);
+            linkSignUp.Inlines.Clear();
+
+            var linkInline = new Run();
+            linkInline.Text = "CreateOne".Text();
+            linkSignUp.Inlines.Add(linkInline);
         }
 
         private async Task HandleLoginAsync()

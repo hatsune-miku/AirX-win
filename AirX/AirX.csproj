@@ -165,4 +165,9 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Strings\en\" />
+    <Folder Include="Strings\zh\" />
+  </ItemGroup>
 </Project>

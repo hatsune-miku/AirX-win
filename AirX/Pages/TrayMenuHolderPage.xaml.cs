@@ -1,7 +1,9 @@
 ﻿using AirX.Extension;
 using AirX.Util;
+using AirX.Utils;
 using AirX.View;
 using AirX.ViewModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -14,6 +16,12 @@ namespace AirX.Pages
     {
         private AboutWindow aboutWindow = null;
         private GlobalViewModel ViewModel = GlobalViewModel.Instance;
+
+        public string TextOpenControlPanel = "OpenControlPanel".Text();
+        public string TextSendFile = "SendFile".Text();
+        public string TextAboutAirX = "AboutAirX".Text();
+        public string TextExit = "Exit".Text();
+        public string TextHooray = "Hooray".Text();
 
         public TrayMenuHolderPage()
         {

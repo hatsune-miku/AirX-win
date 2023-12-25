@@ -17,6 +17,7 @@ namespace AirX.Util
         DataServiceListenPort,
         DataServiceAddressIpV4,
         GroupIdentifier,
+        AutoDiscovery,
 
         LoggedInUid,
         SavedUid,
@@ -54,6 +55,7 @@ namespace AirX.Util
         {
             // TODO: remove
             Write(Keys.BlockList, "");
+            Write(Keys.IsNotFirstRun, false);
 
             if (Bool(Keys.IsNotFirstRun, false))
             {
@@ -65,8 +67,8 @@ namespace AirX.Util
             Write(Keys.DataServiceListenPort, 9819);
             Write(Keys.DataServiceAddressIpV4, "0.0.0.0");
             Write(Keys.GroupIdentifier, 0);
+            Write(Keys.AutoDiscovery, true);
             Write(Keys.ShouldAutoSignIn, false);
-            Write(Keys.IsNotFirstRun, true);
             Write(Keys.ShouldShowConsole, false);
             Write(Keys.ShouldShowAdvancedSettings, false);
             Write(Keys.IsKafkaProducer, true);
@@ -74,6 +76,8 @@ namespace AirX.Util
             Write(Keys.AirXCloudAddress, "https://airx.eggtartc.com");
             Write(Keys.SaveFilePath, "C:\\AirXFiles");
             Write(Keys.NewTextPopupDisplayTimeMillis, 6000);
+
+            Write(Keys.IsNotFirstRun, true);
         }
 
         public static string String(Keys key, string def)
@@ -125,6 +129,16 @@ namespace AirX.Util
             return Enum.TryParse<CredentialType>(rawValue, out CredentialType credentialType)
                 ? credentialType
                 : CredentialType.Password;
+        }
+
+        public static bool ShouldEnableAutoDiscovery()
+        {
+            return Bool(Keys.AutoDiscovery, true);
+        }
+
+        public static void SetAutoDiscovery(bool enabled)
+        {
+            Write(Keys.AutoDiscovery, enabled);
         }
 
         public static HashSet<string> ReadBlockList()
