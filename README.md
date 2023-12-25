@@ -2,9 +2,9 @@
 
 ## Issues / 问题反馈
 
-Please feel free to open issues if you encounter any problems using AirX for Windows.
+Please feel free to [open issues](issues/new) if you encounter any problems using AirX for Windows.
 
-如果使用 Windows 版 AirX 的过程中遇到问题，请提起一个 issue。中英文都可。
+如果使用 Windows 版 AirX 的过程中遇到问题，请[提起一个 issue](issues/new)。中英文都可。
 
 # AirX Repositories
 
