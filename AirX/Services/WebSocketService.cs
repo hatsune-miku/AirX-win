@@ -65,7 +65,7 @@ namespace AirX.Services
                 Debug.WriteLine("Failed to parse message.");
                 return;
             }
-
+            
             switch (message.MessageTypeInfo)
             {
                 case MessageType.Text:
