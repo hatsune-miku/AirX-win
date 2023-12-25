@@ -1,4 +1,5 @@
-﻿using Microsoft.UI.Xaml.Data;
+﻿using AirX.Utils;
+using Microsoft.UI.Xaml.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,8 @@ namespace AirX.Converters
         {
             bool isOnline = (bool)value;
             return isOnline
-                ? "AirX is online!"
-                : "AirX is offline.";
+                ? "AirXIsOnline".Text()
+                : "AirXIsOffline".Text();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

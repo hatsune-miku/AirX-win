@@ -38,7 +38,7 @@
         >
         <tb:TaskbarIcon.ContextFlyout>
             <MenuFlyout AreOpenCloseAnimationsEnabled="True">
-                <MenuFlyoutItem IsEnabled="False" Text="\^O^/"/>
+                <MenuFlyoutItem IsEnabled="False" Text="{x:Bind TextHooray}"/>
                 <MenuFlyoutSeparator />
                 <MenuFlyoutItem
                     IsEnabled="False"
@@ -50,13 +50,13 @@
                 />
                 <MenuFlyoutItem
                     Command="{x:Bind OpenControlPanelCommand}"
-                    Text="Open Control Panel"
+                    Text="{x:Bind TextOpenControlPanel}"
                 />
                 <MenuFlyoutSeparator />
 
                 <MenuFlyoutItem
                     Command="{x:Bind SendFileCommand}"
-                    Text="Send File"
+                    Text="{x:Bind TextSendFile}"
                 />
 
                 <MenuFlyoutItem
@@ -69,8 +69,8 @@
                     Text="{x:Bind ViewModel.IsSignedIn, Mode=OneWay, Converter={StaticResource booleanToSigningToggleStringConverter}}"
                 />
                 <MenuFlyoutSeparator />
-                <MenuFlyoutItem Command="{x:Bind ShowAboutAirXCommand}" Text="About AirX" />
-                <MenuFlyoutItem Command="{x:Bind ExitApplicationCommand}" Text="Exit" />
+                <MenuFlyoutItem Command="{x:Bind ShowAboutAirXCommand}" Text="{x:Bind TextAboutAirX}" />
+                <MenuFlyoutItem Command="{x:Bind ExitApplicationCommand}" Text="{x:Bind TextExit}" />
 
             </MenuFlyout>
         </tb:TaskbarIcon.ContextFlyout>

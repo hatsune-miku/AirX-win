@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AirX.Utils;
 
 namespace AirX.Converters
 {
@@ -13,8 +14,8 @@ namespace AirX.Converters
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             return (bool)value
-                ? "Stop Service"
-                : "Start Service";
+                ? "StopService".Text()
+                : "StartService".Text();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

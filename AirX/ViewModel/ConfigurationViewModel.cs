@@ -1,5 +1,6 @@
 ﻿using AirX.Model;
 using AirX.Util;
+using AirX.Utils;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
@@ -21,5 +22,11 @@ namespace AirX.ViewModel
 
         [ObservableProperty]
         bool shouldShowAdvancedSettings = SettingsUtil.Bool(Keys.ShouldShowAdvancedSettings, false);
+
+        [ObservableProperty]
+        string showAdvancedSettingsHeaderText = "ShowAdvancedSettings.Text".Tr();
+
+        [ObservableProperty]
+        string showAdvancedSettingsDescriptionText = "ShowAdvancedSettings.Description".Tr();
     }
 }
