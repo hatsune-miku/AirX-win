@@ -37,3 +37,9 @@ AirX 是一个跨平台的文本和文件分享系统。
 - 对于 **macOS** 用户：
     - 如果你的 MacBook 有刘海，那么 CPU 架构是 `arm64`。
     - 否则，请点击左上角的苹果 () 图标，选择“关于本机”。如果处理器那里显示 Intel，那么架构是 `x64`。如果显示 M1 或 M2，那么架构是 `arm64`。
+
+## appx_install.exe 是什么？
+
+这是一个用于安装 AirX 的开源的小程序。
+
+参见：[appx_install](https://github.com/hatsune-miku/appx-install)

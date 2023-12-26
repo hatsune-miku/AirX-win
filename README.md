@@ -39,3 +39,9 @@ if you encounter any problems using AirX for Windows.
 - For **macOS** users:
     - If your MacBook comes with a notch, your CPU arch is `arm64`.
     - If not, click the Apple () icon on the top left corner, then select "About This Mac". If the chip (or processor) says Intel, it’s `x64`. If you see M1 or M2 it’s `arm64`.
+
+## What is appx_install.exe?
+
+This is an open-source tool for installing packages.
+
+See: [appx_install](https://github.com/hatsune-miku/appx-install)
