@@ -25,3 +25,15 @@ AirX 是一个跨平台的文本和文件分享系统。
 - [macOS Client (SwiftUI)](https://github.com/Lsjy44/airX_mac)
 - [Netdisk Frontend (Vue.js)](https://github.com/hatsune-miku/airx-cloud)
 - [Backend (SpringBoot)](https://github.com/hatsune-miku/airx-backend)
+
+# 附录
+
+## 怎么看 CPU 架构？
+
+- 对于 **Windows** 用户：
+    - 绝大多数 Windows PC 都是 `x64` 架构，尤其是游戏本。
+    - 如果不确定，可参考[这篇文章](https://support.microsoft.com/en-us/windows/32-bit-and-64-bit-windows-frequently-asked-questions-c6ca9541-8dce-4d48-0415-94a3faa2e13d)。
+
+- 对于 **macOS** 用户：
+    - 如果你的 MacBook 有刘海，那么 CPU 架构是 `arm64`。
+    - 否则，请点击左上角的苹果 () 图标，选择“关于本机”。如果处理器那里显示 Intel，那么架构是 `x64`。如果显示 M1 或 M2，那么架构是 `arm64`。
