@@ -104,9 +104,9 @@ namespace AirX.Util
             try
             {
                 renewResponse = await AirXCloud.RenewAsync(uid);
-                if (!renewResponse.success)
+                if (renewResponse == null || !renewResponse.success)
                 {
-                    Debug.WriteLine($"Failed: renew failed: {renewResponse.message}");
+                    Debug.WriteLine($"Failed: renew failed.");
                     return false;
                 }
             }
