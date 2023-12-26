@@ -1,12 +1,25 @@
 # AirX Windows Frontend
 
-## Issues / 问题反馈
+[简体中文](README.zh.md) | [English](README.md)
 
-Please feel free to [open an issue](https://github.com/hatsune-miku/AirX-win/issues/new/choose) or [view existing issues](https://github.com/hatsune-miku/AirX-win/issues) if you encounter any problems using AirX for Windows.
+AirX is a cross-platform text and file sharing system.
 
-如果使用 Windows 版 AirX 的过程中遇到问题，请用中文或英文[提起一个 issue](https://github.com/hatsune-miku/AirX-win/issues/new/choose)或是[查看现有 issues](https://github.com/hatsune-miku/AirX-win/issues)。
+- [View Demo Video](https://hatsune-miku.github.io/airx.html)
 
-# AirX Repositories
+## How to Download
+
+Please head to [v0.1.0.0 release page](https://github.com/hatsune-miku/AirX-win/releases/tag/v0.1.0.0).
+
+## Issues
+
+Please feel free to 
+
+- [Open an issue](https://github.com/hatsune-miku/AirX-win/issues/new/choose), or 
+- [View existing issues](https://github.com/hatsune-miku/AirX-win/issues)
+
+if you encounter any problems using AirX for Windows.
+
+## AirX Family
 
 - [libairx](https://github.com/hatsune-miku/libairx)
 - [Windows Client (WinUI 3)](https://github.com/hatsune-miku/AirX-win)
@@ -14,4 +27,3 @@ Please feel free to [open an issue](https://github.com/hatsune-miku/AirX-win/iss
 - [macOS Client (SwiftUI)](https://github.com/Lsjy44/airX_mac)
 - [Netdisk Frontend (Vue.js)](https://github.com/hatsune-miku/airx-cloud)
 - [Backend (SpringBoot)](https://github.com/hatsune-miku/airx-backend)
-
