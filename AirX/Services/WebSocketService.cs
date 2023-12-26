@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Net.WebSockets;
 using System.Threading.Tasks;
 using Websocket.Client;
-using Websocket.Client.Models;
 
 namespace AirX.Services
 {

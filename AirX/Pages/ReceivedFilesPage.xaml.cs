@@ -41,7 +41,9 @@ namespace AirX.Pages
         {
             ViewModel.ReceiveFiles = GlobalViewModel.Instance.ReceiveFiles.Values
                 .Select(item => item.ReceivingFile)
+                .SkipWhile(item => item == ReceiveFile.Sample)
                 .ToList();
+            ViewModel.NoReceiveFiles = ViewModel.ReceiveFiles.Count == 0;
         }
     }
 }

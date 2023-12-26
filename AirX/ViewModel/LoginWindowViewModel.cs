@@ -24,32 +24,5 @@ namespace AirX
 
         [ObservableProperty]
         public bool isLoggingIn = false;
-
-        [ObservableProperty]
-        public string controlPanelTitle = "AirXControlPanel".Text();
-
-        [ObservableProperty]
-        public string textUidOrEmail = "UidOrEmail".Text();
-
-        [ObservableProperty]
-        public string textPassword = "Password".Text();
-
-        [ObservableProperty]
-        public string textSignIn = "SignIn".Text();
-
-        [ObservableProperty]
-        public string textRememberMe = "RememberMe".Text();
-
-        [ObservableProperty]
-        public string textConfirmSignIn = "ConfirmSignIn".Text();
-
-        [ObservableProperty]
-        public string textSignUp = "SignUp".Text();
-
-        [ObservableProperty]
-        public string textCreateOne = "CreateOne".Text();
-
-        [ObservableProperty]
-        public string textNoAirXAccountYet = "NoAirXAccountYet".Text();
     }
 }

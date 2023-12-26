@@ -12,6 +12,7 @@
     mc:Ignorable="d"
     DataContext="ViewModel"
     Loaded="OnPageLoaded"
+    Unloaded="OnPageUnloaded"
 >
     <Page.Resources>
         <StackLayout x:Name="VerticalStackLayout" Orientation="Vertical" Spacing="8"/>
@@ -70,50 +71,48 @@
         </StackPanel>
 
         <Pivot Margin="20, 20, 20, 0">
-            <PivotItem Header="AirX Core" Margin="8">
-                <ScrollViewer VerticalScrollBarVisibility="Auto" Height="480">
+            <PivotItem x:Uid="AirXCore" Margin="8">
+                <ScrollViewer x:Name="ScrollView" VerticalScrollBarVisibility="Auto">
                     <StackPanel Spacing="8">
-                    <labs:SettingsCard
+                        <labs:SettingsCard
                         Header="{x:Bind ViewModel.ShowAdvancedSettingsHeaderText}"
                         Description="{x:Bind ViewModel.ShowAdvancedSettingsDescriptionText}"
                         ActionIcon="{ui:FontIcon Glyph={x:Null}}"
                         IsClickEnabled="True"
                     >
-                        <ToggleSwitch IsOn="{x:Bind GetShouldShowAdvancedSettings(), BindBack=SetShouldShowAdvancedSettings, Mode=TwoWay}" />
-                    </labs:SettingsCard>
+                            <ToggleSwitch IsOn="{x:Bind GetShouldShowAdvancedSettings(), BindBack=SetShouldShowAdvancedSettings, Mode=TwoWay}" />
+                        </labs:SettingsCard>
 
-                    <ListView
-                        x:Name="ListViewSettings"
-                        ItemsSource="{x:Bind ViewModel.SettingsItems, Mode=OneWay}"
-                        ItemTemplateSelector="{StaticResource SettingsDataTemplateSelector}"
-                        SelectionMode="None"
-                        IsItemClickEnabled="False"
-                    >
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="ListViewItem">
-                                <Setter Property="Padding" Value="0"/>
-                                <Setter Property="Margin" Value="0"/>
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                                <Setter Property="VerticalContentAlignment" Value="Stretch"/>
-                            </Style>
-                        </ListView.ItemContainerStyle>
-                        <ListView.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Vertical" Spacing="4" />
-                            </ItemsPanelTemplate>
-                        </ListView.ItemsPanel>
-                    </ListView>
+                        <ListView
+                            x:Name="ListViewSettings"
+                            ItemsSource="{x:Bind ViewModel.SettingsItems, Mode=OneWay}"
+                            ItemTemplateSelector="{StaticResource SettingsDataTemplateSelector}"
+                            SelectionMode="None"
+                            IsItemClickEnabled="False"
+                        >
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Padding" Value="0"/>
+                                    <Setter Property="Margin" Value="0"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical" Spacing="4" />
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
+                        </ListView>
                     </StackPanel>
                 </ScrollViewer>
             </PivotItem>
 
-            <PivotItem Header="Debug">
+            <PivotItem x:Uid="Debug">
                 <StackPanel>
-                    <Button Content="Clean Cache" Margin="5,5,5,5" Click="OnCleanCacheClicked" FontWeight="Bold"/>
+                    <Button x:Uid="ClearCache" Margin="5,5,5,5" Click="OnCleanCacheClicked" FontWeight="Bold"/>
                 </StackPanel>
             </PivotItem>
         </Pivot>
-
-        <TextBlock Margin="30, 0, 0, 0" FontStyle="Italic">Saved settings take effect at next launch.</TextBlock>
     </StackPanel>
 </Page>

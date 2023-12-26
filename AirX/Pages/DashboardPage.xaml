@@ -20,13 +20,14 @@
 
     <StackPanel>
         <StackPanel Margin="20, 40, 10, 0">
-            <TextBlock Text="Dashboard" FontSize="24" FontWeight="Bold"/>
+            <TextBlock x:Uid="Dashboard" FontSize="24" FontWeight="Bold"/>
         </StackPanel>
 
-        <Button
+        <StackPanel
             DataContext="GlobalViewModel"
             Margin="24" Padding="24" CornerRadius="12"
             HorizontalAlignment="Stretch"
+            Background="{ThemeResource SystemFillColorNeutralBackgroundBrush}"
         >
             <Grid RowSpacing="12">
                 <Grid.RowDefinitions>
@@ -43,65 +44,59 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock
-                Grid.Row="0" Grid.Column="0"
-                Text="libairx Status"
-                VerticalAlignment="Center"
-            />
-                <Button
-                Grid.Row="0" Grid.Column="1"
-                Content="{x:Bind GlobalViewModel.IsServiceOnline, Mode=OneWay, Converter={StaticResource serviceOnlineStatusToDescriptionConverter}}"
-                Padding="10"
-                CornerRadius="12"
-            />
+                    Grid.Row="0" Grid.Column="0"
+                    x:Uid="LibairxStatus"
+                    VerticalAlignment="Center"
+                />
+                <TextBlock
+                    Grid.Row="0" Grid.Column="1"
+                    Text="{x:Bind GlobalViewModel.IsServiceOnline, Mode=OneWay, Converter={StaticResource serviceOnlineStatusToDescriptionConverter}}"
+                    Padding="10"
+                />
 
                 <TextBlock
-                Grid.Row="1" Grid.Column="0"
-                Text="libairx Version"
-                VerticalAlignment="Center"
-            />
-                <Button
-                Grid.Row="1" Grid.Column="1"
-                Content="{x:Bind ViewModel.AirXVersion, Mode=OneWay}"
-                Padding="10"
-                CornerRadius="12"
-            />
+                    Grid.Row="1" Grid.Column="0"
+                    x:Uid="LibairxVersion"
+                    VerticalAlignment="Center"
+                />
+                <TextBlock
+                    Grid.Row="1" Grid.Column="1"
+                    Text="{x:Bind ViewModel.AirXVersion, Mode=OneWay}"
+                    Padding="10"
+                />
 
                 <TextBlock
-                Grid.Row="2" Grid.Column="0"
-                Text="Discovery Service"
-                VerticalAlignment="Center"
-            />
-                <Button
-                Grid.Row="2" Grid.Column="1"
-                Content="{x:Bind GlobalViewModel.IsDiscoveryServiceOnline, Mode=OneWay, Converter={StaticResource booleanToOnlineStatusDescriptionConverter}}"
-                Padding="10"
-                CornerRadius="12"
-            />
+                    Grid.Row="2" Grid.Column="0"
+                    x:Uid="DiscoveryService"
+                    VerticalAlignment="Center"
+                />
+                <TextBlock
+                    Grid.Row="2" Grid.Column="1"
+                    Text="{x:Bind GlobalViewModel.IsDiscoveryServiceOnline, Mode=OneWay, Converter={StaticResource booleanToOnlineStatusDescriptionConverter}}"
+                    Padding="10"
+                />
 
                 <TextBlock
-                Grid.Row="3" Grid.Column="0"
-                Text="Text Service"
-                VerticalAlignment="Center"
-            />
-                <Button
-                Grid.Row="3" Grid.Column="1"
-                Content="{x:Bind GlobalViewModel.IsTextServiceOnline, Mode=OneWay, Converter={StaticResource booleanToOnlineStatusDescriptionConverter}}"
-                Padding="10"
-                CornerRadius="12"
-            />
+                    Grid.Row="3" Grid.Column="0"
+                    x:Uid="TextService"
+                    VerticalAlignment="Center"
+                />
+                <TextBlock
+                    Grid.Row="3" Grid.Column="1"
+                    Text="{x:Bind GlobalViewModel.IsTextServiceOnline, Mode=OneWay, Converter={StaticResource booleanToOnlineStatusDescriptionConverter}}"
+                    Padding="10"
+                />
 
                 <TextBlock
-                Grid.Row="4" Grid.Column="0"
-                Text="Current Peers"
-                VerticalAlignment="Center"
-            />
+                    Grid.Row="4" Grid.Column="0"
+                    x:Uid="CurrentPeers"
+                    VerticalAlignment="Center"
+                />
                 <Button
-                Grid.Row="4" Grid.Column="1"
-                Content="Refresh"
-            />
+                    Grid.Row="4" Grid.Column="1"
+                    Content="Refresh"
+                />
             </Grid>
-            
-
-        </Button>
+        </StackPanel>
     </StackPanel>
 </Page>

@@ -1,4 +1,5 @@
-﻿using Microsoft.UI.Xaml.Data;
+﻿using AirX.Utils;
+using Microsoft.UI.Xaml.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +13,8 @@ namespace AirX.Converters
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             return (bool)value
-                ? "Preferences - Unsaved"
-                : "Preferences";
+                ? "Preferences".Text() + " - " + "Unsaved".Text()
+                : "Preferences".Text();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

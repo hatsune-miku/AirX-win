@@ -16,8 +16,8 @@
     <Page.Resources>
         <DataTemplate x:DataType="model:PeerItem" x:Name="peerItem">
             <labs:SettingsCard 
-                Header="{x:Bind Value.Hostname, Mode=OneWay}"
-                Description="{x:Bind GetDescription(), Mode=OneWay}"
+                Header="{x:Bind Value.Hostname}"
+                Description="{x:Bind GetDescription()}"
                 IsClickEnabled="True"
                 Click="OnSettingsCardClicked"
             />
@@ -28,9 +28,9 @@
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <StackPanel>
                 <ItemsRepeater
-                ItemsSource="{x:Bind ViewModel.Peers}"
-                ItemTemplate="{StaticResource peerItem}"
-            />
+                    ItemsSource="{x:Bind ViewModel.Peers}"
+                    ItemTemplate="{StaticResource peerItem}"
+                />
             </StackPanel>
         </ScrollViewer>
     </Grid>

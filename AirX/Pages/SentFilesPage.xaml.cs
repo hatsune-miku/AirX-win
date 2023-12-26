@@ -47,7 +47,7 @@ namespace AirX.Pages
 
         }
 
-        private async void OnDownloadClick(object sender, RoutedEventArgs e)
+        private async Task OnDownloadClickAsync(object sender, RoutedEventArgs e)
         {
             // var saveFile = await Windows.Storage.KnownFolders.PicturesLibrary.CreateFileAsync("Laoganma.jpg", CreationCollisionOption.ReplaceExisting);
             var file = File.Create("C:\\Users\\gc135\\OneDrive\\桌面\\test.png");
@@ -108,7 +108,7 @@ namespace AirX.Pages
             e.Handled = true;
         }
 
-        private async void OnDrop(object sender, DragEventArgs e)
+        private async Task OnDropAsync(object sender, DragEventArgs e)
         {
             if (e.DataView.Contains(StandardDataFormats.StorageItems))
             {

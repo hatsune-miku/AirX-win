@@ -1,5 +1,4 @@
 ﻿using AirX.ViewModel;
-using Lombok.NET;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;

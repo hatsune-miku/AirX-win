@@ -13,14 +13,14 @@ using System.Threading.Tasks;
 
 namespace AirX.Util
 {
-    public class AccountUtil
+    public class AccountUtils
     {
-        private static HashSet<string> _blockList = SettingsUtil.ReadBlockList();
+        private static HashSet<string> _blockList = SettingsUtils.ReadBlockList();
 
         public static void ClearSavedUserInfoAndSignOut()
         {
-            SettingsUtil.Delete(Keys.SavedCredential);
-            SettingsUtil.Delete(Keys.LoggedInUid);
+            SettingsUtils.Delete(Keys.SavedCredential);
+            SettingsUtils.Delete(Keys.LoggedInUid);
             GlobalViewModel.Instance.IsSignedIn = false;
             GlobalViewModel.Instance.LoggingInUid = "";
             GlobalViewModel.Instance.LoggingGreetingsName = "AirX User";
@@ -42,7 +42,7 @@ namespace AirX.Util
                 return;
             }
             _blockList.Add(peer.IpAddress);
-            SettingsUtil.WriteBlockList(_blockList);
+            SettingsUtils.WriteBlockList(_blockList);
         }
 
         public static async Task<bool> SendGreetingsAsync()
@@ -50,7 +50,7 @@ namespace AirX.Util
             AirXCloud.GreetingsResponse greetingsResponse;
             try
             {
-                var uid = SettingsUtil.String(Keys.SavedUid, "");
+                var uid = SettingsUtils.String(Keys.SavedUid, "");
                 greetingsResponse = await AirXCloud.GreetingsAsync();
                 if (greetingsResponse.success)
                 {
@@ -71,7 +71,7 @@ namespace AirX.Util
          */
         public static async Task<bool> TryLoginWithSavedTokenAsync()
         {
-            if (!SettingsUtil.Bool(Keys.ShouldAutoSignIn, false))
+            if (!SettingsUtils.Bool(Keys.ShouldAutoSignIn, false))
             {
                 return false;
             }
@@ -80,20 +80,20 @@ namespace AirX.Util
             Debug.WriteLine("Trying automatic login...");
 
             // Check credentials!
-            if (SettingsUtil.ReadCredentialType() != CredentialType.AirXToken)
+            if (SettingsUtils.ReadCredentialType() != CredentialType.AirXToken)
             {
                 Debug.WriteLine("Failed: incorrect credential type");
                 return false;
             }
 
-            string token = SettingsUtil.String(Keys.SavedCredential, "");
+            string token = SettingsUtils.String(Keys.SavedCredential, "");
             if (string.IsNullOrEmpty(token))
             {
                 Debug.WriteLine("Failed: empty token");
                 return false;
             }
 
-            string uid = SettingsUtil.String(Keys.SavedUid, "");
+            string uid = SettingsUtils.String(Keys.SavedUid, "");
             if (string.IsNullOrEmpty(uid))
             {
                 Debug.WriteLine("Failed: empty uid");
@@ -125,8 +125,8 @@ namespace AirX.Util
             GlobalViewModel.Instance.IsSignedIn = true;
 
             // Update storage.
-            SettingsUtil.Write(Keys.LoggedInUid, uid);
-            SettingsUtil.Write(Keys.SavedCredential, renewResponse.token);
+            SettingsUtils.Write(Keys.LoggedInUid, uid);
+            SettingsUtils.Write(Keys.SavedCredential, renewResponse.token);
 
             // Initialize websocket.
             WebSocketService.Instance.InitializeAsync().ContinueWith(task =>

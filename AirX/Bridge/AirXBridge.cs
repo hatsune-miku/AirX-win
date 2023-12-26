@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
+using Windows.Win32;
 
 public class AirXBridge
 {
@@ -60,7 +61,7 @@ public class AirXBridge
 
     public static void RedirectAirXStdoutToDebugConsole()
     {
-        PInvoke.Kernel32.AllocConsole();
+        PInvoke.AllocConsole();
     }
 
     private static void OnTimerTick(object sender, object e)
@@ -258,12 +259,12 @@ public class AirXBridge
             Debug.WriteLine("AirX compabilitily version: " + AirXNative.airx_compatibility_number());
 
             AirXInstance = AirXNative.airx_create(
-                (ushort)SettingsUtil.Int(Keys.DiscoveryServiceServerPort, 9818),
-                (ushort)SettingsUtil.Int(Keys.DiscoveryServiceClientPort, 0),
+                (ushort)SettingsUtils.Int(Keys.DiscoveryServiceServerPort, 9818),
+                (ushort)SettingsUtils.Int(Keys.DiscoveryServiceClientPort, 0),
                 listenAddressBuffer,
                 listenAddressSize,
-                (ushort)SettingsUtil.Int(Keys.DataServiceListenPort, 9819),
-                ((byte)SettingsUtil.Int(Keys.GroupIdentifier, 0))
+                (ushort)SettingsUtils.Int(Keys.DataServiceListenPort, 9819),
+                ((byte)SettingsUtils.Int(Keys.GroupIdentifier, 0))
             );
         }
         catch (Exception e)
@@ -277,8 +278,8 @@ public class AirXBridge
 
         AirXDiscoveryThread.Start();
         AirXTextServiceThread.Start();
-        
-        if (SettingsUtil.ShouldEnableAutoDiscovery())
+
+        if (SettingsUtils.ShouldEnableAutoDiscovery())
         {
             AirXAutoDiscoveryThread = new Thread(AutoDiscoveryRoutine);
             AirXAutoDiscoveryThread.Start();
@@ -363,7 +364,7 @@ public class AirXBridge
     {
         var versionString = Utf8StringAlloc(128);
         var actualLength = AirXNative.airx_version_string(versionString);
-        var ret = Utf8StringFromPtr(versionString, (int) actualLength);
+        var ret = Utf8StringFromPtr(versionString, (int)actualLength);
         FreeUtf8String(versionString);
         return ret;
     }
@@ -394,7 +395,7 @@ public class AirXBridge
         byte[] bytes = Encoding.UTF8.GetBytes(s);
         IntPtr ptr = Marshal.AllocHGlobal(bytes.Length);
         Marshal.Copy(bytes, 0, ptr, bytes.Length);
-        size = (uint) bytes.Length;
+        size = (uint)bytes.Length;
         return ptr;
     }
 

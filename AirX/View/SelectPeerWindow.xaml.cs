@@ -15,7 +15,6 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
-using WinUIEx;
 
 namespace AirX.View
 {
@@ -45,7 +44,6 @@ namespace AirX.View
             );
 
             SetTitleBar(titleBar);
-            this.CenterOnScreen();
         }
 
         public void OnPeerSelected(Model.PeerItem peer)

@@ -44,7 +44,7 @@ namespace AirX.Model
         {
             if (stringRepresentation == null)
             {
-                stringRepresentation = SettingsUtil.String(SettingsKey, "");
+                stringRepresentation = SettingsUtils.String(SettingsKey, "");
             }
             return stringRepresentation;
         }
@@ -53,7 +53,7 @@ namespace AirX.Model
         {
             if (stringRepresentation == null)
             {
-                stringRepresentation = SettingsUtil.String(SettingsKey, "false")
+                stringRepresentation = SettingsUtils.String(SettingsKey, "false")
                     .ToLower();
             }
             if (bool.TryParse(stringRepresentation, out bool result))
@@ -76,7 +76,7 @@ namespace AirX.Model
         public void SetAsBoolean(bool newValue)
         {
             stringRepresentation = newValue.ToString();
-            SettingsUtil.Write(SettingsKey, stringRepresentation.ToLower());
+            SettingsUtils.Write(SettingsKey, stringRepresentation.ToLower());
         }
 
         public void OnButtonValueSaved(object sender, RoutedEventArgs e)
@@ -85,12 +85,12 @@ namespace AirX.Model
             {
                 if (XamlRoot != null)
                 {
-                    UIUtil.ShowContentDialog("Error", "You have entered an invalid value.", XamlRoot);
+                    UIUtils.ShowContentDialog("Error", "You have entered an invalid value.", XamlRoot);
                 }
                 return;
             }
             ViewModel.IsUnsaved = false;
-            SettingsUtil.Write(SettingsKey, stringRepresentation);
+            SettingsUtils.Write(SettingsKey, stringRepresentation);
         }
     }
 }

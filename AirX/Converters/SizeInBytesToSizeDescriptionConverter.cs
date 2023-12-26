@@ -13,7 +13,7 @@ namespace AirX.Converters
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             ulong sizeInBytes = (ulong)value;
-            return FileUtil.GetFileSizeDescription(sizeInBytes);
+            return FileUtils.GetFileSizeDescription(sizeInBytes);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

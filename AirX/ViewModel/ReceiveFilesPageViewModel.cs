@@ -13,5 +13,8 @@ namespace AirX.ViewModel
     {
         [ObservableProperty]
         public List<ReceiveFile> receiveFiles;
+
+        [ObservableProperty]
+        public bool noReceiveFiles = true;
     }
 }

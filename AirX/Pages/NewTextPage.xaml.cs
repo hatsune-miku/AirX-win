@@ -32,7 +32,7 @@ namespace AirX.Pages
         [RelayCommand]
         private void Block()
         {
-            AccountUtil.AddToBlockList(ViewModel.Peer.IpAddress);
+            AccountUtils.AddToBlockList(ViewModel.Peer.IpAddress);
             _instance?.Close();
         }
 

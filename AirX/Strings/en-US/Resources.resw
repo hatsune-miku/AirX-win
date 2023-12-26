@@ -129,7 +129,7 @@
   <data name="AirXControlPanel.Text" xml:space="preserve">
     <value>AirX Control Panel</value>
   </data>
-  <data name="AirXCore.Text" xml:space="preserve">
+  <data name="AirXCore.Header" xml:space="preserve">
     <value>AirX Core</value>
   </data>
   <data name="AirXIsOffline.Text" xml:space="preserve">
@@ -144,6 +144,18 @@
   <data name="Build.Text" xml:space="preserve">
     <value>Build</value>
   </data>
+  <data name="Cancel.Text" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="ClearCache.Content" xml:space="preserve">
+    <value>Clear Cache</value>
+  </data>
+  <data name="ClearCacheWarning.Text" xml:space="preserve">
+    <value>This will delete all cached data.</value>
+  </data>
+  <data name="ConfirmClear.Text" xml:space="preserve">
+    <value>Clear</value>
+  </data>
   <data name="ConfirmSignIn.Text" xml:space="preserve">
     <value>Sign In</value>
   </data>
@@ -156,11 +168,20 @@
   <data name="CreateOne.Text" xml:space="preserve">
     <value>Create One!</value>
   </data>
-  <data name="DashBoard.Text" xml:space="preserve">
+  <data name="CurrentPeers.Text" xml:space="preserve">
+    <value>Peer List</value>
+  </data>
+  <data name="Dashboard.Text" xml:space="preserve">
     <value>Dashboard</value>
   </data>
-  <data name="Debug.Text" xml:space="preserve">
+  <data name="Debug.Header" xml:space="preserve">
     <value>Debug</value>
+  </data>
+  <data name="DiscoveryService.Text" xml:space="preserve">
+    <value>LAN Discovery Service</value>
+  </data>
+  <data name="Edited.Text" xml:space="preserve">
+    <value>Unsaved</value>
   </data>
   <data name="EnhancedDiscovery.Description" xml:space="preserve">
     <value>Periodically send LAN discovery packets to ensure peer list up to date. May increase load to the router, especially for large amount of AirX users under the same network.</value>
@@ -204,13 +225,25 @@
   <data name="LanguagePack.Text" xml:space="preserve">
     <value>Language Pack</value>
   </data>
+  <data name="LibairxStatus.Text" xml:space="preserve">
+    <value>libairx Status</value>
+  </data>
+  <data name="LibairxVersion.Text" xml:space="preserve">
+    <value>libairx Version</value>
+  </data>
   <data name="NoAirXAccountYet.Text" xml:space="preserve">
     <value>No AirX Account?</value>
+  </data>
+  <data name="NoReceivedFiles.Text" xml:space="preserve">
+    <value>No file received yet.</value>
+  </data>
+  <data name="NotYetImplemented.Text" xml:space="preserve">
+    <value>This function has not yet been implemented.</value>
   </data>
   <data name="OpenControlPanel.Text" xml:space="preserve">
     <value>Open Control Panel</value>
   </data>
-  <data name="Password.Text" xml:space="preserve">
+  <data name="Password.PlaceholderText" xml:space="preserve">
     <value>Password</value>
   </data>
   <data name="Preferences.Text" xml:space="preserve">
@@ -225,7 +258,7 @@
   <data name="ReceivedFiles.Text" xml:space="preserve">
     <value>Received Files</value>
   </data>
-  <data name="RememberMe.Text" xml:space="preserve">
+  <data name="RememberMe.Content" xml:space="preserve">
     <value>Remember Me</value>
   </data>
   <data name="SendFile.Text" xml:space="preserve">
@@ -273,7 +306,10 @@
   <data name="TextPopupDisplayTime.Text" xml:space="preserve">
     <value>Text Popup Display Time (ms)</value>
   </data>
-  <data name="UidOrEmail.Text" xml:space="preserve">
+  <data name="TextService.Text" xml:space="preserve">
+    <value>LAN Data Service</value>
+  </data>
+  <data name="UidOrEmail.PlaceholderText" xml:space="preserve">
     <value>UID/Email</value>
   </data>
   <data name="Version.Text" xml:space="preserve">

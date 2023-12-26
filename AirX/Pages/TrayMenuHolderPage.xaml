@@ -34,12 +34,9 @@
             IconSource="ms-appx:///Assets/AirX.ico"
             ToolTipText="ToolTip"
             NoLeftClickDelay="True"
-            ContextMenuMode="SecondWindow"
         >
         <tb:TaskbarIcon.ContextFlyout>
             <MenuFlyout AreOpenCloseAnimationsEnabled="True">
-                <MenuFlyoutItem IsEnabled="False" Text="{x:Bind TextHooray}"/>
-                <MenuFlyoutSeparator />
                 <MenuFlyoutItem
                     IsEnabled="False"
                     Text="{x:Bind ViewModel.IsServiceOnline, Mode=OneWay, Converter={StaticResource serviceOnlineStatusToDescriptionConverter}}"
@@ -50,13 +47,13 @@
                 />
                 <MenuFlyoutItem
                     Command="{x:Bind OpenControlPanelCommand}"
-                    Text="{x:Bind TextOpenControlPanel}"
+                    x:Uid="OpenControlPanel"
                 />
                 <MenuFlyoutSeparator />
 
                 <MenuFlyoutItem
                     Command="{x:Bind SendFileCommand}"
-                    Text="{x:Bind TextSendFile}"
+                    x:Uid="SendFile"
                 />
 
                 <MenuFlyoutItem
@@ -69,8 +66,8 @@
                     Text="{x:Bind ViewModel.IsSignedIn, Mode=OneWay, Converter={StaticResource booleanToSigningToggleStringConverter}}"
                 />
                 <MenuFlyoutSeparator />
-                <MenuFlyoutItem Command="{x:Bind ShowAboutAirXCommand}" Text="{x:Bind TextAboutAirX}" />
-                <MenuFlyoutItem Command="{x:Bind ExitApplicationCommand}" Text="{x:Bind TextExit}" />
+                <MenuFlyoutItem Command="{x:Bind ShowAboutAirXCommand}" x:Uid="AboutAirX" />
+                <MenuFlyoutItem Command="{x:Bind ExitApplicationCommand}" x:Uid="Exit" />
 
             </MenuFlyout>
         </tb:TaskbarIcon.ContextFlyout>

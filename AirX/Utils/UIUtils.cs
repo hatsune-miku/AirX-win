@@ -9,10 +9,12 @@ using Windows.Graphics;
 using AirX.View;
 using Microsoft.UI.Xaml.Controls;
 using AirX.Extension;
+using Windows.Win32;
+using Windows.Win32.Foundation;
 
 namespace AirX.Util
 {
-    public static class UIUtil
+    public static class UIUtils
     {
         public static AppWindow GetAppWindow(Window window)
         {
@@ -30,8 +32,8 @@ namespace AirX.Util
 
         public static Size GetPrimaryScreenSize()
         {
-            int screenWidth = PInvoke.User32.GetSystemMetrics(PInvoke.User32.SystemMetric.SM_CXSCREEN);
-            int screenHeight = PInvoke.User32.GetSystemMetrics(PInvoke.User32.SystemMetric.SM_CYSCREEN);
+            int screenWidth = PInvoke.GetSystemMetrics(Windows.Win32.UI.WindowsAndMessaging.SYSTEM_METRICS_INDEX.SM_CXSCREEN);
+            int screenHeight = PInvoke.GetSystemMetrics(Windows.Win32.UI.WindowsAndMessaging.SYSTEM_METRICS_INDEX.SM_CYSCREEN);
             return new Size(screenWidth, screenHeight);
         }
 
@@ -62,11 +64,12 @@ namespace AirX.Util
 
         public static void SetWindowVisibility(Window window, bool visible)
         {
-            PInvoke.User32.ShowWindow(
-                WindowNative.GetWindowHandle(window),
+            nint rawHandle = WindowNative.GetWindowHandle(window);
+            PInvoke.ShowWindow(
+                new HWND(rawHandle),
                 visible
-                    ? PInvoke.User32.WindowShowStyle.SW_SHOW
-                    : PInvoke.User32.WindowShowStyle.SW_HIDE
+                    ? Windows.Win32.UI.WindowsAndMessaging.SHOW_WINDOW_CMD.SW_SHOW
+                    : Windows.Win32.UI.WindowsAndMessaging.SHOW_WINDOW_CMD.SW_HIDE
             );
         }
 
@@ -78,15 +81,6 @@ namespace AirX.Util
                 X = size.Width / 2 - width / 2,
                 Y = size.Height / 2 - height / 2
             };
-        }
-
-        public static async Task<ContentDialogResult> MessageBoxAsync(
-            string title, string content, string primaryButtonText, string secondaryButtonText)
-        {
-            var window = new MessageBoxWindow(
-                title, content, primaryButtonText, secondaryButtonText);
-            ContentDialogResult result = await window.ShowAsync();
-            return result;
         }
     }
 }

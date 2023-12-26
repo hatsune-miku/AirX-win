@@ -10,16 +10,11 @@
 >
     <StackPanel>
         <StackPanel Margin="20, 40, 10, 0">
-            <TextBlock Text="Dashboard" FontSize="24" FontWeight="Bold"/>
+            <TextBlock x:Uid="SentFiles" FontSize="24" FontWeight="Bold"/>
         </StackPanel>
 
-        <StackPanel Margin="20, 40, 10, 0">
-            <RatingControl
-                AutomationProperties.Name="Simple RatingControl" 
-                IsClearEnabled="True"
-                IsReadOnly="False" 
-                Caption="Your rating"
-            />
+        <StackPanel Margin="20, 20, 20, 0">
+            <TextBlock x:Uid="NotYetImplemented" FontSize="18" />
         </StackPanel>
     </StackPanel>
 </Page>

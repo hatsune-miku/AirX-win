@@ -28,11 +28,6 @@ namespace AirX.Pages
 
             ViewModel = new LoginWindowViewModel();
             textBoxUid.Focus(FocusState.Programmatic);
-            linkSignUp.Inlines.Clear();
-
-            var linkInline = new Run();
-            linkInline.Text = "CreateOne".Text();
-            linkSignUp.Inlines.Add(linkInline);
         }
 
         private async Task HandleLoginAsync()
@@ -54,7 +49,7 @@ namespace AirX.Pages
                 response = await AirXCloud.LoginAsync(ViewModel.Uid, ViewModel.Password);
                 if (!response.success)
                 {
-                    UIUtil.ShowContentDialog(
+                    UIUtils.ShowContentDialog(
                         "Error", "Login failed: " + response.message,
                         Content.XamlRoot
                     );
@@ -63,7 +58,7 @@ namespace AirX.Pages
             }
             catch (AirXCloud.UnauthorizedException)
             {
-                UIUtil.ShowContentDialog(
+                UIUtils.ShowContentDialog(
                     "Error", "Login failed: unknown reason.",
                     Content.XamlRoot
                 );
@@ -75,19 +70,19 @@ namespace AirX.Pages
             }
 
             // Success
-            SettingsUtil.Write(Keys.SavedUid, ViewModel.Uid);
-            SettingsUtil.Write(Keys.LoggedInUid, ViewModel.Uid);
-            SettingsUtil.Write(Keys.SavedCredential, response.token);
-            SettingsUtil.Write(Keys.SavedCredentialType, CredentialType.AirXToken);
+            SettingsUtils.Write(Keys.SavedUid, ViewModel.Uid);
+            SettingsUtils.Write(Keys.LoggedInUid, ViewModel.Uid);
+            SettingsUtils.Write(Keys.SavedCredential, response.token);
+            SettingsUtils.Write(Keys.SavedCredentialType, CredentialType.AirXToken);
             GlobalViewModel.Instance.LoggingInUid = ViewModel.Uid;
             GlobalViewModel.Instance.IsSignedIn = true;
 
-            SettingsUtil.Write(
+            SettingsUtils.Write(
                 Keys.ShouldAutoSignIn,
                 ViewModel.ShouldRememberPassword
             );
 
-            await AccountUtil.SendGreetingsAsync();
+            await AccountUtils.SendGreetingsAsync();
 
             // Initialize WebSocket
             WebSocketService.Instance.InitializeAsync().FireAndForget();
@@ -111,7 +106,7 @@ namespace AirX.Pages
 
         private void GoogleLoginButton_Click(object sender, RoutedEventArgs e)
         {
-            var _ = googleSignInHelper.TrySignInAsync();
+            googleSignInHelper.TrySignInAsync().FireAndForget();
         }
     }
 }

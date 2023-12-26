@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AirX.Util
 {
-    public static class HashUtil
+    public static class HashUtils
     {
         public static string Sha256(string randomString)
         {

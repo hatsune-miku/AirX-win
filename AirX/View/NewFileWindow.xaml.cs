@@ -2,7 +2,6 @@ using AirX.Util;
 using System.Security.Policy;
 using System.Threading.Channels;
 using WinRT.Interop;
-using WinUIEx;
 
 namespace AirX.View
 {
@@ -34,7 +33,7 @@ namespace AirX.View
             );
             ExtendsContentIntoTitleBar = true;
 
-            var screenSize = UIUtil.GetPrimaryScreenSize();
+            var screenSize = UIUtils.GetPrimaryScreenSize();
             AppWindow.Move(new Windows.Graphics.PointInt32(
                 (int)screenSize.Width - AppWindow.Size.Width - 64,
                 (int)screenSize.Height - AppWindow.Size.Height - 92

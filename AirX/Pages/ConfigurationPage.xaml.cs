@@ -7,6 +7,8 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using AirX.Extension;
 using AirX.Utils;
+using AirX.View;
+using System;
 
 namespace AirX.Pages
 {
@@ -158,6 +160,17 @@ namespace AirX.Pages
             }
 
             ApplyLatestItemFilters();
+            ControlPanelWindow.Instance?.SubscribeToSizeChange(OnControlPanelWindowSizeChanged);
+        }
+
+        private void OnPageUnloaded(object sender, RoutedEventArgs e)
+        {
+            ControlPanelWindow.Instance?.UnsubscribeToSizeChange(OnControlPanelWindowSizeChanged);
+        }
+
+        private void OnControlPanelWindowSizeChanged(Microsoft.UI.Xaml.WindowSizeChangedEventArgs args)
+        {
+            ScrollView.Height = Math.Max(220, args.Size.Height - 220);
         }
 
         public void ApplyLatestItemFilters()
@@ -170,7 +183,7 @@ namespace AirX.Pages
         public void SetShouldShowAdvancedSettings(bool value)
         {
             ViewModel.ShouldShowAdvancedSettings = value;
-            SettingsUtil.Write(Keys.ShouldShowAdvancedSettings, value.ToString().ToLower());
+            SettingsUtils.Write(Keys.ShouldShowAdvancedSettings, value.ToString().ToLower());
             ApplyLatestItemFilters();
         }
 
@@ -182,8 +195,8 @@ namespace AirX.Pages
         public string GetTitle()
         {
             return ViewModel.IsUnsaved
-                ? "Preferences - Edited"
-                : "Perferences";
+                ? "Preferences".Text() + " - " + "Edited".Text()
+                : "Perferences".Text();
         }
 
         private bool IsPortValid(string portRepr)
@@ -213,9 +226,9 @@ namespace AirX.Pages
 
         private void OnCleanCacheClicked(object sender, RoutedEventArgs args)
         {
-            // TODO: Clean cache
-            UIUtil.ShowContentDialogYesNoAsync("Clean Cache", "This will delete all cached data.",
-                "Clean", "Cancel", Content.XamlRoot)
+            UIUtils.ShowContentDialogYesNoAsync(
+                "ClearCache".Text(), "ClearCacheWarning".Text(),
+                "ConfirmClear".Text(), "Cancel".Text(), Content.XamlRoot)
                 .FireAndForget();
         }
     }
