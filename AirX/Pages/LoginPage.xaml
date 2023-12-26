@@ -22,12 +22,12 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
             >
-                <TextBlock FontSize="32" FontWeight="Bold" Text="{x:Bind ViewModel.TextSignIn}">
+                <TextBlock x:Uid="SignIn" FontSize="32" FontWeight="Bold">
                 </TextBlock>
                 <TextBox
                     x:Name="textBoxUid" 
+                    x:Uid="UidOrEmail"
                     PreviewKeyDown="onTextBoxesKeyDown"
-                    PlaceholderText="{x:Bind ViewModel.TextUidOrEmail}"
                     Margin="0,30,0,12"
                     Text="{x:Bind ViewModel.Uid, Mode=TwoWay}"
                     IsEnabled="{x:Bind ViewModel.IsLoggingIn, Mode=OneWay, Converter={StaticResource BooleanInvertionConverter}}"
@@ -35,8 +35,8 @@
 
                 <PasswordBox
                     x:Name="textBoxPassword" 
+                    x:Uid="Password"
                     PreviewKeyDown="onTextBoxesKeyDown"
-                    PlaceholderText="{x:Bind ViewModel.TextPassword}"
                     Margin="0,0,0,20"
                     Password="{x:Bind ViewModel.Password, Mode=TwoWay}"
                     IsEnabled="{x:Bind ViewModel.IsLoggingIn, Mode=OneWay, Converter={StaticResource BooleanInvertionConverter}}"
@@ -62,7 +62,7 @@
                     <CheckBox
                         Grid.Row="0" Grid.Column="1"
                         x:Name="checkBoxRememberMe"
-                        Content="{x:Bind ViewModel.TextRememberMe}"
+                        x:Uid="RememberMe"
                         IsChecked="{x:Bind ViewModel.ShouldRememberPassword, Mode=TwoWay}"
                         IsEnabled="{x:Bind ViewModel.IsLoggingIn, Mode=OneWay, Converter={StaticResource BooleanInvertionConverter}}"
                     />
@@ -72,7 +72,11 @@
                     TextWrapping="WrapWholeWords"
                     Margin="0,24,0,0"
                 >
-                    <Span xml:space="preserve"><Run Text="{x:Bind ViewModel.TextNoAirXAccountYet}"></Run> <Hyperlink x:Name="linkSignUp" NavigateUri="https://airx-cloud.eggtartc.com/sign-up"></Hyperlink>
+                    <Span>
+                        <Run x:Uid="NoAirXAccountYet"></Run>
+                        <Hyperlink NavigateUri="https://airx-cloud.eggtartc.com/sign-up">
+                            <Run x:Uid="CreateOne"></Run>
+                        </Hyperlink>
                     </Span>
                 </TextBlock>
 

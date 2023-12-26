@@ -20,11 +20,11 @@
                 <TextBlock Text="{x:Bind Label}" Margin="20,10,0,10" VerticalAlignment="Center" />
             </StackPanel>
         </DataTemplate>
-        
+
         <converters:LoggingInUidStringToDescriptionConverter
             x:Key="loggingInUidStringToDescriptionConverter"
         />
-        
+
         <converters:BooleanInvertionConverter
             x:Key="booleanInvertionConverter"
         />
@@ -58,7 +58,7 @@
                             ColumnSpacing="12"
                             Padding="24"
                             CornerRadius="12"
-                            Background="{ThemeResource AccentAcrylicBackgroundFillColorBaseBrush}"
+                            Background="{ThemeResource SystemFillColorNeutralBackgroundBrush}"
                             Visibility="{x:Bind ViewModel.ShouldExpandPane, Converter={StaticResource booleanToVisibilityConverter}, Mode=OneWay}"
                         >
                             <Grid.ColumnDefinitions>
@@ -88,25 +88,6 @@
                                     Text="{x:Bind SharedViewModel.LoggingInUid, Mode=OneWay, Converter={StaticResource loggingInUidStringToDescriptionConverter}}"
                                 />
                             </Grid>
-
-                            <DropDownButton
-                                Grid.Row="0" Grid.Column="1"
-                                VerticalAlignment="Center"
-                            >
-                                <DropDownButton.Content>
-                                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE713;"/>
-                                </DropDownButton.Content>
-                                <DropDownButton.Flyout>
-                                    <MenuFlyout Placement="Bottom">
-                                        <MenuFlyoutItem Text="Toggle Day/Night" Click="ToggleDayNightClicked">
-                                            <MenuFlyoutItem.Icon>
-                                                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE708;"/>
-                                            </MenuFlyoutItem.Icon>
-                                        </MenuFlyoutItem>
-                                    </MenuFlyout>
-                                </DropDownButton.Flyout>
-                            </DropDownButton>
-                         
                         </Grid>
                         <ListView
                             x:Name="NavLinksList"
@@ -127,4 +108,3 @@
 
     </StackPanel>
 </Page>
-    

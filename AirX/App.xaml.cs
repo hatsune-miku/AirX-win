@@ -14,10 +14,10 @@ namespace AirX
         // Invoked when the application is launched.
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
-            SettingsUtil.TryInitializeConfigurationsForFirstRun();
+            SettingsUtils.TryInitializeConfigurationsForFirstRun();
 
             // Debug console
-            if (SettingsUtil.Bool(Keys.ShouldShowConsole, false))
+            if (SettingsUtils.Bool(Keys.ShouldShowConsole, false))
             {
                 AirXBridge.RedirectAirXStdoutToDebugConsole();
             }

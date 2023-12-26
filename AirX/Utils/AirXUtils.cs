@@ -7,14 +7,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Win32;
+using Windows.Win32.Foundation;
 
 namespace AirX.Util
 {
-    class AirXUtil
+    class AirXUtils
     {
         public static async Task UserSendFileAsync()
         {
-            var files = await FileUtil.OpenFileDialogAsync();
+            var files = await FileUtils.OpenFileDialogAsync();
             if (files.Count == 0 || files.First() == null)
             {
                 return;
@@ -22,8 +24,8 @@ namespace AirX.Util
 
             if (AirXBridge.GetPeers().Count == 0)
             {
-                UIUtil.MessageBoxAsync("Error", "No peers available", "OK", null)
-                    .FireAndForget();
+                PInvoke.MessageBox(
+                    HWND.Null, "No peers available", "Error", Windows.Win32.UI.WindowsAndMessaging.MESSAGEBOX_STYLE.MB_ICONINFORMATION);
                 return;
             }
 

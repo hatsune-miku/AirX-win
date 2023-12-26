@@ -1,6 +1,5 @@
 ﻿using AirX.Helper;
 using AirX.Util;
-using Lombok.NET;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +25,7 @@ namespace AirX.View
 
         protected BaseWindow()
         {
-            CurrentAppWindow = UIUtil.GetAppWindow(this);
+            CurrentAppWindow = UIUtils.GetAppWindow(this);
             Presenter = (OverlappedPresenter) CurrentAppWindow.Presenter;
 
             backdropConfiguration = new SystemBackdropConfiguration
@@ -47,14 +46,14 @@ namespace AirX.View
 
         protected void PrepareWindow(WindowParameters parameters)
         {
-            var screenSize = UIUtil.GetPrimaryScreenSize();
+            var screenSize = UIUtils.GetPrimaryScreenSize();
             var realWidth = (int)(parameters.WidthPortion * screenSize.Width);
             var realHeight = (int)(parameters.HeightPortion * screenSize.Height);
             Resize(realWidth, realHeight);
 
             if (parameters.CenterScreen)
             {
-                UIUtil.MoveWindowToCenterScreen(CurrentAppWindow);
+                UIUtils.MoveWindowToCenterScreen(CurrentAppWindow);
             }
 
             CurrentAppWindow.Title = parameters.Title;

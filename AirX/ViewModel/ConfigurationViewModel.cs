@@ -21,7 +21,7 @@ namespace AirX.ViewModel
         bool isUnsaved = false;
 
         [ObservableProperty]
-        bool shouldShowAdvancedSettings = SettingsUtil.Bool(Keys.ShouldShowAdvancedSettings, false);
+        bool shouldShowAdvancedSettings = SettingsUtils.Bool(Keys.ShouldShowAdvancedSettings, false);
 
         [ObservableProperty]
         string showAdvancedSettingsHeaderText = "ShowAdvancedSettings.Text".Tr();

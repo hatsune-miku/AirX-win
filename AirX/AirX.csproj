@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0-windows10.0.22621.0</TargetFramework>
+    <TargetFramework>net8.0-windows10.0.22621.0</TargetFramework>
     <TargetPlatformMinVersion>10.0.18362.0</TargetPlatformMinVersion>
     <RootNamespace>AirX</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <Platforms>x86;x64;ARM64</Platforms>
-    <RuntimeIdentifiers>win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
+    <RuntimeIdentifiers>win-x86;win-x64;win-arm64</RuntimeIdentifiers>
     <UseWinUI>true</UseWinUI>
     <ApplicationIcon>airx.ico</ApplicationIcon>
   </PropertyGroup>
@@ -17,33 +17,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="assets\sign-in.html" />
-    <None Remove="Pages\LoginPage.xaml" />
-    <None Remove="Pages\NewFilePage.xaml" />
-    <None Remove="Pages\ReceivedFilesPage.xaml" />
-    <None Remove="Pages\SelectPeerPage.xaml" />
-    <None Remove="Pages\TrayMenuHolderPage.xaml" />
-    <None Remove="View\AboutWindow.xaml" />
-    <None Remove="View\MessageBoxWindow.xaml" />
-    <None Remove="View\MicaTestPage.xaml" />
-    <None Remove="View\NewFileWindow.xaml" />
-    <None Remove="View\NewTextWindow.xaml" />
-    <None Remove="View\SelectPeerWindow.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="CommunityToolkit.Labs.WinUI.SettingsControls" Version="0.0.18" />
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0" />
-    <PackageReference Include="H.NotifyIcon" Version="2.0.108" />
-    <PackageReference Include="H.NotifyIcon.WinUI" Version="2.0.108" />
-    <PackageReference Include="Lombok.NET" Version="2.1.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Text.UI" Version="17.6.268" />
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.3.230602002" />
-    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.756" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+    <PackageReference Include="H.NotifyIcon.WinUI" Version="2.0.123" />
+    <PackageReference Include="Microsoft.VisualStudio.Text.UI" Version="17.8.222" />
+    <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.49-beta" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.4.231115000" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.2428" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="PInvoke.User32" Version="0.7.124" />
-    <PackageReference Include="Websocket.Client" Version="4.6.1" />
-    <PackageReference Include="WinUIEx" Version="2.2.0" />
+    <PackageReference Include="Websocket.Client" Version="5.0.0" />
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
   
@@ -78,12 +60,6 @@
 
   <ItemGroup>
     <Page Update="View\NewFileWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Page Update="View\MessageBoxWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
@@ -167,7 +143,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Strings\en\" />
-    <Folder Include="Strings\zh\" />
+    <Folder Include="Strings\en-US\" />
+    <Folder Include="Strings\zh-Hans-CN\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Fix\If.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 </Project>

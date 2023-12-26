@@ -28,12 +28,28 @@ namespace AirX.Utils
 
         public static string Text(this string uid)
         {
-            return I18nUtils.Tr(uid + "/Text");
+            string text = I18nUtils.Tr(uid + "/Text");
+            if (text.Length > 0) return text;
+
+            string content = Content(uid);
+            if (content.Length > 0) return content;
+
+            return PlaceholderText(uid);
         }
 
         public static string Description(this string uid)
         {
             return I18nUtils.Tr(uid + "/Description");
+        }
+
+        public static string PlaceholderText(this string uid)
+        {
+            return I18nUtils.Tr(uid + "/PlaceholderText");
+        }
+
+        public static string Content(this string uid)
+        {
+            return I18nUtils.Tr(uid + "/Content");
         }
     }
 }

@@ -15,6 +15,8 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Windows.Win32;
+using Windows.Win32.Foundation;
 using WinRT.Interop;
 
 namespace AirX.View
@@ -51,17 +53,12 @@ namespace AirX.View
 
         private async Task TrySignInAsync()
         {
-            if (!await AccountUtil.TryLoginWithSavedTokenAsync())
+            if (!await AccountUtils.TryLoginWithSavedTokenAsync())
             {
                 // Prompt to login if token expired.
                 var window = new LoginWindow();
                 window.Activate();
-                return;
             }
-
-            var displayName = GlobalViewModel.Instance.LoggingGreetingsName;
-            NotificationUtil.ShowNotification(
-                $"Welcome back, {displayName}!");
         }
 
         // Called when a FilePartPacket is received.
@@ -122,33 +119,32 @@ namespace AirX.View
         {
             context.Post((_) =>
             {
-                UIUtil.MessageBoxAsync(
+                var result = PInvoke.MessageBox(
+                    HWND.Null,
+                    $"File {fileName} from {peer} ({FileUtils.GetFileSizeDescription(fileSize)}) is coming! Receive?",
                     "Received File",
-                    $"File {fileName} from {peer} ({FileUtil.GetFileSizeDescription(fileSize)}) is coming! Receive?",
-                    "Receive",
-                    "Decline"
-                ).ContinueWith(t =>
+                    Windows.Win32.UI.WindowsAndMessaging.MESSAGEBOX_STYLE.MB_ICONINFORMATION
+                    | Windows.Win32.UI.WindowsAndMessaging.MESSAGEBOX_STYLE.MB_YESNO
+                );
+                bool accept = result == Windows.Win32.UI.WindowsAndMessaging.MESSAGEBOX_RESULT.IDYES;
+                byte fileId = FileUtils.NextFileId();
+                if (accept)
                 {
-                    bool accept = t.Result == Microsoft.UI.Xaml.Controls.ContentDialogResult.Primary;
-                    byte fileId = FileUtil.NextFileId();
-                    if (accept)
-                    {
-                        PrepareForReceiveFile(fileId, fileSize, fileName, peer);
-                    }
-                    AirXBridge.RespondToFile(
-                        peer,
-                        fileId,
-                        fileSize,
-                        fileName,
-                        accept
-                    );
-                }, TaskScheduler.Default).FireAndForget();
+                    PrepareForReceiveFile(fileId, fileSize, fileName, peer);
+                }
+                AirXBridge.RespondToFile(
+                    peer,
+                    fileId,
+                    fileSize,
+                    fileName,
+                    accept
+                );
             }, null);
         }
 
         private static void OnTextReceived(string text, Peer peer)
         {
-            if (AccountUtil.IsInBlockList(peer.IpAddress))
+            if (AccountUtils.IsInBlockList(peer.IpAddress))
             {
                 return;
             }
@@ -169,8 +165,8 @@ namespace AirX.View
 
         private static void PrepareForReceiveFile(byte fileId, ulong fileSize, string fileName, Peer peer)
         {
-            var savingFilename = FileUtil.GetFileName(fileName);
-            var fullPath = Path.Join(SettingsUtil.String(Keys.SaveFilePath, ""), savingFilename);
+            var savingFilename = FileUtils.GetFileName(fileName);
+            var fullPath = Path.Join(SettingsUtils.String(Keys.SaveFilePath, ""), savingFilename);
             var directoryPath = Path.GetDirectoryName(fullPath);
 
             if (!Directory.Exists(directoryPath))
@@ -208,7 +204,7 @@ namespace AirX.View
         private void Window_Activated(object sender, WindowActivatedEventArgs args)
         {
             IntPtr hwnd = WindowNative.GetWindowHandle(this);
-            PInvoke.User32.ShowWindow(hwnd, PInvoke.User32.WindowShowStyle.SW_HIDE);
+            PInvoke.ShowWindow(new HWND(hwnd), Windows.Win32.UI.WindowsAndMessaging.SHOW_WINDOW_CMD.SW_HIDE);
         }
     }
 }

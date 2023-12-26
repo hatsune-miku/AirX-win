@@ -1,7 +1,6 @@
 ﻿using AirX.Bridge;
 using AirX.ViewModel;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Lombok.NET;
 using Microsoft.UI.Xaml;
 using System;
 using System.Collections.Generic;

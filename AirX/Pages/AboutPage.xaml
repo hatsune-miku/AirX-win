@@ -9,7 +9,7 @@
 >
     <StackPanel>
         <StackPanel Margin="20, 40, 10, 0">
-            <TextBlock Text="Credits" FontSize="24" FontWeight="Bold"/>
+            <TextBlock x:Uid="Contacts" FontSize="24" FontWeight="Bold"/>
         </StackPanel>
 
         <Grid

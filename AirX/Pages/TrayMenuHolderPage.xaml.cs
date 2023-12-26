@@ -17,12 +17,6 @@ namespace AirX.Pages
         private AboutWindow aboutWindow = null;
         private GlobalViewModel ViewModel = GlobalViewModel.Instance;
 
-        public string TextOpenControlPanel = "OpenControlPanel".Text();
-        public string TextSendFile = "SendFile".Text();
-        public string TextAboutAirX = "AboutAirX".Text();
-        public string TextExit = "Exit".Text();
-        public string TextHooray = "Hooray".Text();
-
         public TrayMenuHolderPage()
         {
             this.InitializeComponent();
@@ -48,7 +42,7 @@ namespace AirX.Pages
         [RelayCommand]
         public void ToggleService()
         {
-            AirXUtil.UserToggleService();
+            AirXUtils.UserToggleService();
         }
 
         [RelayCommand]
@@ -61,13 +55,13 @@ namespace AirX.Pages
         [RelayCommand]
         public void ToggleSignInOut()
         {
-            AccountUtil.UserToggleSignInOut();
+            AccountUtils.UserToggleSignInOut();
         }
 
         [RelayCommand]
         public void SendFile()
         {
-            AirXUtil.UserSendFileAsync()
+            AirXUtils.UserSendFileAsync()
                 .FireAndForget();
         }
     }

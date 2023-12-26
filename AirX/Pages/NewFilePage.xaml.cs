@@ -55,7 +55,7 @@ namespace AirX.Pages
             try
             {
                 sizeInBytes = ViewModel.ReceivingFile.TotalSize;
-                return FileUtil.GetFileSizeDescription(sizeInBytes);
+                return FileUtils.GetFileSizeDescription(sizeInBytes);
             }
             catch (Exception)
             {
@@ -77,7 +77,7 @@ namespace AirX.Pages
 
         private async Task HandleStopAsync()
         {
-            var result = await UIUtil.ShowContentDialogYesNoAsync(
+            var result = await UIUtils.ShowContentDialogYesNoAsync(
                 "Stop", "Are you sure to stop receiving this file?", "Stop", "Don't Stop", Content.XamlRoot);
 
             if (result == ContentDialogResult.Primary)
@@ -91,7 +91,7 @@ namespace AirX.Pages
         {
             if (ViewModel.ReceivingFile.Status == AirXBridge.FileStatus.Completed)
             {
-                FileUtil.OpenFolderInExplorer(ViewModel.ReceivingFile.LocalSaveFullPath);
+                FileUtils.OpenFolderInExplorer(ViewModel.ReceivingFile.LocalSaveFullPath);
                 _instance?.Close();
             }
             else
@@ -117,7 +117,7 @@ namespace AirX.Pages
                 {
                     if (t.Result == ContentDialogResult.Primary)
                     {
-                        AccountUtil.AddToBlockList(target);
+                        AccountUtils.AddToBlockList(target);
                     }
                 }
                 catch (Exception) { }

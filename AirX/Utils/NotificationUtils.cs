@@ -6,7 +6,7 @@ using Windows.UI.Notifications;
 
 namespace SRCounter;
 
-public class NotificationUtil
+public class NotificationUtils
 {
     private static bool _didManagerInitialized = false;
 

@@ -13,7 +13,7 @@ namespace AirX.Converters
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             var filePath = (string)value;
-            return FileUtil.GetFileName(filePath);
+            return FileUtils.GetFileName(filePath);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

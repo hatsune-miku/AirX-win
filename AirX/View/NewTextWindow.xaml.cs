@@ -51,13 +51,13 @@ namespace AirX.View
             );
             ExtendsContentIntoTitleBar = true;
 
-            var screenSize = UIUtil.GetPrimaryScreenSize();
+            var screenSize = UIUtils.GetPrimaryScreenSize();
             AppWindow.Move(new Windows.Graphics.PointInt32(
                 (int)screenSize.Width - AppWindow.Size.Width - 64,
                 (int)screenSize.Height - AppWindow.Size.Height - 92
             ));
 
-            Task.Delay(SettingsUtil.Int(Keys.NewTextPopupDisplayTimeMillis, 6000)).ContinueWith(t =>
+            Task.Delay(SettingsUtils.Int(Keys.NewTextPopupDisplayTimeMillis, 6000)).ContinueWith(t =>
             {
                 context.Post(_ => Close(), null);
             }, TaskScheduler.Default).FireAndForget();

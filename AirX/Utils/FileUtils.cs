@@ -11,7 +11,7 @@ using System.Diagnostics;
 
 namespace AirX.Util
 {
-    public class FileUtil
+    public class FileUtils
     {
         private static byte _fileId = 0;
 

@@ -46,17 +46,13 @@ namespace AirX.Util
         GoogleToken
     }
 
-    public class SettingsUtil
+    public class SettingsUtils
     {
         private static ApplicationDataContainer localSettings =
             ApplicationData.Current.LocalSettings;
 
         public static void TryInitializeConfigurationsForFirstRun()
         {
-            // TODO: remove
-            Write(Keys.BlockList, "");
-            Write(Keys.IsNotFirstRun, false);
-
             if (Bool(Keys.IsNotFirstRun, false))
             {
                 return;

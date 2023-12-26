@@ -129,7 +129,7 @@
   <data name="AirXControlPanel.Text" xml:space="preserve">
     <value>AirX 控制面板</value>
   </data>
-  <data name="AirXCore.Text" xml:space="preserve">
+  <data name="AirXCore.Header" xml:space="preserve">
     <value>AirX Core</value>
   </data>
   <data name="AirXIsOffline.Text" xml:space="preserve">
@@ -144,6 +144,18 @@
   <data name="Build.Text" xml:space="preserve">
     <value>构建号</value>
   </data>
+  <data name="Cancel.Text" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="ClearCache.Content" xml:space="preserve">
+    <value>清除缓存数据</value>
+  </data>
+  <data name="ClearCacheWarning.Text" xml:space="preserve">
+    <value>确定清除缓存吗？</value>
+  </data>
+  <data name="ConfirmClear.Text" xml:space="preserve">
+    <value>清除</value>
+  </data>
   <data name="ConfirmSignIn.Text" xml:space="preserve">
     <value>登录</value>
   </data>
@@ -156,11 +168,20 @@
   <data name="CreateOne.Text" xml:space="preserve">
     <value>点我注册！</value>
   </data>
-  <data name="DashBoard.Text" xml:space="preserve">
+  <data name="CurrentPeers.Text" xml:space="preserve">
+    <value>已发现用户</value>
+  </data>
+  <data name="Dashboard.Text" xml:space="preserve">
     <value>仪表盘</value>
   </data>
-  <data name="Debug.Text" xml:space="preserve">
+  <data name="Debug.Header" xml:space="preserve">
     <value>调试</value>
+  </data>
+  <data name="DiscoveryService.Text" xml:space="preserve">
+    <value>局域网发现服务</value>
+  </data>
+  <data name="Edited.Text" xml:space="preserve">
+    <value>未保存</value>
   </data>
   <data name="EnhancedDiscovery.Description" xml:space="preserve">
     <value>周期性地广播发现数据包。可能对路由器有较大负载，尤其是当同一子网下 AirX 用户很多时。</value>
@@ -204,13 +225,25 @@
   <data name="LanguagePack.Text" xml:space="preserve">
     <value>语言包</value>
   </data>
+  <data name="LibairxStatus.Text" xml:space="preserve">
+    <value>libairx 状态</value>
+  </data>
+  <data name="LibairxVersion.Text" xml:space="preserve">
+    <value>libairx 版本</value>
+  </data>
   <data name="NoAirXAccountYet.Text" xml:space="preserve">
     <value>如果没有 AirX 账号，可</value>
+  </data>
+  <data name="NoReceivedFiles.Text" xml:space="preserve">
+    <value>暂无已收文件</value>
+  </data>
+  <data name="NotYetImplemented.Text" xml:space="preserve">
+    <value>这个功能暂未实现</value>
   </data>
   <data name="OpenControlPanel.Text" xml:space="preserve">
     <value>打开 AirX 控制面板</value>
   </data>
-  <data name="Password.Text" xml:space="preserve">
+  <data name="Password.PlaceholderText" xml:space="preserve">
     <value>密码</value>
   </data>
   <data name="Preferences.Text" xml:space="preserve">
@@ -225,7 +258,7 @@
   <data name="ReceivedFiles.Text" xml:space="preserve">
     <value>已收文件</value>
   </data>
-  <data name="RememberMe.Text" xml:space="preserve">
+  <data name="RememberMe.Content" xml:space="preserve">
     <value>自动登录</value>
   </data>
   <data name="SendFile.Text" xml:space="preserve">
@@ -273,7 +306,10 @@
   <data name="TextPopupDisplayTime.Text" xml:space="preserve">
     <value>文本弹框持续时间（毫秒）</value>
   </data>
-  <data name="UidOrEmail.Text" xml:space="preserve">
+  <data name="TextService.Text" xml:space="preserve">
+    <value>局域网数据服务</value>
+  </data>
+  <data name="UidOrEmail.PlaceholderText" xml:space="preserve">
     <value>UID/电子邮箱地址</value>
   </data>
   <data name="Version.Text" xml:space="preserve">

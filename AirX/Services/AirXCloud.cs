@@ -73,11 +73,11 @@ namespace AirX.Services
 
             if (needToken)
             {
-                if (SettingsUtil.ReadCredentialType() != CredentialType.AirXToken)
+                if (SettingsUtils.ReadCredentialType() != CredentialType.AirXToken)
                 {
                     throw new IncorrectCredentialTypeException();
                 }
-                var credential = SettingsUtil.String(Keys.SavedCredential, "");
+                var credential = SettingsUtils.String(Keys.SavedCredential, "");
                 request.Headers.Authorization = new("Bearer", credential);
             }
 
@@ -102,7 +102,7 @@ namespace AirX.Services
 
         public static async Task<LoginResponse> LoginAsync(string uid, string password, string salt = "114514")
         {
-            password = HashUtil.Sha256(HashUtil.Sha256(password));
+            password = HashUtils.Sha256(HashUtils.Sha256(password));
             return await RequestAsync<LoginResponse>(
                 HttpMethod.Post,
                 "/auth/token",
