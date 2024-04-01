@@ -4,7 +4,7 @@
 
 AirX is a cross-platform text and file sharing system.
 
-- [View Demo View](https://hatsune-miku.github.io/#airx-video)
+- [View Demo Video](https://hatsune-miku.github.io/#airx-video)
 
 ## How to Download
 
