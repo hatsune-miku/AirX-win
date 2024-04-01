@@ -4,7 +4,7 @@
 
 AirX 是一个跨平台的文本和文件分享系统。
 
-- [观看演示视频](https://hatsune-miku.github.io/airx.html)
+- [观看演示视频](https://hatsune-miku.github.io/#airx-video)
 
 ## 如何下载？
 
